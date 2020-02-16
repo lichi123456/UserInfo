@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.dao.TeacherStudentMapper">
+  <resultMap id="BaseResultMap" type="cn.edu.entity.TeacherStudent">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="tea_stu_id" jdbcType="BIGINT" property="teaStuId" />
+    <result column="teacher_id" jdbcType="VARCHAR" property="teacherId" />
+    <result column="student_id" jdbcType="VARCHAR" property="studentId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_user" jdbcType="VARCHAR" property="createUser" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="update_user" jdbcType="VARCHAR" property="updateUser" />
+  </resultMap>
+</mapper>

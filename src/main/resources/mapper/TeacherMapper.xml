@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.dao.TeacherMapper">
+  <resultMap id="BaseResultMap" type="cn.edu.entity.Teacher">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="teacher_id" jdbcType="VARCHAR" property="teacherId" />
+    <result column="teacher_code" jdbcType="VARCHAR" property="teacherCode" />
+    <result column="teacher_name" jdbcType="VARCHAR" property="teacherName" />
+    <result column="teacher_sex" jdbcType="VARCHAR" property="teacherSex" />
+    <result column="teacher_tel" jdbcType="VARCHAR" property="teacherTel" />
+    <result column="teacher_qq" jdbcType="VARCHAR" property="teacherQq" />
+    <result column="teacher_mail" jdbcType="VARCHAR" property="teacherMail" />
+    <result column="teacher_picture_url" jdbcType="VARCHAR" property="teacherPictureUrl" />
+    <result column="delete_status" jdbcType="VARCHAR" property="deleteStatus" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_user" jdbcType="VARCHAR" property="createUser" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="update_user" jdbcType="VARCHAR" property="updateUser" />
+  </resultMap>
+</mapper>
