@@ -6,8 +6,9 @@
       WARNING - @mbg.generated
     -->
     <id column="menu_id" jdbcType="VARCHAR" property="menuId" />
-    <result column="menu_name" jdbcType="VARCHAR" property="menuName" />
-    <result column="menu_url" jdbcType="VARCHAR" property="menuUrl" />
+    <result column="menu_title" jdbcType="VARCHAR" property="menuTitle" />
+    <result column="menu_path" jdbcType="VARCHAR" property="menuPath" />
+    <result column="menu_icon" jdbcType="VARCHAR" property="menuIcon" />
     <result column="menu_parent_id" jdbcType="VARCHAR" property="menuParentId" />
     <result column="menu_status" jdbcType="VARCHAR" property="menuStatus" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
