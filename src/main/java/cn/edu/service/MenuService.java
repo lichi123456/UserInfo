@@ -1,5 +1,9 @@
 package cn.edu.service;
 
+import cn.edu.entity.Menu;
+
+import java.util.List;
+
 /**
  * @ClassName MenuService
  * @Description TODO 菜单管理接口
@@ -8,4 +12,6 @@ package cn.edu.service;
  * @Version 1.0
  **/
 public interface MenuService {
+    List<Menu> getMenuList();
+    Menu getMenuById(String menuId);
 }

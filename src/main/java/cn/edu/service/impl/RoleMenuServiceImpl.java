@@ -1,7 +1,15 @@
 package cn.edu.service.impl;
 
+import cn.edu.dao.RoleMenuMapper;
+import cn.edu.entity.Menu;
+import cn.edu.entity.RoleMenu;
 import cn.edu.service.RoleMenuService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
+import tk.mybatis.mapper.entity.Example;
+
+import java.util.List;
 
 /**
  * @ClassName RoleMenuServiceImpl
@@ -12,4 +20,22 @@ import org.springframework.stereotype.Service;
  **/
 @Service
 public class RoleMenuServiceImpl implements RoleMenuService {
+    @Autowired
+    private RoleMenuMapper roleMenuMapper;
+
+    /**
+     * @Author wys
+     * @ClassName getRoleMenuListByRoleId
+     * @Description //TODO  根据角色id获取其菜单id
+     * @Date 10:15 2020/2/18
+     * @Param [roleId]
+     * @return java.util.List<cn.edu.entity.RoleMenu>
+     **/
+    @Override
+    public List<RoleMenu> getRoleMenuListByRoleId(String roleId) {
+        Assert.hasText(roleId,"角色id不能为空");
+        Example example = new Example(RoleMenu.class);
+        example.and().andEqualTo("roleId",roleId);
+        return roleMenuMapper.selectByExample(example);
+    }
 }

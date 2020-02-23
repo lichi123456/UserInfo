@@ -1,5 +1,9 @@
 package cn.edu.service;
 
+import cn.edu.entity.RoleMenu;
+
+import java.util.List;
+
 /**
  * @ClassName RoleMenuService
  * @Description TODO 角色菜单中间表接口
@@ -8,4 +12,5 @@ package cn.edu.service;
  * @Version 1.0
  **/
 public interface RoleMenuService {
+    List<RoleMenu>getRoleMenuListByRoleId(String roleId);
 }

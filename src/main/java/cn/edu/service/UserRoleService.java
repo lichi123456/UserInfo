@@ -1,5 +1,7 @@
 package cn.edu.service;
 
+import cn.edu.entity.UserRole;
+
 /**
  * @ClassName UserRoleService
  * @Description TODO 用户角色中间表管理接口
@@ -8,4 +10,5 @@ package cn.edu.service;
  * @Version 1.0
  **/
 public interface UserRoleService {
+    UserRole getUserRoleByUserId(String userId);
 }

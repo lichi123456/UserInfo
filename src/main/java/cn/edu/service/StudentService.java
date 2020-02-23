@@ -15,6 +15,7 @@ public interface StudentService {
     List<Student>getStudentList();
     int insert(Student student);
     int deletet(String id);
+    int realDel(String id);
     int update(Student student);
     Student search(String id);
 }

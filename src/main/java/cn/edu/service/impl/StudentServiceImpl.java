@@ -72,6 +72,19 @@ public class StudentServiceImpl implements StudentService {
 
     /**
      * @Author wys
+     * @ClassName realDel
+     * @Description //TODO  真删除
+     * @Date 11:06 2020/2/22
+     * @Param [id]
+     * @return int
+     **/
+    @Override
+    public int realDel(String id) {
+        return studentMapper.deleteByPrimaryKey(id);
+    }
+
+    /**
+     * @Author wys
      * @ClassName update
      * @Description //TODO 更新
      * @Date 16:38 2020/2/15
