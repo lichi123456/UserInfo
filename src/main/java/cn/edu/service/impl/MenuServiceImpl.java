@@ -1,10 +1,8 @@
 package cn.edu.service.impl;
 
 import cn.edu.dao.MenuMapper;
-import cn.edu.entity.Menu;
-import cn.edu.entity.RoleMenu;
+import cn.edu.vo.Menu;
 import cn.edu.service.MenuService;
-import cn.edu.service.RoleMenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +25,7 @@ public class MenuServiceImpl implements MenuService {
      * @Description //TODO  获取全部menu
      * @Date 10:16 2020/2/18
      * @Param []
-     * @return java.util.List<cn.edu.entity.Menu>
+     * @return java.util.List<cn.edu.vo.Menu>
      **/
     @Override
     public List<Menu> getMenuList() {
@@ -42,7 +40,7 @@ public class MenuServiceImpl implements MenuService {
          * @Description //TODO 根据Id获取一个菜单
          * @Date 10:22 2020/2/18
          * @Param [menuId]
-         * @return cn.edu.entity.Menu
+         * @return cn.edu.vo.Menu
          **/
         return menuMapper.selectByPrimaryKey(menuId);
     }

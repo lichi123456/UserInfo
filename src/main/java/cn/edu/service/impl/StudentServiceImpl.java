@@ -1,12 +1,20 @@
 package cn.edu.service.impl;
 
 import cn.edu.dao.StudentMapper;
-import cn.edu.entity.Student;
+import cn.edu.service.ClassesService;
+import cn.edu.service.FacultyService;
+import cn.edu.service.MajorService;
+import cn.edu.vo.Classes;
+import cn.edu.vo.Faculty;
+import cn.edu.vo.Major;
+import cn.edu.vo.Student;
 import cn.edu.service.StudentService;
 import cn.edu.utils.Constant;
 import cn.edu.utils.ApplicationUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import java.util.Date;
 import java.util.List;
@@ -24,13 +32,21 @@ public class StudentServiceImpl implements StudentService {
     @Autowired
     private StudentMapper studentMapper;
 
+    @Autowired
+    private ClassesService classesService;
+
+    @Autowired
+    private MajorService majorService;
+
+    @Autowired
+    private FacultyService facultyService;
     /**
      * @Author wys
      * @ClassName getStudentList
      * @Description //TODO 获取学生信息列表
      * @Date 16:37 2020/2/15
      * @Param []
-     * @return java.util.List<cn.edu.entity.Student>
+     * @return java.util.List<cn.edu.vo.Student>
      **/
     @Override
     public List<Student> getStudentList() {
@@ -63,6 +79,7 @@ public class StudentServiceImpl implements StudentService {
      **/
     @Override
     public int deletet(String id) {
+        Assert.hasText(id,"id不能为空");
         Student student = studentMapper.selectByPrimaryKey(id);
         student.setDeleteStatus(Constant.isDelete);
         student.setUpdateTime(new Date());
@@ -80,6 +97,7 @@ public class StudentServiceImpl implements StudentService {
      **/
     @Override
     public int realDel(String id) {
+        Assert.hasText(id,"id不能为空");
         return studentMapper.deleteByPrimaryKey(id);
     }
 
@@ -100,14 +118,15 @@ public class StudentServiceImpl implements StudentService {
 
     /**
      * @Author wys
-     * @ClassName search
-     * @Description //TODO  搜索一个学生
+     * @ClassName getOneStudentById
+     * @Description //TODO  获取一个学生的所有信息
      * @Date 16:39 2020/2/15
      * @Param [id]
-     * @return cn.edu.entity.Student
+     * @return cn.edu.vo.Student
      **/
     @Override
-    public Student search(String id) {
+    public Student getOneStudentById(String id) {
+        Assert.hasText(id,"id不能为空");
         return studentMapper.selectByPrimaryKey(id);
     }
 }

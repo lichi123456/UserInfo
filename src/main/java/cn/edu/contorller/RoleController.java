@@ -1,6 +1,5 @@
 package cn.edu.contorller;
 
-import cn.edu.entity.Role;
 import cn.edu.service.MenuService;
 import cn.edu.service.RoleMenuService;
 import cn.edu.service.RoleService;
@@ -10,8 +9,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 /**
  * @ClassName RoleController

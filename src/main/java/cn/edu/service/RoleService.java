@@ -1,8 +1,7 @@
 package cn.edu.service;
 
-import cn.edu.entity.Menu;
-import cn.edu.entity.Role;
-import cn.edu.utils.Result;
+import cn.edu.vo.Menu;
+import cn.edu.vo.Role;
 
 import java.util.List;
 

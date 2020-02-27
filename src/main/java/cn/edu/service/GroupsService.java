@@ -1,5 +1,9 @@
 package cn.edu.service;
 
+import cn.edu.vo.Groups;
+
+import java.util.List;
+
 /**
  * @ClassName GroupsService
  * @Description TODO 分组管理接口
@@ -8,4 +12,6 @@ package cn.edu.service;
  * @Version 1.0
  **/
 public interface GroupsService {
+    List<Groups>getGroupList();
+    Groups getOneGroupById(String groupId);
 }

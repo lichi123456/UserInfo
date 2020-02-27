@@ -1,6 +1,6 @@
 package cn.edu.service;
 
-import cn.edu.entity.Classes;
+import cn.edu.vo.Classes;
 
 import java.util.List;
 /**
@@ -12,8 +12,8 @@ import java.util.List;
  * @return
  **/
 public interface ClassesService {
-
     List<Classes> getClassesList();
+    Classes getOneClassesById(String classId);
     int insert(Classes classes, String majorId);
     int update(Classes classes);
     int delete(String id);

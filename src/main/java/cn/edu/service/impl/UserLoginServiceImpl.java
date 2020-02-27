@@ -1,10 +1,9 @@
 package cn.edu.service.impl;
 
 import cn.edu.dao.UserLoginMapper;
-import cn.edu.entity.UserLogin;
+import cn.edu.vo.UserLogin;
 import cn.edu.service.UserLoginService;
 import cn.edu.utils.Result;
-import com.sun.xml.internal.ws.policy.AssertionSet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;

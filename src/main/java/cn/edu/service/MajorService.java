@@ -1,6 +1,6 @@
 package cn.edu.service;
 
-import cn.edu.entity.Major;
+import cn.edu.vo.Major;
 
 import java.util.List;
 /**
@@ -14,6 +14,7 @@ import java.util.List;
 public interface MajorService {
 
     List<Major>getMajorList();
+    Major getOneMajorById(String majorId);
     int insert(Major major);
     int update(Major major);
     int delete(String id);

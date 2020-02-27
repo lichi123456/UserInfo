@@ -1,23 +1,19 @@
 package cn.edu.service.impl;
 
 import cn.edu.dao.RoleMapper;
-import cn.edu.entity.Menu;
-import cn.edu.entity.Role;
-import cn.edu.entity.RoleMenu;
+import cn.edu.vo.Menu;
+import cn.edu.vo.Role;
+import cn.edu.vo.RoleMenu;
 import cn.edu.service.MenuService;
 import cn.edu.service.RoleMenuService;
 import cn.edu.service.RoleService;
-import cn.edu.utils.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
-import sun.reflect.generics.tree.Tree;
-import tk.mybatis.mapper.entity.Example;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.TreeMap;
 
 /**
  * @ClassName RoleServiceImpl
@@ -40,7 +36,7 @@ public class RoleServiceImpl implements RoleService {
      * @Description //TODO  根据角色id获取一个角色
      * @Date 16:11 2020/2/17
      * @Param [id]
-     * @return cn.edu.entity.Role
+     * @return cn.edu.vo.Role
      **/
     @Override
     public Role getOneRole(String id) {

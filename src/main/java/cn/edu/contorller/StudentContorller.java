@@ -1,14 +1,11 @@
 package cn.edu.contorller;
 
-import cn.edu.entity.Student;
+import cn.edu.vo.Student;
 import cn.edu.service.StudentService;
 import cn.edu.utils.ApplicationUtils;
 import cn.edu.utils.Result;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 /**
  * @ClassName StudentContorller
@@ -129,6 +126,27 @@ public class StudentContorller {
         return result;
     }
 
+    /**
+     * @Author wys
+     * @ClassName getOneStudent
+     * @Description //TODO  通过id获取学生信息，包括学生班级信息与分组信息
+     * @Date 9:43 2020/2/27
+     * @Param [id]
+     * @return cn.edu.utils.Result
+     **/
+    @GetMapping("/{userId}")
+    public Result getOneStudent(@PathVariable String userId){
+        Result result = new Result();
+        try{
+            result.setMessage("获取学生信息成功");
+            result.setSuccess(true);
+            result.setObject(studentService.getOneStudentById(userId));
+        }catch (Exception e){
+            result.setSuccess(false);
+            result.setMessage(e.getMessage());
+        }
+        return result;
+    }
     /**
      * @Author wys
      * @ClassName getUUID

@@ -1,11 +1,12 @@
 package cn.edu.service.impl;
 
 import cn.edu.dao.ClassesMapper;
-import cn.edu.entity.Classes;
+import cn.edu.vo.Classes;
 import cn.edu.service.ClassesService;
 import cn.edu.utils.ApplicationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import java.util.Date;
 import java.util.List;
@@ -29,11 +30,25 @@ public class ClassesServiceImpl implements ClassesService {
      * @Description //TODO  获取班级列表
      * @Date 17:08 2020/2/15
      * @Param []
-     * @return java.util.List<cn.edu.entity.Classes>
+     * @return java.util.List<cn.edu.vo.Classes>
      **/
     @Override
     public List<Classes> getClassesList() {
         return classesMapper.selectAll();
+    }
+
+    /**
+     * @Author wys
+     * @ClassName getOneClassesById
+     * @Description //TODO  获取当前学生班级信息
+     * @Date 19:29 2020/2/27
+     * @Param [classId]
+     * @return cn.edu.vo.Classes
+     **/
+    @Override
+    public Classes getOneClassesById(String classId) {
+//        Assert.hasText(classId,"班级id不能为空");
+        return classesMapper.selectByPrimaryKey(classId);
     }
 
     /**

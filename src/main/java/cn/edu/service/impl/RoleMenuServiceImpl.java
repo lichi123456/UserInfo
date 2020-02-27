@@ -1,8 +1,7 @@
 package cn.edu.service.impl;
 
 import cn.edu.dao.RoleMenuMapper;
-import cn.edu.entity.Menu;
-import cn.edu.entity.RoleMenu;
+import cn.edu.vo.RoleMenu;
 import cn.edu.service.RoleMenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,7 +28,7 @@ public class RoleMenuServiceImpl implements RoleMenuService {
      * @Description //TODO  根据角色id获取其菜单id
      * @Date 10:15 2020/2/18
      * @Param [roleId]
-     * @return java.util.List<cn.edu.entity.RoleMenu>
+     * @return java.util.List<cn.edu.vo.RoleMenu>
      **/
     @Override
     public List<RoleMenu> getRoleMenuListByRoleId(String roleId) {

@@ -1,6 +1,6 @@
 package cn.edu.service;
 
-import cn.edu.entity.Faculty;
+import cn.edu.vo.Faculty;
 
 import java.util.List;
 /**
@@ -14,6 +14,7 @@ import java.util.List;
 public interface FacultyService {
 
     List<Faculty> getFacultyList();
+    Faculty getFacultyBuId(String facultyId);
     int insert(Faculty faculty);
     int update(Faculty faculty);
     int delete(String id);

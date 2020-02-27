@@ -1,8 +1,6 @@
 package cn.edu.service;
 
-import cn.edu.entity.UserLogin;
 import cn.edu.utils.Result;
-import org.apache.ibatis.mapping.ResultMap;
 
 /**
  * @ClassName UserLoginService

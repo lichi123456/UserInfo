@@ -1,6 +1,6 @@
 package cn.edu.service;
 
-import cn.edu.entity.Student;
+import cn.edu.vo.Student;
 
 import java.util.List;
 
@@ -17,5 +17,5 @@ public interface StudentService {
     int deletet(String id);
     int realDel(String id);
     int update(Student student);
-    Student search(String id);
+    Student getOneStudentById(String id);
 }
