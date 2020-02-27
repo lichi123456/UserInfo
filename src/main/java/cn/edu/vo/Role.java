@@ -1,0 +1,54 @@
+package cn.edu.vo;
+
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.Date;
+import javax.persistence.*;
+
+@Table(name = "`role`")
+@Getter
+@Setter
+public class Role {
+    /**
+     * 主键id
+     */
+    @Id
+    @Column(name = "`role_id`")
+    private String roleId;
+
+    /**
+     * 角色类型名称:学生、教师、管理员..
+     */
+    @Column(name = "`role_name`")
+    private String roleName;
+
+    /**
+     * 创建时间
+     */
+    @Column(name = "`create_time`")
+    private Date createTime;
+
+    /**
+     * 创建人
+     */
+    @Column(name = "`create_user`")
+    private String createUser;
+
+    /**
+     * 修改日期
+     */
+    @Column(name = "`update_time`")
+    private Date updateTime;
+
+    /**
+     * 修改人
+     */
+    @Column(name = "`update_user`")
+    private String updateUser;
+    /**
+     * 存放额外信息
+     */
+    @Transient
+    private Object object;
+}

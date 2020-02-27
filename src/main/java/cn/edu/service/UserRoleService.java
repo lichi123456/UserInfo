@@ -1,6 +1,6 @@
 package cn.edu.service;
 
-import cn.edu.entity.UserRole;
+import cn.edu.vo.UserRole;
 
 /**
  * @ClassName UserRoleService

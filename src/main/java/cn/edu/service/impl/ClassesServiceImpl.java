@@ -1,7 +1,7 @@
 package cn.edu.service.impl;
 
 import cn.edu.dao.ClassesMapper;
-import cn.edu.entity.Classes;
+import cn.edu.vo.Classes;
 import cn.edu.service.ClassesService;
 import cn.edu.utils.ApplicationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +29,7 @@ public class ClassesServiceImpl implements ClassesService {
      * @Description //TODO  获取班级列表
      * @Date 17:08 2020/2/15
      * @Param []
-     * @return java.util.List<cn.edu.entity.Classes>
+     * @return java.util.List<cn.edu.vo.Classes>
      **/
     @Override
     public List<Classes> getClassesList() {

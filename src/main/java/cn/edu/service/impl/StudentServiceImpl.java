@@ -1,12 +1,13 @@
 package cn.edu.service.impl;
 
 import cn.edu.dao.StudentMapper;
-import cn.edu.entity.Student;
+import cn.edu.vo.Student;
 import cn.edu.service.StudentService;
 import cn.edu.utils.Constant;
 import cn.edu.utils.ApplicationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import java.util.Date;
 import java.util.List;
@@ -30,7 +31,7 @@ public class StudentServiceImpl implements StudentService {
      * @Description //TODO 获取学生信息列表
      * @Date 16:37 2020/2/15
      * @Param []
-     * @return java.util.List<cn.edu.entity.Student>
+     * @return java.util.List<cn.edu.vo.Student>
      **/
     @Override
     public List<Student> getStudentList() {
@@ -63,6 +64,7 @@ public class StudentServiceImpl implements StudentService {
      **/
     @Override
     public int deletet(String id) {
+        Assert.hasText(id,"id不能为空");
         Student student = studentMapper.selectByPrimaryKey(id);
         student.setDeleteStatus(Constant.isDelete);
         student.setUpdateTime(new Date());
@@ -80,6 +82,7 @@ public class StudentServiceImpl implements StudentService {
      **/
     @Override
     public int realDel(String id) {
+        Assert.hasText(id,"id不能为空");
         return studentMapper.deleteByPrimaryKey(id);
     }
 
@@ -104,10 +107,11 @@ public class StudentServiceImpl implements StudentService {
      * @Description //TODO  搜索一个学生
      * @Date 16:39 2020/2/15
      * @Param [id]
-     * @return cn.edu.entity.Student
+     * @return cn.edu.vo.Student
      **/
     @Override
     public Student search(String id) {
+        Assert.hasText(id,"id不能为空");
         return studentMapper.selectByPrimaryKey(id);
     }
 }

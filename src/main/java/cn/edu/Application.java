@@ -14,7 +14,7 @@ import tk.mybatis.spring.annotation.MapperScan;
  **/
 @SpringBootApplication
 @MapperScan("cn.edu.dao")
-@EntityScan("cn.edu.entity")
+@EntityScan("cn.edu.vo")
 public class Application {
     public static void main(String[] args) {
         SpringApplication.run(Application.class,args);

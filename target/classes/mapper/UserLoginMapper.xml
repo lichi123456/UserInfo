@@ -9,6 +9,7 @@
     <result column="user_code" jdbcType="VARCHAR" property="userCode" />
     <result column="user_password" jdbcType="VARCHAR" property="userPassword" />
     <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="user_type" jdbcType="VARCHAR" property="userType" />
     <result column="last_login" jdbcType="TIMESTAMP" property="lastLogin" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="create_user" jdbcType="VARCHAR" property="createUser" />

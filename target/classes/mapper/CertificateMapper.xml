@@ -11,6 +11,7 @@
     <result column="certificate_level" jdbcType="VARCHAR" property="certificateLevel" />
     <result column="certificate_picture_url" jdbcType="VARCHAR" property="certificatePictureUrl" />
     <result column="match_id" jdbcType="VARCHAR" property="matchId" />
+    <result column="delete_status" jdbcType="VARCHAR" property="deleteStatus" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="create_user" jdbcType="VARCHAR" property="createUser" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />

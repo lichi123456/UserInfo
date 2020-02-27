@@ -1,6 +1,6 @@
 package cn.edu.service;
 
-import cn.edu.entity.RoleMenu;
+import cn.edu.vo.RoleMenu;
 
 import java.util.List;
 

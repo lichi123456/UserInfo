@@ -1,4 +1,4 @@
-package cn.edu.entity;
+package cn.edu.vo;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -77,5 +77,9 @@ public class Menu {
      */
     @Transient
     private List<Menu> menuList;
-
+    /**
+     * 存放额外信息
+     */
+    @Transient
+    private Object object;
 }

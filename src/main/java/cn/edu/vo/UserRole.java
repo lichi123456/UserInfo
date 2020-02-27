@@ -1,34 +1,33 @@
-package cn.edu.entity;
+package cn.edu.vo;
 
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Date;
-import java.util.List;
 import javax.persistence.*;
 
-@Table(name = "`role_menu`")
+@Table(name = "`user_role`")
 @Getter
 @Setter
-public class RoleMenu {
+public class UserRole {
     /**
      * 主键id
      */
     @Id
-    @Column(name = "`role_menu_id`")
-    private Long roleMenuId;
+    @Column(name = "`user_role_id`")
+    private Long userRoleId;
 
     /**
-     * 角色主键id
+     * 用户登录表主键id
+     */
+    @Column(name = "`user_id`")
+    private String userId;
+
+    /**
+     * 角色表id
      */
     @Column(name = "`role_id`")
     private String roleId;
-
-    /**
-     * 菜单主键id
-     */
-    @Column(name = "`menu_id`")
-    private String menuId;
 
     /**
      * 创建时间
@@ -55,14 +54,8 @@ public class RoleMenu {
     private String updateUser;
 
     /**
-     * 将要操作的菜单列表
+     * 存放额外信息
      */
-   @Transient
-    private List<Menu>menuList;
-
-    /**
-     * 操作人（待使用）
-     */
-   @Transient
-    private String operator;
+    @Transient
+    private Object object;
 }

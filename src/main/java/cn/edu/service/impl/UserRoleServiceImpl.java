@@ -1,7 +1,7 @@
 package cn.edu.service.impl;
 
 import cn.edu.dao.UserRoleMapper;
-import cn.edu.entity.UserRole;
+import cn.edu.vo.UserRole;
 import cn.edu.service.UserRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

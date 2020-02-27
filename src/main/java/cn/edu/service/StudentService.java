@@ -1,6 +1,6 @@
 package cn.edu.service;
 
-import cn.edu.entity.Student;
+import cn.edu.vo.Student;
 
 import java.util.List;
 

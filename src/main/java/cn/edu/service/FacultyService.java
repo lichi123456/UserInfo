@@ -1,6 +1,6 @@
 package cn.edu.service;
 
-import cn.edu.entity.Faculty;
+import cn.edu.vo.Faculty;
 
 import java.util.List;
 /**

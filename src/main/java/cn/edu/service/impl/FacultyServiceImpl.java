@@ -1,7 +1,7 @@
 package cn.edu.service.impl;
 
 import cn.edu.dao.FacultyMapper;
-import cn.edu.entity.Faculty;
+import cn.edu.vo.Faculty;
 import cn.edu.service.FacultyService;
 import cn.edu.utils.ApplicationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,7 @@ public class FacultyServiceImpl implements FacultyService {
      * @Description //TODO  获取院系列表
      * @Date 16:50 2020/2/15
      * @Param []
-     * @return java.util.List<cn.edu.entity.Faculty>
+     * @return java.util.List<cn.edu.vo.Faculty>
      **/
     @Override
     public List<Faculty> getFacultyList() {

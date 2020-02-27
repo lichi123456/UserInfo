@@ -1,6 +1,6 @@
 package cn.edu.service;
 
-import cn.edu.entity.Classes;
+import cn.edu.vo.Classes;
 
 import java.util.List;
 /**

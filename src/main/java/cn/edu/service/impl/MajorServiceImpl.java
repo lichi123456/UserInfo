@@ -1,7 +1,7 @@
 package cn.edu.service.impl;
 
 import cn.edu.dao.MajorMapper;
-import cn.edu.entity.Major;
+import cn.edu.vo.Major;
 import cn.edu.service.MajorService;
 import cn.edu.utils.ApplicationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,7 @@ public class MajorServiceImpl implements MajorService {
      * @Description //TODO  获取专业列表
      * @Date 16:59 2020/2/15
      * @Param []
-     * @return java.util.List<cn.edu.entity.Major>
+     * @return java.util.List<cn.edu.vo.Major>
      **/
     @Override
     public List<Major> getMajorList() {
