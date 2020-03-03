@@ -50,13 +50,8 @@ public class Teacher {
     /**
      * 邮箱
      */
-<<<<<<< HEAD
     @Column(name = "`teacher_email`")
     private String teacherEmail;
-=======
-    @Column(name = "`teacher_mail`")
-    private String teacherMail;
->>>>>>> 6cf9729eabc04a72d38265b189fa85e20511736e
 
     /**
      * 照片/头像地址

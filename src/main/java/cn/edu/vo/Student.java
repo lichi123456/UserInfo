@@ -65,7 +65,6 @@ public class Student {
      */
     @Column(name = "`class_id`")
     private String classId;
-<<<<<<< HEAD
     /**
      * 班级名称
      */
@@ -91,23 +90,16 @@ public class Student {
      */
     @Transient
     private String facultyName;
-=======
-
->>>>>>> 6cf9729eabc04a72d38265b189fa85e20511736e
     /**
      * 分组id
      */
     @Column(name = "`group_id`")
     private String groupId;
-<<<<<<< HEAD
     /**
      * 分组名称
      */
     @Transient
     private String groupName;
-=======
-
->>>>>>> 6cf9729eabc04a72d38265b189fa85e20511736e
     /**
      * 假删除标识（已删除：Y，使用：N）
      */
@@ -145,8 +137,6 @@ public class Student {
     @Transient
     private String condition;
     /**
-=======
->>>>>>> 6cf9729eabc04a72d38265b189fa85e20511736e
      * 存放额外信息
      */
     @Transient

@@ -42,6 +42,14 @@ public class FacultyController {
         }
         return result;
     }
+    /**
+     * @Author wys
+     * @ClassName getAllList
+     * @Description //TODO  获取获取院系-专业-班级列表成功
+     * @Date 23:17 2020/3/3
+     * @Param []
+     * @return cn.edu.utils.Result
+     **/
     @GetMapping("/all/")
     public Result getAllList(){
         Result result = new Result();

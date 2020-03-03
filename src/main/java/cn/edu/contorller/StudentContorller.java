@@ -1,9 +1,6 @@
 package cn.edu.contorller;
 
-<<<<<<< HEAD
 import cn.edu.service.TeacherStudentService;
-=======
->>>>>>> 6cf9729eabc04a72d38265b189fa85e20511736e
 import cn.edu.vo.Student;
 import cn.edu.service.StudentService;
 import cn.edu.utils.ApplicationUtils;
@@ -151,7 +148,6 @@ public class StudentContorller {
         try{
             result.setMessage("获取学生信息成功");
             result.setSuccess(true);
-<<<<<<< HEAD
             result.setObject(studentService.getOneStudentById(userId));
         }catch (Exception e){
             result.setSuccess(false);
@@ -175,9 +171,6 @@ public class StudentContorller {
             result.setMessage("获取学生指导老师列表成功");
             result.setSuccess(true);
             result.setObject(teacherStudentService.getTeacherListByStudentId(userId));
-=======
-            result.setObject(studentService.search(userId));
->>>>>>> 6cf9729eabc04a72d38265b189fa85e20511736e
         }catch (Exception e){
             result.setSuccess(false);
             result.setMessage(e.getMessage());

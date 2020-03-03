@@ -1,13 +1,10 @@
 package cn.edu.service.impl;
 
 import cn.edu.dao.StudentMapper;
-<<<<<<< HEAD
 import cn.edu.service.*;
 import cn.edu.vo.*;
-=======
 import cn.edu.vo.Student;
 import cn.edu.service.StudentService;
->>>>>>> 6cf9729eabc04a72d38265b189fa85e20511736e
 import cn.edu.utils.Constant;
 import cn.edu.utils.ApplicationUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -133,39 +130,33 @@ public class StudentServiceImpl implements StudentService {
      * @return cn.edu.vo.Student
      **/
     @Override
-<<<<<<< HEAD
     public Student getOneStudentById(String id) {
-        Assert.hasText(id,"id不能为空");
+        Assert.hasText(id, "id不能为空");
         Student student = studentMapper.selectByPrimaryKey(id);
         Faculty faculty = new Faculty();
         Major major = new Major();
         Classes classes = new Classes();
         Groups groups = new Groups();
-        if(StringUtils.isNotEmpty(student.getClassId()) && StringUtils.isNoneBlank(student.getClassId())){
+        if (StringUtils.isNotEmpty(student.getClassId()) && StringUtils.isNoneBlank(student.getClassId())) {
             classes = classesService.getOneClassesById(student.getClassId());
             student.setClassName(classes.getClassName());
-            if(StringUtils.isNotEmpty(classes.getMajorId()) && StringUtils.isNoneBlank(classes.getMajorId())){
+            if (StringUtils.isNotEmpty(classes.getMajorId()) && StringUtils.isNoneBlank(classes.getMajorId())) {
                 major = majorService.getOneMajorById(classes.getMajorId());
                 student.setMajorId(major.getMajorId());
                 student.setMajorName(major.getMajorName());
-                if(StringUtils.isNotEmpty(major.getFacultyId()) && StringUtils.isNoneBlank(major.getFacultyId())){
+                if (StringUtils.isNotEmpty(major.getFacultyId()) && StringUtils.isNoneBlank(major.getFacultyId())) {
                     faculty = facultyService.getFacultyById(major.getFacultyId());
                     student.setFacultyId(faculty.getFacultyId());
                     student.setFacultyName(faculty.getFacultyName());
                 }
             }
         }
-        if(StringUtils.isNotEmpty(student.getGroupId()) && StringUtils.isNoneBlank(student.getGroupId())){
+        if (StringUtils.isNotEmpty(student.getGroupId()) && StringUtils.isNoneBlank(student.getGroupId())) {
             groups = groupsService.getOneGroupById(student.getGroupId());
             student.setGroupName(groups.getGroupName());
         }
 
         return student;
-=======
-    public Student search(String id) {
-        Assert.hasText(id,"id不能为空");
-        return studentMapper.selectByPrimaryKey(id);
->>>>>>> 6cf9729eabc04a72d38265b189fa85e20511736e
     }
 
 }
