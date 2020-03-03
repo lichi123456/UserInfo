@@ -1,9 +1,12 @@
 package cn.edu.service.impl;
 
 import cn.edu.dao.FacultyMapper;
+<<<<<<< HEAD
 import cn.edu.service.ClassesService;
 import cn.edu.service.MajorService;
 import cn.edu.vo.Classes;
+=======
+>>>>>>> 6cf9729eabc04a72d38265b189fa85e20511736e
 import cn.edu.vo.Faculty;
 import cn.edu.service.FacultyService;
 import cn.edu.utils.ApplicationUtils;

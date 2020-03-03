@@ -1,8 +1,13 @@
 package cn.edu.service.impl;
 
 import cn.edu.dao.StudentMapper;
+<<<<<<< HEAD
 import cn.edu.service.*;
 import cn.edu.vo.*;
+=======
+import cn.edu.vo.Student;
+import cn.edu.service.StudentService;
+>>>>>>> 6cf9729eabc04a72d38265b189fa85e20511736e
 import cn.edu.utils.Constant;
 import cn.edu.utils.ApplicationUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -128,6 +133,7 @@ public class StudentServiceImpl implements StudentService {
      * @return cn.edu.vo.Student
      **/
     @Override
+<<<<<<< HEAD
     public Student getOneStudentById(String id) {
         Assert.hasText(id,"id不能为空");
         Student student = studentMapper.selectByPrimaryKey(id);
@@ -155,6 +161,11 @@ public class StudentServiceImpl implements StudentService {
         }
 
         return student;
+=======
+    public Student search(String id) {
+        Assert.hasText(id,"id不能为空");
+        return studentMapper.selectByPrimaryKey(id);
+>>>>>>> 6cf9729eabc04a72d38265b189fa85e20511736e
     }
 
 }
