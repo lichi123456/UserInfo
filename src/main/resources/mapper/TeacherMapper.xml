@@ -11,7 +11,7 @@
     <result column="teacher_sex" jdbcType="VARCHAR" property="teacherSex" />
     <result column="teacher_tel" jdbcType="VARCHAR" property="teacherTel" />
     <result column="teacher_qq" jdbcType="VARCHAR" property="teacherQq" />
-    <result column="teacher_mail" jdbcType="VARCHAR" property="teacherMail" />
+    <result column="teacher_email" jdbcType="VARCHAR" property="teacherEmail" />
     <result column="teacher_picture_url" jdbcType="VARCHAR" property="teacherPictureUrl" />
     <result column="delete_status" jdbcType="VARCHAR" property="deleteStatus" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />

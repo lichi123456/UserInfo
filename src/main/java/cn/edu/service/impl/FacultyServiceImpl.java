@@ -1,12 +1,17 @@
 package cn.edu.service.impl;
 
 import cn.edu.dao.FacultyMapper;
+import cn.edu.service.ClassesService;
+import cn.edu.service.MajorService;
+import cn.edu.vo.Classes;
 import cn.edu.vo.Faculty;
 import cn.edu.service.FacultyService;
 import cn.edu.utils.ApplicationUtils;
+import cn.edu.vo.Major;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -22,6 +27,12 @@ public class FacultyServiceImpl implements FacultyService {
 
     @Autowired
     private FacultyMapper facultyMapper;
+
+    @Autowired
+    private MajorService majorService;
+
+    @Autowired
+    private ClassesService classesService;
     /**
      * @Author wys
      * @ClassName getFacultyList
@@ -35,16 +46,16 @@ public class FacultyServiceImpl implements FacultyService {
         return facultyMapper.selectAll();
     }
 
+    /**
+     * @Author wys
+     * @ClassName getFacultyById
+     * @Description //TODO  获取当前专业对应院系信息
+     * @Date 20:20 2020/2/27
+     * @Param [facultyId]
+     * @return cn.edu.vo.Faculty
+     **/
     @Override
-    public Faculty getFacultyBuId(String facultyId) {
-        /**
-         * @Author wys
-         * @ClassName getFacultyBuId
-         * @Description //TODO  获取当前专业对应院系信息
-         * @Date 20:20 2020/2/27
-         * @Param [facultyId]
-         * @return cn.edu.vo.Faculty
-         **/
+    public Faculty getFacultyById(String facultyId) {
         return facultyMapper.selectByPrimaryKey(facultyId);
     }
 
@@ -89,5 +100,31 @@ public class FacultyServiceImpl implements FacultyService {
     @Override
     public int delete(String id) {
         return facultyMapper.deleteByPrimaryKey(id);
+    }
+
+    @Override
+    public List<Faculty> getAllList() {
+        List<Faculty>facultyList = getFacultyList();
+        List<Major>majorList = majorService.getMajorList();
+        List<Classes>classesList = classesService.getClassesList();
+        List<Faculty>list=new ArrayList<>();
+        for (Faculty f:facultyList ) {
+            List<Major>m1 = new ArrayList<>();
+            for (Major m:majorList) {
+                List<Classes>c1 = new ArrayList<>();
+                for (Classes c:classesList) {
+                    if(c.getMajorId().compareTo(m.getMajorId())==0){
+                        c1.add(c);
+                    }
+                }
+                m.setObject(c1);
+                if(m.getFacultyId().compareTo(f.getFacultyId())==0){
+                    m1.add(m);
+                }
+            }
+            f.setObject(m1);
+            list.add(f);
+        }
+        return list;
     }
 }

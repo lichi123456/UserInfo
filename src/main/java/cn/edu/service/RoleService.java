@@ -15,5 +15,5 @@ import java.util.List;
 public interface RoleService {
     Role getOneRole(String id);
 
-    List<Menu> getRoleByroleId(String id);
+    List<Menu> getMenuByroleId(String id);
 }

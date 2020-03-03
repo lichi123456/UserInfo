@@ -1,14 +1,8 @@
 package cn.edu.service.impl;
 
 import cn.edu.dao.StudentMapper;
-import cn.edu.service.ClassesService;
-import cn.edu.service.FacultyService;
-import cn.edu.service.MajorService;
-import cn.edu.vo.Classes;
-import cn.edu.vo.Faculty;
-import cn.edu.vo.Major;
-import cn.edu.vo.Student;
-import cn.edu.service.StudentService;
+import cn.edu.service.*;
+import cn.edu.vo.*;
 import cn.edu.utils.Constant;
 import cn.edu.utils.ApplicationUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -16,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -40,6 +35,9 @@ public class StudentServiceImpl implements StudentService {
 
     @Autowired
     private FacultyService facultyService;
+
+    @Autowired
+    private GroupsService groupsService;
     /**
      * @Author wys
      * @ClassName getStudentList
@@ -50,7 +48,12 @@ public class StudentServiceImpl implements StudentService {
      **/
     @Override
     public List<Student> getStudentList() {
-        return studentMapper.selectAll();
+        List<Student>studentList = studentMapper.selectAll();
+        List<Student>list=new ArrayList<>();
+        studentList.stream().forEach(s->{
+                list.add(getOneStudentById(s.getStudentId()));
+        });
+        return list;
     }
 
     /**
@@ -66,7 +69,7 @@ public class StudentServiceImpl implements StudentService {
         student.setStudentId(ApplicationUtils.GUID32());
         student.setDeleteStatus(Constant.isNotDelete);
 //        student.setCreateUser();
-        return studentMapper.insert(student);
+        return studentMapper.insertSelective(student);
     }
 
     /**
@@ -127,6 +130,31 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public Student getOneStudentById(String id) {
         Assert.hasText(id,"id不能为空");
-        return studentMapper.selectByPrimaryKey(id);
+        Student student = studentMapper.selectByPrimaryKey(id);
+        Faculty faculty = new Faculty();
+        Major major = new Major();
+        Classes classes = new Classes();
+        Groups groups = new Groups();
+        if(StringUtils.isNotEmpty(student.getClassId()) && StringUtils.isNoneBlank(student.getClassId())){
+            classes = classesService.getOneClassesById(student.getClassId());
+            student.setClassName(classes.getClassName());
+            if(StringUtils.isNotEmpty(classes.getMajorId()) && StringUtils.isNoneBlank(classes.getMajorId())){
+                major = majorService.getOneMajorById(classes.getMajorId());
+                student.setMajorId(major.getMajorId());
+                student.setMajorName(major.getMajorName());
+                if(StringUtils.isNotEmpty(major.getFacultyId()) && StringUtils.isNoneBlank(major.getFacultyId())){
+                    faculty = facultyService.getFacultyById(major.getFacultyId());
+                    student.setFacultyId(faculty.getFacultyId());
+                    student.setFacultyName(faculty.getFacultyName());
+                }
+            }
+        }
+        if(StringUtils.isNotEmpty(student.getGroupId()) && StringUtils.isNoneBlank(student.getGroupId())){
+            groups = groupsService.getOneGroupById(student.getGroupId());
+            student.setGroupName(groups.getGroupName());
+        }
+
+        return student;
     }
+
 }

@@ -65,13 +65,41 @@ public class Student {
      */
     @Column(name = "`class_id`")
     private String classId;
-
+    /**
+     * 班级名称
+     */
+    @Transient
+    private String className;
+    /**
+     * 专业id
+     */
+    @Transient
+    private String majorId;
+    /**
+     * 专业名称
+     */
+    @Transient
+    private String majorName;
+    /**
+     * 院系id
+     */
+    @Transient
+    private String facultyId;
+    /**
+     * 院系名称
+     */
+    @Transient
+    private String facultyName;
     /**
      * 分组id
      */
     @Column(name = "`group_id`")
     private String groupId;
-
+    /**
+     * 分组名称
+     */
+    @Transient
+    private String groupName;
     /**
      * 假删除标识（已删除：Y，使用：N）
      */
@@ -102,6 +130,11 @@ public class Student {
     @Column(name = "`update_user`")
     private String updateUser;
 
+    /**
+     * 模糊查询
+     */
+    @Transient
+    private String condition;
     /**
      * 存放额外信息
      */

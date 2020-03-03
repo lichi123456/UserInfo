@@ -18,4 +18,5 @@ public interface StudentService {
     int realDel(String id);
     int update(Student student);
     Student getOneStudentById(String id);
+
 }

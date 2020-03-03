@@ -1,5 +1,10 @@
 package cn.edu.service;
 
+import cn.edu.vo.Student;
+import cn.edu.vo.Teacher;
+
+import java.util.List;
+
 /**
  * @ClassName TeacherStudentService
  * @Description TODO 教师学生中间表接口
@@ -8,4 +13,6 @@ package cn.edu.service;
  * @Version 1.0
  **/
 public interface TeacherStudentService {
+    List<Teacher>getTeacherListByStudentId(String id);
+    List<Student>getStudentListByTeacherId(String id);
 }

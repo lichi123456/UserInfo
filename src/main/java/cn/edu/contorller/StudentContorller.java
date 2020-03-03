@@ -1,5 +1,6 @@
 package cn.edu.contorller;
 
+import cn.edu.service.TeacherStudentService;
 import cn.edu.vo.Student;
 import cn.edu.service.StudentService;
 import cn.edu.utils.ApplicationUtils;
@@ -19,6 +20,9 @@ import org.springframework.web.bind.annotation.*;
 public class StudentContorller {
     @Autowired
     private StudentService studentService;
+
+    @Autowired
+    private TeacherStudentService teacherStudentService;
 
     /**
      * @Author wys
@@ -141,6 +145,28 @@ public class StudentContorller {
             result.setMessage("获取学生信息成功");
             result.setSuccess(true);
             result.setObject(studentService.getOneStudentById(userId));
+        }catch (Exception e){
+            result.setSuccess(false);
+            result.setMessage(e.getMessage());
+        }
+        return result;
+    }
+
+    /**
+     * @Author wys
+     * @ClassName getStuudentLeaders
+     * @Description //TODO  根据学生id获取其所有指导老师
+     * @Date 20:02 2020/3/1
+     * @Param [userId]
+     * @return cn.edu.utils.Result
+     **/
+    @GetMapping("/leader/{userId}")
+    public Result getStuudentLeaders(@PathVariable String userId){
+        Result result = new Result();
+        try{
+            result.setMessage("获取学生指导老师列表成功");
+            result.setSuccess(true);
+            result.setObject(teacherStudentService.getTeacherListByStudentId(userId));
         }catch (Exception e){
             result.setSuccess(false);
             result.setMessage(e.getMessage());

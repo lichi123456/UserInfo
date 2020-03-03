@@ -50,8 +50,8 @@ public class Teacher {
     /**
      * 邮箱
      */
-    @Column(name = "`teacher_mail`")
-    private String teacherMail;
+    @Column(name = "`teacher_email`")
+    private String teacherEmail;
 
     /**
      * 照片/头像地址

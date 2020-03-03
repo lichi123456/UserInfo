@@ -1,5 +1,10 @@
 package cn.edu.service;
 
+import cn.edu.vo.Teacher;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
+
 /**
  * @ClassName TeacherService
  * @Description TODO 教师管理接口
@@ -8,4 +13,10 @@ package cn.edu.service;
  * @Version 1.0
  **/
 public interface TeacherService {
+    List<Teacher>getTeacherList();
+    Teacher getOneTeacherById(String id);
+    int insert(Teacher teacher);
+    int update(Teacher teacher);
+    int delete(String id);
+    int realDel(String id);
 }

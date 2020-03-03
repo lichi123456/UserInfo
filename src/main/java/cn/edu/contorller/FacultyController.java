@@ -35,11 +35,26 @@ public class FacultyController {
         try{
             result.setSuccess(true);
             result.setMessage("获取院系信息成功");
-            result.setObject(facultyService.getFacultyBuId(facultyId));
+            result.setObject(facultyService.getFacultyById(facultyId));
         }catch (Exception e){
             result.setSuccess(false);
             result.setMessage(e.getMessage());
         }
+        return result;
+    }
+    @GetMapping("/all/")
+    public Result getAllList(){
+        Result result = new Result();
+        try{
+            result.setSuccess(true);
+            result.setMessage("获取院系-专业-班级列表成功");
+            result.setObject(facultyService.getAllList());
+        }catch (Exception e){
+            result.setMessage(e.getMessage());
+            result.setSuccess(false);
+        }
+
+
         return result;
     }
 }

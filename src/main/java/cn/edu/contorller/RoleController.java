@@ -46,7 +46,7 @@ public class RoleController {
              * ECA8953FA7134ADA8EFC76584EF4658D 学生
              * 662B5AC9668C4241977B0B9E67AF4ED1 教师
              */
-            result.setObject(roleService.getRoleByroleId(roleId));
+            result.setObject(roleService.getMenuByroleId(roleId));
             result.setSuccess(true);
         }catch (Exception e){
             result.setSuccess(false);
