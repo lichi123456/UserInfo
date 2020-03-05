@@ -133,11 +133,7 @@ public class StudentContorller {
     /**
      * @Author wys
      * @ClassName getOneStudent
-<<<<<<< HEAD
      * @Description //TODO  通过id获取学生信息，包括学生班级信息与分组信息
-=======
-     * @Description //TODO  通过id获取学生信息
->>>>>>> 6cf9729eabc04a72d38265b189fa85e20511736e
      * @Date 9:43 2020/2/27
      * @Param [id]
      * @return cn.edu.utils.Result
@@ -158,14 +154,14 @@ public class StudentContorller {
 
     /**
      * @Author wys
-     * @ClassName getStuudentLeaders
+     * @ClassName getStudentLeaders
      * @Description //TODO  根据学生id获取其所有指导老师
      * @Date 20:02 2020/3/1
      * @Param [userId]
      * @return cn.edu.utils.Result
      **/
     @GetMapping("/leader/{userId}")
-    public Result getStuudentLeaders(@PathVariable String userId){
+    public Result getStudentLeaders(@PathVariable String userId){
         Result result = new Result();
         try{
             result.setMessage("获取学生指导老师列表成功");

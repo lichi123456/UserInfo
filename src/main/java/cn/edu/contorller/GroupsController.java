@@ -34,4 +34,17 @@ public class GroupsController {
         }
         return result;
     }
+    @GetMapping("/list/")
+    public Result getGroupsList(){
+        Result result = new Result();
+        try{
+            result.setSuccess(true);
+            result.setMessage("获取小组列表成功");
+            result.setObject(groupsService.getGroupList());
+        }catch (Exception e){
+            result.setMessage(e.getMessage());
+            result.setSuccess(false);
+        }
+        return result;
+    }
 }

@@ -117,12 +117,12 @@ public class FacultyServiceImpl implements FacultyService {
                         c1.add(c);
                     }
                 }
-                m.setObject(c1);
+                m.setClassesList(c1);
                 if(m.getFacultyId().compareTo(f.getFacultyId())==0){
                     m1.add(m);
                 }
             }
-            f.setObject(m1);
+            f.setMajorList(m1);
             list.add(f);
         }
         return list;

@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Date;
+import java.util.List;
 import javax.persistence.*;
 
 @Table(name = "`major`")
@@ -53,6 +54,11 @@ public class Major {
     @Column(name = "`update_user`")
     private String updateUser;
 
+    /**
+     * 存放classList
+     */
+    @Transient
+    private List<Classes> classesList;
     /**
      * 存放额外信息
      */
