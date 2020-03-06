@@ -24,6 +24,11 @@ public class Role {
     private String roleName;
 
     /**
+     * 0:管理员，1：学生，2：教师
+     */
+    @Column(name = "`role_type`")
+    private String roleType;
+    /**
      * 创建时间
      */
     @Column(name = "`create_time`")

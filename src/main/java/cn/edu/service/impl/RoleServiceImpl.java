@@ -53,7 +53,7 @@ public class RoleServiceImpl implements RoleService {
      * @return cn.edu.utils.Result
      **/
     @Override
-    public List<Menu> getMenuByroleId(String id) {
+    public List<Menu> getMenuByRoleId(String id) {
         Assert.hasText(id,"角色id不能为空");
         List<RoleMenu>roleMenuList = roleMenuService.getRoleMenuListByRoleId(id);//获取角色对应菜单id
         List<Menu>menuList = new ArrayList<>();
@@ -82,5 +82,10 @@ public class RoleServiceImpl implements RoleService {
             list1.add(e);
         });
         return list1;
+    }
+
+    @Override
+    public List<Role> getRoleList() {
+        return roleMapper.selectAll();
     }
 }

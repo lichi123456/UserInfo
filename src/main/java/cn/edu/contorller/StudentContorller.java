@@ -27,18 +27,18 @@ public class StudentContorller {
     /**
      * @Author wys
      * @ClassName getStudentList
-     * @Description //TODO  获取学生信息列表
+     * @Description //TODO  获取非删除学生信息列表
      * @Date 11:02 2020/2/22
      * @Param []
      * @return result
      **/
-    @GetMapping("/list")
-    public Result getStudentList(){
+    @PostMapping("/list/")
+    public Result getStudentList(@RequestBody Student student){
         Result result = new Result();
         try{
             result.setSuccess(true);
             result.setMessage("获取学生信息列表成功");
-            result.setObject(studentService.getStudentList());
+            result.setObject(studentService.getStudentList(student));
         }catch(Exception e){
             result.setMessage(e.getMessage());
             result.setSuccess(false);
@@ -57,9 +57,15 @@ public class StudentContorller {
     public Result insert(@RequestBody Student student){
         Result result = new Result();
         try{
-            result.setSuccess(true);
-            result.setMessage("学生信息插入成功");
-            result.setObject(studentService.insert(student));
+            int t = studentService.insert(student);
+            if(t == 0){
+                result.setSuccess(false);
+                result.setMessage("插入中间表或登录表失败");
+            }else{
+                result.setSuccess(true);
+                result.setMessage("学生信息插入成功");
+            }
+            result.setObject(t);
         }catch (Exception e){
             result.setMessage(e.getMessage());
             result.setSuccess(false);

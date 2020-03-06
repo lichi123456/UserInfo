@@ -12,4 +12,10 @@ public class Constant {
     public static final String  isDelete = "Y";
     // 假删除标识-使用中
     public static final String  isNotDelete ="N";
+    //管理员标识
+    public static final String isAdmin = "0";
+    //教师标识
+    public static final String isTeacher = "1";
+    //学生标识
+    public static final String isStudent = "2";
 }

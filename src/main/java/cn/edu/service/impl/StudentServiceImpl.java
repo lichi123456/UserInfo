@@ -40,6 +40,9 @@ public class StudentServiceImpl implements StudentService {
 
     @Autowired
     private GroupsService groupsService;
+
+    @Autowired
+    private UserLoginService userLoginService;
     /**
      * @Author wys
      * @ClassName getStudentList
@@ -49,8 +52,8 @@ public class StudentServiceImpl implements StudentService {
      * @return java.util.List<cn.edu.vo.Student>
      **/
     @Override
-    public List<Student> getStudentList() {
-        List<Student>studentList = studentMapper.selectAll();
+    public List<Student> getStudentList(Student student) {
+        List<Student>studentList = studentMapper.getStudentListByName(student);
         List<Student>list=new ArrayList<>();
         studentList.stream().forEach(s->{
                 list.add(getOneStudentById(s.getStudentId()));
@@ -71,6 +74,16 @@ public class StudentServiceImpl implements StudentService {
         student.setStudentId(ApplicationUtils.GUID32());
         student.setDeleteStatus(Constant.isNotDelete);
 //        student.setCreateUser();
+
+        UserLogin userLogin = new UserLogin();
+        userLogin.setUserId(student.getStudentId());
+        userLogin.setUserCode(student.getStudentCode());
+        userLogin.setUserName(student.getStudentName());
+        userLogin.setUserType(Constant.isStudent);
+        int t = userLoginService.insert(userLogin);
+        if(t == 0){
+            return 0;
+        }
         return studentMapper.insertSelective(student);
     }
 

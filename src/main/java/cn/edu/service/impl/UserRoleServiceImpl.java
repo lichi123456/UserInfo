@@ -26,4 +26,11 @@ public class UserRoleServiceImpl implements UserRoleService {
         example.and().andEqualTo("userId",userId);
         return userRoleMapper.selectOneByExample(example);
     }
+
+    @Override
+    public int insert(UserRole userRole) {
+        Assert.hasText(userRole.getRoleId(),"角色id不能为空");
+        Assert.hasText(userRole.getUserId(),"用户登录id不能为空");
+        return userRoleMapper.insertSelective(userRole);
+    }
 }

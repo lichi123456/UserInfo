@@ -11,4 +11,5 @@ import cn.edu.vo.UserRole;
  **/
 public interface UserRoleService {
     UserRole getUserRoleByUserId(String userId);
+    int insert(UserRole userRole);
 }

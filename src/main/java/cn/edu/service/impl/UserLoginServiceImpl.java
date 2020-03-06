@@ -1,14 +1,21 @@
 package cn.edu.service.impl;
 
 import cn.edu.dao.UserLoginMapper;
+import cn.edu.service.RoleService;
+import cn.edu.service.UserRoleService;
+import cn.edu.utils.ApplicationUtils;
+import cn.edu.vo.Role;
 import cn.edu.vo.UserLogin;
 import cn.edu.service.UserLoginService;
 import cn.edu.utils.Result;
+import cn.edu.vo.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 import tk.mybatis.mapper.entity.Example;
+
+import java.util.List;
 
 /**
  * @ClassName UserLoginServiceImpl
@@ -22,6 +29,12 @@ public class UserLoginServiceImpl implements UserLoginService {
 
     @Autowired
     private UserLoginMapper userLoginMapper;
+
+    @Autowired
+    private UserRoleService userRoleService;
+
+    @Autowired
+    private RoleService roleService;
 
     /**
      * @Author wys
@@ -55,5 +68,38 @@ public class UserLoginServiceImpl implements UserLoginService {
             }
         }
         return result;
+    }
+
+    /**
+     * @Author wys
+     * @ClassName insert
+     * @Description //TODO  登录表与用户角色关系表插入
+     * @Date 18:04 2020/3/5
+     * @Param [userLogin]
+     * @return int
+     **/
+    @Override
+    public int insert(UserLogin userLogin) {
+//        userLogin.setUserId(ApplicationUtils.GUID32());
+        userLogin.setUserPassword("123456");
+        List<Role>roleList = roleService.getRoleList();
+        String roleId = null;
+        for (Role r:roleList) {
+            if (userLogin.getUserType().compareTo(r.getRoleType())==0){
+                roleId = r.getRoleId();
+                break;
+            }
+        }
+        UserRole userRole = new UserRole();
+        if(roleId == null || roleId.trim().compareTo("")==0){
+            return 0;
+        }
+        userRole.setRoleId(roleId);
+        userRole.setUserId(userLogin.getUserId());
+        int t = userLoginMapper.insertSelective(userLogin);
+        if(t==0){
+            return 0;
+        }
+        return userRoleService.insert(userRole);
     }
 }

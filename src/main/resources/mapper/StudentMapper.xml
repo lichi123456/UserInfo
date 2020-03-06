@@ -21,4 +21,12 @@
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="update_user" jdbcType="VARCHAR" property="updateUser" />
   </resultMap>
+
+  <select id="getStudentListByName" resultType="cn.edu.vo.Student" parameterType="cn.edu.vo.Student">
+    SELECT * from student WHERE 1=1
+    <if test="condition!=null and condition!=''">
+      and student.student_name like CONCAT('%',#{condition},'%')
+    </if>
+      and student.delete_status = 'N'
+  </select>
 </mapper>

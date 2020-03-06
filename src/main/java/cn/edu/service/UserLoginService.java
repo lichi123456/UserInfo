@@ -1,6 +1,7 @@
 package cn.edu.service;
 
 import cn.edu.utils.Result;
+import cn.edu.vo.UserLogin;
 
 /**
  * @ClassName UserLoginService
@@ -11,5 +12,5 @@ import cn.edu.utils.Result;
  **/
 public interface UserLoginService {
     Result getLoginUser(String code, String password);
-
+    int insert(UserLogin userLogin);
 }
