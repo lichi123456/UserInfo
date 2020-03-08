@@ -1,6 +1,7 @@
 package cn.edu.contorller;
 
 import cn.edu.service.TeacherStudentService;
+import cn.edu.utils.Constant;
 import cn.edu.vo.Student;
 import cn.edu.service.StudentService;
 import cn.edu.utils.ApplicationUtils;
@@ -38,7 +39,28 @@ public class StudentContorller {
         try{
             result.setSuccess(true);
             result.setMessage("获取学生信息列表成功");
-            result.setObject(studentService.getStudentList(student));
+            result.setObject(studentService.getStudentList(student, Constant.isNotDelete));
+        }catch(Exception e){
+            result.setMessage(e.getMessage());
+            result.setSuccess(false);
+        }
+        return result;
+    }
+    /**
+     * @Author wys
+     * @ClassName getDeleteStudentList
+     * @Description //TODO  获取已被删除的学生信息列表
+     * @Date 10:26 2020/3/7
+     * @Param [student]
+     * @return cn.edu.utils.Result
+     **/
+    @PostMapping("/deleteList/")
+    public Result getDeleteStudentList(@RequestBody Student student){
+        Result result = new Result();
+        try{
+            result.setSuccess(true);
+            result.setMessage("获取学生信息列表成功");
+            result.setObject(studentService.getStudentList(student, Constant.isDelete));
         }catch(Exception e){
             result.setMessage(e.getMessage());
             result.setSuccess(false);

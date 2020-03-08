@@ -1,14 +1,18 @@
 package cn.edu.service.impl;
 
 import cn.edu.dao.TeacherMapper;
+import cn.edu.service.TeacherGroupService;
 import cn.edu.service.TeacherService;
 import cn.edu.utils.ApplicationUtils;
 import cn.edu.utils.Constant;
+import cn.edu.vo.Groups;
 import cn.edu.vo.Teacher;
+import cn.edu.vo.TeacherGroup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -24,6 +28,9 @@ public class TeacherServiceImpl implements TeacherService {
     @Autowired
     private TeacherMapper teacherMapper;
 
+    @Autowired
+    private TeacherGroupService teacherGroupService;
+
     /**
      * @Author wys
      * @ClassName getTeacherList
@@ -33,8 +40,19 @@ public class TeacherServiceImpl implements TeacherService {
      * @return java.util.List<cn.edu.vo.Teacher>
      **/
     @Override
-    public List<Teacher> getTeacherList() {
-        return teacherMapper.selectAll();
+    public List<Teacher> getTeacherList(Teacher teacher,String deleteStatus) {
+        List<Teacher>teacherList = null;
+        if(deleteStatus.trim().compareTo(Constant.isNotDelete)==0){
+            teacherList = teacherMapper.getTeacherListByName(teacher);
+        }else if(deleteStatus.trim().compareTo(Constant.isDelete)==0){
+            teacherList = teacherMapper.getDelTeacherListByName(teacher);
+        }
+
+        List<Teacher>list=new ArrayList<>();
+        teacherList.stream().forEach(s->{
+            list.add(getOneTeacherById(s.getTeacherId()));
+        });
+        return list;
     }
 
     /**
@@ -48,7 +66,16 @@ public class TeacherServiceImpl implements TeacherService {
     @Override
     public Teacher getOneTeacherById(String id) {
         Assert.hasText(id,"教师id不能为空");
-        return teacherMapper.selectByPrimaryKey(id);
+        Teacher teacher = teacherMapper.selectByPrimaryKey(id);
+        List<Groups> groupList = teacherGroupService.getGroupListByTeacherId(id);
+        teacher.setGroupsList(groupList);
+        String groupName = "";
+        for (Groups g:groupList) {
+            groupName+=g.getGroupName();
+            groupName+="、";
+        }
+        teacher.setGroupName(groupName);
+        return teacher;
     }
 
     /**

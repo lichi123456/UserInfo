@@ -52,8 +52,14 @@ public class StudentServiceImpl implements StudentService {
      * @return java.util.List<cn.edu.vo.Student>
      **/
     @Override
-    public List<Student> getStudentList(Student student) {
-        List<Student>studentList = studentMapper.getStudentListByName(student);
+    public List<Student> getStudentList(Student student,String deleteStatus) {
+        List<Student>studentList = null;
+        if(deleteStatus.trim().compareTo(Constant.isNotDelete)==0){
+            studentList = studentMapper.getStudentListByName(student);
+        }else if(deleteStatus.trim().compareTo(Constant.isDelete)==0){
+            studentList = studentMapper.getDelStudentListByName(student);
+        }
+
         List<Student>list=new ArrayList<>();
         studentList.stream().forEach(s->{
                 list.add(getOneStudentById(s.getStudentId()));

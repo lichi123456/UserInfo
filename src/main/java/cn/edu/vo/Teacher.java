@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Date;
+import java.util.List;
 import javax.persistence.*;
 
 @Getter
@@ -89,6 +90,22 @@ public class Teacher {
     @Column(name = "`update_user`")
     private String updateUser;
 
+    /**
+     * 模糊查询需要姓名
+     */
+    @Transient
+    private String condition;
+
+    /**
+     * 指导的小组列表
+     */
+    @Transient
+    private List<Groups>groupsList;
+    /**
+     * 指导小组合成名
+     */
+    @Transient
+    private String groupName;
     /**
      * 存放额外信息
      */

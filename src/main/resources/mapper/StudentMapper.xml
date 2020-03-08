@@ -21,12 +21,21 @@
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="update_user" jdbcType="VARCHAR" property="updateUser" />
   </resultMap>
-
+<!--获取未被删除学生信息-->
   <select id="getStudentListByName" resultType="cn.edu.vo.Student" parameterType="cn.edu.vo.Student">
     SELECT * from student WHERE 1=1
     <if test="condition!=null and condition!=''">
       and student.student_name like CONCAT('%',#{condition},'%')
     </if>
       and student.delete_status = 'N'
+  </select>
+  <!--获取已删除学生信息-->
+  <select id="getDelStudentListByName" resultType="cn.edu.vo.Student" parameterType="cn.edu.vo.Student">
+    SELECT * from student WHERE 1=1
+    and student.delete_status = 'Y'
+    <if test="condition!=null and condition!=''">
+      and student.student_name like CONCAT('%',#{condition},'%')
+    </if>
+
   </select>
 </mapper>

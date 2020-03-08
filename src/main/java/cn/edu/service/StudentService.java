@@ -12,7 +12,7 @@ import java.util.List;
  * @Version 1.0
  **/
 public interface StudentService {
-    List<Student>getStudentList(Student student);
+    List<Student>getStudentList(Student student,String deleteStatus);
     int insert(Student student);
     int deletet(String id);
     int realDel(String id);

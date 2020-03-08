@@ -3,6 +3,7 @@ package cn.edu.contorller;
 import cn.edu.service.TeacherGroupService;
 import cn.edu.service.TeacherService;
 import cn.edu.service.TeacherStudentService;
+import cn.edu.utils.Constant;
 import cn.edu.utils.Result;
 import cn.edu.vo.Teacher;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,18 +31,39 @@ public class TeacherController {
     /**
      * @Author wys
      * @ClassName getTeacherList
-     * @Description //TODO  获取教师列表
+     * @Description //TODO  获取教师列表-非禁用
      * @Date 15:44 2020/3/2
      * @Param []
      * @return cn.edu.utils.Result
      **/
-    @GetMapping("/list")
-    public Result getTeacherList(){
+    @PostMapping("/list/")
+    public Result getTeacherList(@RequestBody Teacher teacher){
         Result result = new Result();
         try{
             result.setSuccess(true);
-            result.setMessage("获取教师信息列表成功");
-            result.setObject(teacherService.getTeacherList());
+            result.setMessage("获取教师非禁用列表成功");
+            result.setObject(teacherService.getTeacherList(teacher, Constant.isNotDelete));
+        }catch(Exception e){
+            result.setMessage(e.getMessage());
+            result.setSuccess(false);
+        }
+        return result;
+    }
+    /**
+     * @Author wys
+     * @ClassName getDelTeacherList
+     * @Description //TODO  获取教师禁用列表
+     * @Date 11:29 2020/3/7
+     * @Param [teacher]
+     * @return cn.edu.utils.Result
+     **/
+    @PostMapping("/deleteList/")
+    public Result getDelTeacherList(@RequestBody Teacher teacher){
+        Result result = new Result();
+        try{
+            result.setSuccess(true);
+            result.setMessage("获取教师禁用列表成功");
+            result.setObject(teacherService.getTeacherList(teacher, Constant.isDelete));
         }catch(Exception e){
             result.setMessage(e.getMessage());
             result.setSuccess(false);
