@@ -3,14 +3,17 @@ package cn.edu.service.impl;
 import cn.edu.dao.TeacherMapper;
 import cn.edu.service.TeacherGroupService;
 import cn.edu.service.TeacherService;
+import cn.edu.service.UserLoginService;
 import cn.edu.utils.ApplicationUtils;
 import cn.edu.utils.Constant;
 import cn.edu.vo.Groups;
 import cn.edu.vo.Teacher;
 import cn.edu.vo.TeacherGroup;
+import cn.edu.vo.UserLogin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+import tk.mybatis.mapper.entity.Example;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -31,16 +34,18 @@ public class TeacherServiceImpl implements TeacherService {
     @Autowired
     private TeacherGroupService teacherGroupService;
 
+    @Autowired
+    private UserLoginService userLoginService;
     /**
      * @Author wys
      * @ClassName getTeacherList
-     * @Description //TODO  获取教师信息列表
+     * @Description //TODO  获取教师信息列表带模糊查询
      * @Date 15:13 2020/2/29
      * @Param []
      * @return java.util.List<cn.edu.vo.Teacher>
      **/
     @Override
-    public List<Teacher> getTeacherList(Teacher teacher,String deleteStatus) {
+    public List<Teacher> getTeacherListWithCondition(Teacher teacher,String deleteStatus) {
         List<Teacher>teacherList = null;
         if(deleteStatus.trim().compareTo(Constant.isNotDelete)==0){
             teacherList = teacherMapper.getTeacherListByName(teacher);
@@ -53,6 +58,13 @@ public class TeacherServiceImpl implements TeacherService {
             list.add(getOneTeacherById(s.getTeacherId()));
         });
         return list;
+    }
+
+    @Override
+    public List<Teacher> getTeacherList() {
+        Example example = new Example(Teacher.class);
+        example.and().andEqualTo("deleteStatus",Constant.isNotDelete);
+        return teacherMapper.selectByExample(example);
     }
 
     /**
@@ -75,6 +87,7 @@ public class TeacherServiceImpl implements TeacherService {
             groupName+="、";
         }
         teacher.setGroupName(groupName);
+        teacher.setPassword(userLoginService.getPasswordById(id));
         return teacher;
     }
 
@@ -90,7 +103,21 @@ public class TeacherServiceImpl implements TeacherService {
     public int insert(Teacher teacher) {
         teacher.setTeacherId(ApplicationUtils.GUID32());
         teacher.setDeleteStatus(Constant.isNotDelete);
-        return teacherMapper.insertSelective(teacher);
+        UserLogin userLogin = new UserLogin();
+        userLogin.setUserId(teacher.getTeacherId());
+        userLogin.setUserCode(teacher.getTeacherCode());
+        userLogin.setUserName(teacher.getTeacherName());
+        userLogin.setUserType(Constant.isTeacher);
+        String t = userLoginService.insert(userLogin);
+        if(t.compareTo("插入成功")!=0){//插入登录表失败
+            return 0;
+        }
+        int t1 = teacherMapper.insertSelective(teacher);
+        if(t1==0)return 0;
+        if(teacher.getChangeGroupList()!=null &&teacher.getChangeGroupList().size()>0){
+            changeTeacherGroupList(teacher);
+        }
+        return  1;
     }
 
     /**
@@ -103,7 +130,13 @@ public class TeacherServiceImpl implements TeacherService {
      **/
     @Override
     public int update(Teacher teacher) {
+        Assert.hasText(teacher.getTeacherId(),"教师主键不能为空");
+        Assert.hasText(teacher.getTeacherCode(),"教师工号不能为空");
+        Assert.hasText(teacher.getTeacherName(),"教师姓名不能为空");
+        Assert.hasText(teacher.getTeacherSex(),"教师性别不能为空");
         teacher.setUpdateTime(new Date());
+        changeTeacherGroupList(teacher);
+        userLoginService.updatePasswordByUserCode(teacher.getTeacherId(),teacher.getPassword());
         return teacherMapper.updateByPrimaryKeySelective(teacher);
     }
 
@@ -136,5 +169,52 @@ public class TeacherServiceImpl implements TeacherService {
     public int realDel(String id) {
         Assert.hasText(id,"id不能为空");
         return teacherMapper.deleteByPrimaryKey(id);
+    }
+
+    /**
+     * @Author wys
+     * @ClassName changeTeacherGroupList
+     * @Description //TODO  修改教师指导小组信息
+     * @Date 10:32 2020/3/9
+     * @Param [teacher]
+     * @return int
+     **/
+    @Override
+    public int changeTeacherGroupList(Teacher teacher) {
+        List<TeacherGroup>teacherGroupList = teacherGroupService.getTeacherGroupByTeacherId(teacher.getTeacherId());
+        //增加,循环找出未插入
+        for (String id:teacher.getChangeGroupList() ) {//前端获取的小组id列表
+            boolean flag = true;
+            for (TeacherGroup tg:teacherGroupList) {//后台获取teacherGroupList校验
+                if(teacher.getTeacherId().compareTo(tg.getTeacherId())==0 && id.compareTo(tg.getGroupId())==0){//教师id与小组id均相等，则已插入
+                    flag = false;
+                    break;
+                }
+            }
+            if(flag){
+                TeacherGroup teacherGroup = new TeacherGroup();
+                teacherGroup.setTeacherId(teacher.getTeacherId());
+                teacherGroup.setGroupId(id);
+                teacherGroupService.insert(teacherGroup);
+            }
+        }
+        //删除
+        for (TeacherGroup tg:teacherGroupList) {//对已存在的列表循环
+            if(teacher.getChangeGroupList()==null || teacher.getChangeGroupList().size()==0){
+                teacherGroupService.deleteByTeacherIdAndGroupId(tg);
+            }else{
+                boolean flag = false;
+                for (String id:teacher.getChangeGroupList()){//若在前端传过来的列表id中没有groupId，则删除
+                    if(teacher.getTeacherId().compareTo(tg.getTeacherId())==0 && id.compareTo(tg.getGroupId())==0){//教师id与小组id均相等，则已插入
+                        flag = true;
+                        break;
+                    }
+                }
+                if(!flag){//在前端传过来的groupId列表中没有这一条，删除
+                    teacherGroupService.deleteByTeacherIdAndGroupId(tg);
+                }
+            }
+        }
+        return 1;
     }
 }

@@ -43,6 +43,9 @@ public class StudentServiceImpl implements StudentService {
 
     @Autowired
     private UserLoginService userLoginService;
+
+    @Autowired
+    private TeacherStudentService teacherStudentService;
     /**
      * @Author wys
      * @ClassName getStudentList
@@ -86,8 +89,8 @@ public class StudentServiceImpl implements StudentService {
         userLogin.setUserCode(student.getStudentCode());
         userLogin.setUserName(student.getStudentName());
         userLogin.setUserType(Constant.isStudent);
-        int t = userLoginService.insert(userLogin);
-        if(t == 0){
+        String t = userLoginService.insert(userLogin);
+        if(t.compareTo("插入成功")!=0){
             return 0;
         }
         return studentMapper.insertSelective(student);
@@ -102,7 +105,7 @@ public class StudentServiceImpl implements StudentService {
      * @return int
      **/
     @Override
-    public int deletet(String id) {
+    public int delete(String id) {
         Assert.hasText(id,"id不能为空");
         Student student = studentMapper.selectByPrimaryKey(id);
         student.setDeleteStatus(Constant.isDelete);
@@ -135,8 +138,12 @@ public class StudentServiceImpl implements StudentService {
      **/
     @Override
     public int update(Student student) {
+        Assert.hasText(student.getStudentId(),"学生主键不能为空");
+        Assert.hasText(student.getStudentCode(),"学生学号不能为空");
+        Assert.hasText(student.getStudentName(),"学生姓名不能为空");
+        Assert.hasText(student.getStudentSex(),"学生性别不能为空");
         student.setUpdateTime(new Date());
-//        student.setUpdateUser();
+        userLoginService.updatePasswordByUserCode(student.getStudentId(),student.getPassword());
         return studentMapper.updateByPrimaryKeySelective(student);
     }
 
@@ -174,7 +181,15 @@ public class StudentServiceImpl implements StudentService {
             groups = groupsService.getOneGroupById(student.getGroupId());
             student.setGroupName(groups.getGroupName());
         }
-
+        student.setPassword(userLoginService.getPasswordById(id));
+        List<Teacher>teacherList = teacherStudentService.getTeacherListByStudentId(id);
+        student.setTutor(teacherList);
+        String name = "";
+        for (Teacher t:teacherList) {
+            name+=t.getTeacherName();
+            name+="、";
+        }
+        student.setTutorName(name);
         return student;
     }
 

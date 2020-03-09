@@ -15,7 +15,7 @@ public class Constant {
     //管理员标识
     public static final String isAdmin = "0";
     //教师标识
-    public static final String isTeacher = "1";
+    public static final String isTeacher = "2";
     //学生标识
-    public static final String isStudent = "2";
+    public static final String isStudent = "1";
 }

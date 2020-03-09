@@ -131,11 +131,26 @@ public class Student {
     private String updateUser;
 
     /**
-<<<<<<< HEAD
      * 模糊查询
      */
     @Transient
     private String condition;
+
+    /**
+     * 当前学生的密码
+     */
+    @Transient
+    private String password;
+    /**
+     * 指导老师信息组
+     */
+    @Transient
+    private List<Teacher> tutor;
+    /**
+     * 指导老师姓名组合
+     */
+    @Transient
+    private String tutorName;
     /**
      * 存放额外信息
      */

@@ -16,4 +16,8 @@ import java.util.List;
 public interface TeacherGroupService {
     List<Groups>getGroupListByTeacherId(String teacherId);
     List<Teacher>getTeacherListByGroupId(String groupId);
+    int insert(TeacherGroup teacherGroup);
+    int delete(Long id);
+    List<TeacherGroup>getTeacherGroupByTeacherId(String teacherId);
+    int deleteByTeacherIdAndGroupId(TeacherGroup teacherGroup);
 }

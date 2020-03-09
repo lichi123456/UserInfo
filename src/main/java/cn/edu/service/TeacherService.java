@@ -13,10 +13,12 @@ import java.util.List;
  * @Version 1.0
  **/
 public interface TeacherService {
-    List<Teacher>getTeacherList(Teacher teacher,String deleteStatus);
+    List<Teacher>getTeacherListWithCondition(Teacher teacher,String deleteStatus);
+    List<Teacher>getTeacherList();
     Teacher getOneTeacherById(String id);
     int insert(Teacher teacher);
     int update(Teacher teacher);
     int delete(String id);
     int realDel(String id);
+    int changeTeacherGroupList(Teacher teacher);
 }

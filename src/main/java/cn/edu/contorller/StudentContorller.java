@@ -108,7 +108,7 @@ public class StudentContorller {
         try{
             result.setSuccess(true);
             result.setMessage("学生信息放入禁用库中");
-            result.setObject(studentService.deletet(id));
+            result.setObject(studentService.delete(id));
         }catch (Exception e){
             result.setMessage(e.getMessage());
             result.setSuccess(false);

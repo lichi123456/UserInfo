@@ -107,6 +107,16 @@ public class Teacher {
     @Transient
     private String groupName;
     /**
+     * 插入或修改的小组列表
+     */
+    @Transient
+    private List<String>changeGroupList;
+    /**
+     * 当前教师的密码
+     */
+    @Transient
+    private String password;
+    /**
      * 存放额外信息
      */
     @Transient

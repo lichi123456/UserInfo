@@ -7,6 +7,7 @@
     -->
     <id column="role_id" jdbcType="VARCHAR" property="roleId" />
     <result column="role_name" jdbcType="VARCHAR" property="roleName" />
+    <result column="role_type" jdbcType="VARCHAR" property="roleType" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="create_user" jdbcType="VARCHAR" property="createUser" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />

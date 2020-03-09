@@ -44,9 +44,7 @@ public class TeacherGroupServiceImpl implements TeacherGroupService {
     @Override
     public List<Groups> getGroupListByTeacherId(String teacherId) {
         Assert.hasText(teacherId,"教师id不能为空");
-        Example example = new Example(TeacherGroup.class);
-        example.and().andEqualTo("teacherId",teacherId);
-        List<TeacherGroup>teacherGroups = teacherGroupMapper.selectByExample(example);
+        List<TeacherGroup>teacherGroups = getTeacherGroupByTeacherId(teacherId);
         List<Groups>groupsList = new ArrayList<>();
         for (TeacherGroup tg: teacherGroups) {
             groupsList.add(groupsService.getOneGroupById(tg.getGroupId()));
@@ -74,4 +72,69 @@ public class TeacherGroupServiceImpl implements TeacherGroupService {
         }
         return teachers;
     }
+
+
+    /**
+     * @Author wys
+     * @ClassName insert
+     * @Description //TODO 新增
+     * @Date 13:09 2020/3/8
+     * @Param [teacherGroup]
+     * @return int
+     **/
+    @Override
+    public int insert(TeacherGroup teacherGroup) {
+        Assert.hasText(teacherGroup.getGroupId(),"组别id不能为空");
+        Assert.hasText(teacherGroup.getTeacherId(),"教师id不能为空");
+        return teacherGroupMapper.insertSelective(teacherGroup);
+    }
+
+    /**
+     * @Author wys
+     * @ClassName delete
+     * @Description //TODO 删除
+     * @Date 12:00 2020/3/8
+     * @Param [id]
+     * @return int
+     **/
+    @Override
+    public int delete(Long id) {
+        return teacherGroupMapper.deleteByPrimaryKey(id);
+    }
+
+    /**
+     * @Author wys
+     * @ClassName getTeacherGroupByTeacherId
+     * @Description //TODO  根据teacherId获取teacherGroup列表
+     * @Date 13:14 2020/3/8
+     * @Param [teacherId]
+     * @return java.util.List<cn.edu.vo.TeacherGroup>
+     **/
+    @Override
+    public List<TeacherGroup> getTeacherGroupByTeacherId(String teacherId) {
+        Example example = new Example(TeacherGroup.class);
+        example.and().andEqualTo("teacherId",teacherId);
+        return teacherGroupMapper.selectByExample(example);
+    }
+
+    /**
+     * @Author wys
+     * @ClassName deleteByTeacherIdAndGroupId
+     * @Description //TODO  根据教师id与组别id删除
+     * @Date 18:10 2020/3/8
+     * @Param [teacherGroup]
+     * @return int
+     **/
+    @Override
+    public int deleteByTeacherIdAndGroupId(TeacherGroup teacherGroup) {
+        Assert.hasText(teacherGroup.getTeacherId(),"教师id不能为空");
+        Assert.hasText(teacherGroup.getGroupId(),"小组id不能为空");
+        Example example = new Example(TeacherGroup.class);
+        example.and().andEqualTo("teacherId",teacherGroup.getTeacherId());
+        example.and().andEqualTo("groupId",teacherGroup.getGroupId());
+
+        return teacherGroupMapper.deleteByExample(example);
+    }
+
+
 }

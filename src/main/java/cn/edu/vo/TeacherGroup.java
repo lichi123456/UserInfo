@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Date;
+import java.util.List;
 import javax.persistence.*;
 
 @Table(name = "`teacher_group`")
@@ -53,6 +54,11 @@ public class TeacherGroup {
     @Column(name = "`update_user`")
     private String updateUser;
 
+    /**
+     * 修改使用的groupIdList
+     */
+    @Transient
+    private List<String>groupIdList;
     /**
      * 存放额外信息
      */

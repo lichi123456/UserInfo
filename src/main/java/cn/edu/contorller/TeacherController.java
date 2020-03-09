@@ -30,19 +30,19 @@ public class TeacherController {
 
     /**
      * @Author wys
-     * @ClassName getTeacherList
-     * @Description //TODO  获取教师列表-非禁用
+     * @ClassName getTeacherListWithCondition
+     * @Description //TODO  获取教师列表-非禁用-带模糊查询
      * @Date 15:44 2020/3/2
      * @Param []
      * @return cn.edu.utils.Result
      **/
-    @PostMapping("/list/")
-    public Result getTeacherList(@RequestBody Teacher teacher){
+    @PostMapping("/usingList/")
+    public Result getTeacherListWithCondition(@RequestBody Teacher teacher){
         Result result = new Result();
         try{
             result.setSuccess(true);
             result.setMessage("获取教师非禁用列表成功");
-            result.setObject(teacherService.getTeacherList(teacher, Constant.isNotDelete));
+            result.setObject(teacherService.getTeacherListWithCondition(teacher, Constant.isNotDelete));
         }catch(Exception e){
             result.setMessage(e.getMessage());
             result.setSuccess(false);
@@ -52,18 +52,39 @@ public class TeacherController {
     /**
      * @Author wys
      * @ClassName getDelTeacherList
-     * @Description //TODO  获取教师禁用列表
+     * @Description //TODO  获取教师禁用列表-带模糊查询
      * @Date 11:29 2020/3/7
      * @Param [teacher]
      * @return cn.edu.utils.Result
      **/
     @PostMapping("/deleteList/")
-    public Result getDelTeacherList(@RequestBody Teacher teacher){
+    public Result getDelTeacherListWithCondition(@RequestBody Teacher teacher){
         Result result = new Result();
         try{
             result.setSuccess(true);
             result.setMessage("获取教师禁用列表成功");
-            result.setObject(teacherService.getTeacherList(teacher, Constant.isDelete));
+            result.setObject(teacherService.getTeacherListWithCondition(teacher, Constant.isDelete));
+        }catch(Exception e){
+            result.setMessage(e.getMessage());
+            result.setSuccess(false);
+        }
+        return result;
+    }
+    /**
+     * @Author wys
+     * @ClassName getTeacherList
+     * @Description //TODO  只获取非禁用教师列表，不带查询
+     * @Date 19:04 2020/3/9
+     * @Param []
+     * @return cn.edu.utils.Result
+     **/
+    @GetMapping("/list/")
+    public Result getTeacherList(){
+        Result result = new Result();
+        try{
+            result.setSuccess(true);
+            result.setMessage("获取教师列表成功");
+            result.setObject(teacherService.getTeacherList());
         }catch(Exception e){
             result.setMessage(e.getMessage());
             result.setSuccess(false);
@@ -82,9 +103,14 @@ public class TeacherController {
     public Result insert(@RequestBody Teacher teacher){
         Result result = new Result();
         try{
+            int t = teacherService.insert(teacher);
+            if(t==0){
+                result.setMessage("插入登录表或小组信息列表失败");
+                result.setSuccess(false);
+            }
             result.setSuccess(true);
             result.setMessage("教师信息新增成功");
-            result.setObject(teacherService.insert(teacher));
+            result.setObject(t);
         }catch (Exception e){
             result.setMessage(e.getMessage());
             result.setSuccess(false);

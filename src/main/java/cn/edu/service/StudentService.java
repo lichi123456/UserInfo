@@ -14,7 +14,7 @@ import java.util.List;
 public interface StudentService {
     List<Student>getStudentList(Student student,String deleteStatus);
     int insert(Student student);
-    int deletet(String id);
+    int delete(String id);
     int realDel(String id);
     int update(Student student);
     Student getOneStudentById(String id);

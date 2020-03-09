@@ -12,5 +12,7 @@ import cn.edu.vo.UserLogin;
  **/
 public interface UserLoginService {
     Result getLoginUser(String code, String password);
-    int insert(UserLogin userLogin);
+    String insert(UserLogin userLogin);
+    int updatePasswordByUserCode(String userId,String newPassword);
+    String getPasswordById(String id);
 }

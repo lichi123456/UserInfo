@@ -1,14 +1,11 @@
 package cn.edu.service.impl;
 
 import cn.edu.dao.UserLoginMapper;
-import cn.edu.service.RoleService;
-import cn.edu.service.UserRoleService;
+import cn.edu.service.*;
 import cn.edu.utils.ApplicationUtils;
-import cn.edu.vo.Role;
-import cn.edu.vo.UserLogin;
-import cn.edu.service.UserLoginService;
+import cn.edu.utils.Constant;
+import cn.edu.vo.*;
 import cn.edu.utils.Result;
-import cn.edu.vo.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -36,6 +33,11 @@ public class UserLoginServiceImpl implements UserLoginService {
     @Autowired
     private RoleService roleService;
 
+    @Autowired
+    private TeacherService teacherService;
+
+    @Autowired
+    private StudentService studentService;
     /**
      * @Author wys
      * @ClassName getLoginUser
@@ -54,6 +56,23 @@ public class UserLoginServiceImpl implements UserLoginService {
         UserLogin userLogin = userLoginMapper.selectOneByExample(example);
 
         Result result = new Result();
+        if(userLogin!=null &&userLogin.getUserType()!=null){
+            if(userLogin.getUserType().compareTo(Constant.isTeacher)==0){
+                Teacher teacher = teacherService.getOneTeacherById(userLogin.getUserId());
+                if(teacher.getDeleteStatus().compareTo(Constant.isDelete)==0 || teacher.getDeleteStatus()==null){
+                    result.setMessage("当前账号已被禁用");
+                    result.setSuccess(false);
+                    return result;
+                }
+            }else if(userLogin.getUserType().compareTo(Constant.isStudent)==0){
+                Student student = studentService.getOneStudentById(userLogin.getUserId());
+                if(student.getDeleteStatus().compareTo(Constant.isDelete)==0 ||student.getDeleteStatus()==null){
+                    result.setMessage("当前账号已被禁用");
+                    result.setSuccess(false);
+                    return result;
+                }
+            }
+        }
         if(StringUtils.isEmpty(userLogin)){
             result.setSuccess(false);
             result.setMessage("没有此账号");
@@ -79,8 +98,15 @@ public class UserLoginServiceImpl implements UserLoginService {
      * @return int
      **/
     @Override
-    public int insert(UserLogin userLogin) {
-//        userLogin.setUserId(ApplicationUtils.GUID32());
+    public String insert(UserLogin userLogin) {
+        Example example = new Example(UserLogin.class);
+        example.and().andEqualTo("userCode",userLogin.getUserCode());
+        UserLogin userLogin1 = userLoginMapper.selectOneByExample(example);
+        if(userLogin1 != null){
+            if(userLogin1.getUserId()!=null){
+                return "该账号已注册，无法再次插入";
+            }
+        }
         userLogin.setUserPassword("123456");
         List<Role>roleList = roleService.getRoleList();
         String roleId = null;
@@ -92,14 +118,51 @@ public class UserLoginServiceImpl implements UserLoginService {
         }
         UserRole userRole = new UserRole();
         if(roleId == null || roleId.trim().compareTo("")==0){
-            return 0;
+            return "没有当前类型的角色";
         }
         userRole.setRoleId(roleId);
         userRole.setUserId(userLogin.getUserId());
         int t = userLoginMapper.insertSelective(userLogin);
         if(t==0){
-            return 0;
+            return "插入登录表信息失败";
         }
-        return userRoleService.insert(userRole);
+        int t1 = userRoleService.insert(userRole);
+        if(t == 0){
+            return "插入用户角色失败";
+        }
+        return "插入成功";
+    }
+
+    /**
+     * @Author wys
+     * @ClassName update
+     * @Description //TODO 更新密码
+     * @Date 11:13 2020/3/9
+     * @Param [userLogin]
+     * @return int
+     **/
+    @Override
+    public int updatePasswordByUserCode(String userId,String newPassword) {
+        Assert.hasText(userId,"用户id不能为空");
+        Assert.hasText(newPassword,"新密码不能为空");
+        UserLogin userLogin = userLoginMapper.selectByPrimaryKey(userId);
+        if(userLogin!=null && userLogin.getUserId()!=null){
+            userLogin.setUserPassword(newPassword);
+        }
+        return userLoginMapper.updateByPrimaryKeySelective(userLogin);
+    }
+
+    @Override
+    public String getPasswordById(String id) {
+        /**
+         * @Author wys
+         * @ClassName getPasswordById
+         * @Description //TODO  根据当前人id获取其密码
+         * @Date 13:34 2020/3/9
+         * @Param [id]
+         * @return java.lang.String
+         **/
+        Assert.hasText(id,"id不能为空");
+        return userLoginMapper.selectByPrimaryKey(id).getUserPassword();
     }
 }
