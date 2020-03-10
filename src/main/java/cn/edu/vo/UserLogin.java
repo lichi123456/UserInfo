@@ -38,11 +38,38 @@ public class UserLogin {
     @Column(name = "`user_type`")
     private String userType;
     /**
+     * 用户类型名称
+     */
+    @Column(name = "`user_type`")
+    private String userTypeName;
+    /**
+     * 电话号码
+     */
+    @Transient
+    private String tel;
+
+    /**
+     * qq
+     */
+    @Transient
+    private String qq;
+
+    /**
+     * 邮箱
+     */
+    @Transient
+    private String email;
+    /**
      * 最后一次登录时间
      */
     @Column(name = "`last_login`")
     private Date lastLogin;
 
+    /**
+     * 假删除标识（已删除：Y，使用：N）
+     */
+    @Column(name = "`delete_status`")
+    private String deleteStatus;
     /**
      * 创建时间
      */
@@ -67,6 +94,11 @@ public class UserLogin {
     @Column(name = "`update_user`")
     private String updateUser;
 
+    /**
+     * 模糊查询
+     */
+    @Transient
+    private String condition;
     /**
      * 存放额外信息
      */

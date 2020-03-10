@@ -2,6 +2,7 @@ package cn.edu.service;
 
 import cn.edu.vo.Student;
 import cn.edu.vo.Teacher;
+import cn.edu.vo.TeacherStudent;
 
 import java.util.List;
 
@@ -15,4 +16,7 @@ import java.util.List;
 public interface TeacherStudentService {
     List<Teacher>getTeacherListByStudentId(String id);
     List<Student>getStudentListByTeacherId(String id);
+    int insert(TeacherStudent teacherStudent);
+    int deleteByStudentIdAndTeacherId(TeacherStudent teacherStudent);
+    List<TeacherStudent>getTeacherStudentByStudentId(String studentId);
 }

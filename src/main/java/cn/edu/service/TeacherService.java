@@ -13,7 +13,7 @@ import java.util.List;
  * @Version 1.0
  **/
 public interface TeacherService {
-    List<Teacher>getTeacherListWithCondition(Teacher teacher,String deleteStatus);
+    List<Teacher>getTeacherListWithConditionAndDeleteStatus(Teacher teacher,String deleteStatus);
     List<Teacher>getTeacherList();
     Teacher getOneTeacherById(String id);
     int insert(Teacher teacher);
@@ -21,4 +21,5 @@ public interface TeacherService {
     int delete(String id);
     int realDel(String id);
     int changeTeacherGroupList(Teacher teacher);
+    int Recover(String id);
 }

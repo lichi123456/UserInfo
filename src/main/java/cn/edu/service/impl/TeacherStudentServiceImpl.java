@@ -9,6 +9,7 @@ import cn.edu.vo.Teacher;
 import cn.edu.vo.TeacherStudent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 import tk.mybatis.mapper.entity.Example;
 
 import javax.xml.ws.Action;
@@ -69,5 +70,54 @@ public class TeacherStudentServiceImpl implements TeacherStudentService {
             studentList.add(studentService.getOneStudentById(ts.getStudentId()));
         }
         return studentList;
+    }
+
+    /**
+     * @Author wys
+     * @ClassName insert
+     * @Description //TODO 新增
+     * @Date 10:21 2020/3/10
+     * @Param [teacherStudent]
+     * @return int
+     **/
+    @Override
+    public int insert(TeacherStudent teacherStudent) {
+        Assert.hasText(teacherStudent.getStudentId(),"学生id不能为空");
+        Assert.hasText(teacherStudent.getTeacherId(),"教师id不能为空");
+        return teacherStudentMapper.insertSelective(teacherStudent);
+    }
+
+    /**
+     * @Author wys
+     * @ClassName deleteByStudentIdAndTeacherId
+     * @Description //TODO  根据学生id与教师id删除中间表数据
+     * @Date 10:23 2020/3/10
+     * @Param [teacherStudent]
+     * @return int
+     **/
+    @Override
+    public int deleteByStudentIdAndTeacherId(TeacherStudent teacherStudent) {
+        Assert.hasText(teacherStudent.getTeacherId(),"教师id不能为空");
+        Assert.hasText(teacherStudent.getStudentId(),"学生id不能为空");
+        Example example = new Example(TeacherStudent.class);
+        example.and().andEqualTo("teacherId",teacherStudent.getTeacherId());
+        example.and().andEqualTo("studentId",teacherStudent.getStudentId());
+        return teacherStudentMapper.deleteByExample(example);
+    }
+
+    /**
+     * @Author wys
+     * @ClassName getTeacherStudentByStudentId
+     * @Description //TODO  根据学生id获取teacherStudent中间表相关数据
+     * @Date 10:13 2020/3/10
+     * @Param [studentId]
+     * @return java.util.List<cn.edu.vo.TeacherStudent>
+     **/
+    @Override
+    public List<TeacherStudent> getTeacherStudentByStudentId(String studentId) {
+        Assert.hasText(studentId,"学生id不能为空");
+        Example example = new Example(TeacherStudent.class);
+        example.and().andEqualTo("studentId",studentId);
+        return teacherStudentMapper.selectByExample(example);
     }
 }

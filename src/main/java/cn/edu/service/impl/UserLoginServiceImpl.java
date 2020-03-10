@@ -12,6 +12,7 @@ import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 import tk.mybatis.mapper.entity.Example;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -71,6 +72,8 @@ public class UserLoginServiceImpl implements UserLoginService {
                     result.setSuccess(false);
                     return result;
                 }
+            }else if(userLogin.getUserType().compareTo(Constant.isAdmin)==0){
+
             }
         }
         if(StringUtils.isEmpty(userLogin)){
@@ -108,6 +111,7 @@ public class UserLoginServiceImpl implements UserLoginService {
             }
         }
         userLogin.setUserPassword("123456");
+        userLogin.setDeleteStatus(Constant.isNotDelete);
         List<Role>roleList = roleService.getRoleList();
         String roleId = null;
         for (Role r:roleList) {
@@ -152,17 +156,106 @@ public class UserLoginServiceImpl implements UserLoginService {
         return userLoginMapper.updateByPrimaryKeySelective(userLogin);
     }
 
+    /**
+     * @Author wys
+     * @ClassName getPasswordById
+     * @Description //TODO  根据当前人id获取其密码
+     * @Date 13:34 2020/3/9
+     * @Param [id]
+     * @return java.lang.String
+     **/
     @Override
     public String getPasswordById(String id) {
-        /**
-         * @Author wys
-         * @ClassName getPasswordById
-         * @Description //TODO  根据当前人id获取其密码
-         * @Date 13:34 2020/3/9
-         * @Param [id]
-         * @return java.lang.String
-         **/
         Assert.hasText(id,"id不能为空");
         return userLoginMapper.selectByPrimaryKey(id).getUserPassword();
+    }
+
+    /**
+     * @Author wys
+     * @ClassName getDeleteUserList
+     * @Description //TODO  获取禁用信息列表
+     * @Date 17:38 2020/3/10
+     * @Param [userLogin]
+     * @return java.util.List<cn.edu.vo.UserLogin>
+     **/
+    @Override
+    public List<UserLogin> getDeleteUserList(UserLogin userLogin) {
+       List<UserLogin>userLoginList = userLoginMapper.getDeleteUserList(userLogin);
+       for(UserLogin u:userLoginList){
+           if(u.getUserType().compareTo(Constant.isStudent)==0){
+               Student student = studentService.getOneStudentById(u.getUserId());
+               u.setUserTypeName("学生");
+               u.setTel(student.getStudentTel());
+               u.setQq(student.getStudentQq());
+               u.setEmail(student.getStudentEmail());
+           }else if(u.getUserType().compareTo(Constant.isTeacher)==0){
+                Teacher teacher = teacherService.getOneTeacherById(u.getUserId());
+                u.setUserTypeName("教师");
+                u.setTel(teacher.getTeacherTel());
+                u.setQq(teacher.getTeacherQq());
+                u.setEmail(teacher.getTeacherEmail());
+           }else{
+
+           }
+       }
+        return userLoginList;
+    }
+
+    /**
+     * @Author wys
+     * @ClassName RecoverUser
+     * @Description //TODO  恢复Y->N
+     * @Date 16:43 2020/3/10
+     * @Param [userLogin]
+     * @return int
+     **/
+    @Override
+    public int RecoverUser(UserLogin userLogin) {
+        Assert.hasText(userLogin.getUserId(),"主键id不能为空");
+        Assert.hasText(userLogin.getUserType(),"角色类型不能为空");
+        if(userLogin.getUserType().compareTo(Constant.isStudent)==0){
+            return studentService.Recover(userLogin.getUserId());
+        }else if (userLogin.getUserType().compareTo(Constant.isTeacher)==0){
+            return teacherService.Recover(userLogin.getUserId());
+        }else{
+
+        }
+        return 0;
+    }
+
+    /**
+     * @Author wys
+     * @ClassName getUserLoginById
+     * @Description //TODO  根据主键id获取其数据
+     * @Date 16:55 2020/3/10
+     * @Param [id]
+     * @return cn.edu.vo.UserLogin
+     **/
+    @Override
+    public UserLogin getUserLoginById(String id) {
+        Assert.hasText(id,"主键id不能为空");
+        return userLoginMapper.selectByPrimaryKey(id);
+    }
+
+    /**
+     * @Author wys
+     * @ClassName RealDeleteUser
+     * @Description //TODO  真删除
+     * @Date 19:00 2020/3/10
+     * @Param [userLogin]
+     * @return int
+     **/
+    @Override
+    public int RealDeleteUser(UserLogin userLogin) {
+        Assert.hasText(userLogin.getUserType(),"角色类型不能为空");
+        Assert.hasText(userLogin.getUserId(),"角色主键id不能为空");
+        if(userLogin.getUserType().compareTo(Constant.isStudent)==0){
+            return studentService.realDel(userLogin.getUserId());
+        }else if(userLogin.getUserType().compareTo(Constant.isTeacher)==0){
+            return teacherService.realDel(userLogin.getUserId());
+        }else{
+
+        }
+        return 0;
     }
 }

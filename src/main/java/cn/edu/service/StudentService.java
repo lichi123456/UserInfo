@@ -12,11 +12,13 @@ import java.util.List;
  * @Version 1.0
  **/
 public interface StudentService {
-    List<Student>getStudentList(Student student,String deleteStatus);
+    List<Student>getStudentListWithConditionAndDeleteStatus(Student student,String deleteStatus);
     int insert(Student student);
     int delete(String id);
     int realDel(String id);
     int update(Student student);
     Student getOneStudentById(String id);
+    int changeTutorList(Student student);
+    int Recover(String id);
 
 }

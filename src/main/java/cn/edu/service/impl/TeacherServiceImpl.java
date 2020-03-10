@@ -45,7 +45,7 @@ public class TeacherServiceImpl implements TeacherService {
      * @return java.util.List<cn.edu.vo.Teacher>
      **/
     @Override
-    public List<Teacher> getTeacherListWithCondition(Teacher teacher,String deleteStatus) {
+    public List<Teacher> getTeacherListWithConditionAndDeleteStatus(Teacher teacher,String deleteStatus) {
         List<Teacher>teacherList = null;
         if(deleteStatus.trim().compareTo(Constant.isNotDelete)==0){
             teacherList = teacherMapper.getTeacherListByName(teacher);
@@ -135,6 +135,7 @@ public class TeacherServiceImpl implements TeacherService {
         Assert.hasText(teacher.getTeacherName(),"教师姓名不能为空");
         Assert.hasText(teacher.getTeacherSex(),"教师性别不能为空");
         teacher.setUpdateTime(new Date());
+        //更新教师指导小组情况-会出现置空情况，因此不做判断
         changeTeacherGroupList(teacher);
         userLoginService.updatePasswordByUserCode(teacher.getTeacherId(),teacher.getPassword());
         return teacherMapper.updateByPrimaryKeySelective(teacher);
@@ -168,6 +169,10 @@ public class TeacherServiceImpl implements TeacherService {
     @Override
     public int realDel(String id) {
         Assert.hasText(id,"id不能为空");
+        List<TeacherGroup>teacherGroupList = teacherGroupService.getTeacherGroupByTeacherId(id);
+        for (TeacherGroup tg:teacherGroupList) {
+            teacherGroupService.delete(tg.getTeaGroId());
+        }
         return teacherMapper.deleteByPrimaryKey(id);
     }
 
@@ -216,5 +221,21 @@ public class TeacherServiceImpl implements TeacherService {
             }
         }
         return 1;
+    }
+
+    /**
+     * @Author wys
+     * @ClassName Recover
+     * @Description //TODO 恢复使用
+     * @Date 17:51 2020/3/10
+     * @Param [id]
+     * @return int
+     **/
+    @Override
+    public int Recover(String id) {
+        Assert.hasText(id,"教师主键id不能为空");
+        Teacher teacher = getOneTeacherById(id);
+        teacher.setDeleteStatus(Constant.isNotDelete);
+        return teacherMapper.updateByPrimaryKeySelective(teacher);
     }
 }

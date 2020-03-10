@@ -152,6 +152,11 @@ public class Student {
     @Transient
     private String tutorName;
     /**
+     * 插入或修改的小组列表
+     */
+    @Transient
+    private List<String>changeTutorList;
+    /**
      * 存放额外信息
      */
     @Transient
