@@ -131,6 +131,10 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public int realDel(String id) {
         Assert.hasText(id,"id不能为空");
+        List<TeacherStudent>teacherStudentList = teacherStudentService.getTeacherStudentByStudentId(id);
+        for (TeacherStudent ts:teacherStudentList) {
+            teacherStudentService.deleteByStudentIdAndTeacherId(ts);
+        }
         return studentMapper.deleteByPrimaryKey(id);
     }
 

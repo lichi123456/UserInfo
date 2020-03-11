@@ -3,13 +3,11 @@ package cn.edu.service.impl;
 import cn.edu.dao.TeacherMapper;
 import cn.edu.service.TeacherGroupService;
 import cn.edu.service.TeacherService;
+import cn.edu.service.TeacherStudentService;
 import cn.edu.service.UserLoginService;
 import cn.edu.utils.ApplicationUtils;
 import cn.edu.utils.Constant;
-import cn.edu.vo.Groups;
-import cn.edu.vo.Teacher;
-import cn.edu.vo.TeacherGroup;
-import cn.edu.vo.UserLogin;
+import cn.edu.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -36,6 +34,9 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Autowired
     private UserLoginService userLoginService;
+
+    @Autowired
+    private TeacherStudentService teacherStudentService;
     /**
      * @Author wys
      * @ClassName getTeacherList
@@ -172,6 +173,10 @@ public class TeacherServiceImpl implements TeacherService {
         List<TeacherGroup>teacherGroupList = teacherGroupService.getTeacherGroupByTeacherId(id);
         for (TeacherGroup tg:teacherGroupList) {
             teacherGroupService.delete(tg.getTeaGroId());
+        }
+        List<TeacherStudent>teacherStudentList = teacherStudentService.getTeacherStudentByTeacherId(id);
+        for (TeacherStudent ts:teacherStudentList) {
+            teacherStudentService.deleteByStudentIdAndTeacherId(ts);
         }
         return teacherMapper.deleteByPrimaryKey(id);
     }

@@ -120,4 +120,20 @@ public class TeacherStudentServiceImpl implements TeacherStudentService {
         example.and().andEqualTo("studentId",studentId);
         return teacherStudentMapper.selectByExample(example);
     }
+
+    /**
+     * @Author wys
+     * @ClassName getTeacherStudentByTeacherId
+     * @Description //TODO  根据教师id获取teacherStudent中间表相关数据
+     * @Date 16:51 2020/3/11
+     * @Param [teacherId]
+     * @return java.util.List<cn.edu.vo.TeacherStudent>
+     **/
+    @Override
+    public List<TeacherStudent> getTeacherStudentByTeacherId(String teacherId) {
+        Assert.hasText(teacherId,"教师id不能为空");
+        Example example = new Example(TeacherStudent.class);
+        example.and().andEqualTo("teacherId",teacherId);
+        return teacherStudentMapper.selectByExample(example);
+    }
 }

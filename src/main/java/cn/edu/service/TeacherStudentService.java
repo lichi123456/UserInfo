@@ -19,4 +19,5 @@ public interface TeacherStudentService {
     int insert(TeacherStudent teacherStudent);
     int deleteByStudentIdAndTeacherId(TeacherStudent teacherStudent);
     List<TeacherStudent>getTeacherStudentByStudentId(String studentId);
+    List<TeacherStudent>getTeacherStudentByTeacherId(String teacherId);
 }
