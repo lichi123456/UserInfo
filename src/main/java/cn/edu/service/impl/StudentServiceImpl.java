@@ -80,10 +80,13 @@ public class StudentServiceImpl implements StudentService {
      **/
     @Override
     public int insert(Student student) {
+        Assert.hasText(student.getStudentName(),"学生姓名不能为空");
+        Assert.hasText(student.getStudentSex(),"学生性别不能为空");
+        Assert.hasText(student.getStudentCode(),"学生学号不能为空");
+        Assert.hasText(student.getClassId(),"学生班级id不能为空");
+        Assert.hasText(student.getGroupId(),"学生小组id不能为空");
         student.setStudentId(ApplicationUtils.GUID32());
         student.setDeleteStatus(Constant.isNotDelete);
-//        student.setCreateUser();
-
         UserLogin userLogin = new UserLogin();
         userLogin.setUserId(student.getStudentId());
         userLogin.setUserCode(student.getStudentCode());

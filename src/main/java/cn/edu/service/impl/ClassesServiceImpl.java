@@ -60,9 +60,10 @@ public class ClassesServiceImpl implements ClassesService {
      * @return int
      **/
     @Override
-    public int insert(Classes classes, String majorId) {
+    public int insert(Classes classes) {
+        Assert.hasText(classes.getMajorId(),"专业id不能为空");
+        Assert.hasText(classes.getClassName(),"班级名称不能为空");
         classes.setClassId(ApplicationUtils.GUID32());
-        classes.setMajorId(majorId);
 //        classes.setCreateUser();
         return classesMapper.insert(classes);
     }

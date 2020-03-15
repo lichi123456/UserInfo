@@ -14,7 +14,7 @@ import java.util.List;
 public interface ClassesService {
     List<Classes> getClassesList();
     Classes getOneClassesById(String classId);
-    int insert(Classes classes, String majorId);
+    int insert(Classes classes);
     int update(Classes classes);
     int delete(String id);
 }

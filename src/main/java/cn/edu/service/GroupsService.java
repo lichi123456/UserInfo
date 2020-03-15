@@ -14,4 +14,7 @@ import java.util.List;
 public interface GroupsService {
     List<Groups>getGroupList();
     Groups getOneGroupById(String groupId);
+    int insert(Groups groups);
+    int delete(String groupId);
+    int update(Groups groups);
 }

@@ -2,11 +2,9 @@ package cn.edu.contorller;
 
 import cn.edu.service.FacultyService;
 import cn.edu.utils.Result;
+import cn.edu.vo.Faculty;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @ClassName FacultyController
@@ -61,8 +59,64 @@ public class FacultyController {
             result.setMessage(e.getMessage());
             result.setSuccess(false);
         }
+        return result;
+    }
 
+    /**
+     * @Author wys
+     * @ClassName insert
+     * @Description //TODO  新增
+     * @Date 17:05 2020/3/14
+     * @Param [faculty]
+     * @return cn.edu.utils.Result
+     **/
+    @PostMapping("/")
+    public Result insert(@RequestBody Faculty faculty){
+        Result result = new Result();
+        try{
+            result.setSuccess(true);
+            result.setObject(facultyService.insert(faculty));
+            result.setMessage("新增院系成功");
+        }catch (Exception e){
+            result.setSuccess(false);
+            result.setMessage(e.getMessage());
+        }
+        return result;
+    }
 
+    /**
+     * @Author wys
+     * @ClassName update
+     * @Description //TODO  更新院系
+     * @Date 17:05 2020/3/14
+     * @Param [faculty]
+     * @return cn.edu.utils.Result
+     **/
+    @PutMapping("/")
+    public Result update(@RequestBody Faculty faculty){
+        Result result = new Result();
+        try{
+            result.setSuccess(true);
+            result.setObject(facultyService.update(faculty));
+            result.setMessage("更新院系成功");
+        }catch (Exception e){
+            result.setSuccess(false);
+            result.setMessage(e.getMessage());
+        }
+        return result;
+    }
+
+    @DeleteMapping("/{facultyId}")
+    public Result delete(@PathVariable String facultyId){
+        Result result = new Result();
+        try{
+            result.setSuccess(true);
+            result.setObject(facultyService.delete(facultyId));
+            result.setMessage("删除院系成功");
+        }catch (Exception e){
+            result.setSuccess(false);
+            result.setMessage(e.getMessage());
+        }
         return result;
     }
 }
