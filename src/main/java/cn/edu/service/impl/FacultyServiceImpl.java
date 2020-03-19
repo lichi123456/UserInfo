@@ -3,11 +3,14 @@ package cn.edu.service.impl;
 import cn.edu.dao.FacultyMapper;
 import cn.edu.service.ClassesService;
 import cn.edu.service.MajorService;
+import cn.edu.service.StudentService;
+import cn.edu.utils.Constant;
 import cn.edu.vo.Classes;
 import cn.edu.vo.Faculty;
 import cn.edu.service.FacultyService;
 import cn.edu.utils.ApplicationUtils;
 import cn.edu.vo.Major;
+import cn.edu.vo.Student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,6 +36,9 @@ public class FacultyServiceImpl implements FacultyService {
 
     @Autowired
     private ClassesService classesService;
+
+    @Autowired
+    private StudentService studentService;
     /**
      * @Author wys
      * @ClassName getFacultyList
@@ -106,7 +112,7 @@ public class FacultyServiceImpl implements FacultyService {
      * @Author wys
      * @ClassName getAllList
      * @Description //TODO
-     * @Date 16:51 2020/2/15 院系-专业-班级信息组装
+     * @Date 16:51 2020/2/15 院系-专业-班级-学生信息组装
      * @Param []
      * @return java.util.List<cn.edu.vo.Faculty>
      **/
@@ -115,12 +121,21 @@ public class FacultyServiceImpl implements FacultyService {
         List<Faculty>facultyList = getFacultyList();
         List<Major>majorList = majorService.getMajorList();
         List<Classes>classesList = classesService.getClassesList();
+        Student student = new Student();
+        List<Student>studentList = studentService.getStudentListWithConditionAndDeleteStatus(student, Constant.isNotDelete);
         List<Faculty>list=new ArrayList<>();
         for (Faculty f:facultyList ) {
             List<Major>m1 = new ArrayList<>();
             for (Major m:majorList) {
                 List<Classes>c1 = new ArrayList<>();
                 for (Classes c:classesList) {
+                    List<Student>s1 = new ArrayList<>();
+                    for(Student s:studentList){
+                        if(s.getClassId().compareTo(c.getClassId())==0){
+                            s1.add(s);
+                        }
+                    }
+                    c.setStudentList(s1);
                     if(c.getMajorId().compareTo(m.getMajorId())==0){
                         c1.add(c);
                     }
