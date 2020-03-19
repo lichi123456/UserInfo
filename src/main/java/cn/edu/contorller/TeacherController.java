@@ -103,14 +103,7 @@ public class TeacherController {
     public Result insert(@RequestBody Teacher teacher){
         Result result = new Result();
         try{
-            int t = teacherService.insert(teacher);
-            if(t==0){
-                result.setMessage("插入登录表或小组信息列表失败");
-                result.setSuccess(false);
-            }
-            result.setSuccess(true);
-            result.setMessage("教师信息新增成功");
-            result.setObject(t);
+            result = teacherService.insert(teacher);
         }catch (Exception e){
             result.setMessage(e.getMessage());
             result.setSuccess(false);

@@ -7,6 +7,7 @@ import cn.edu.service.TeacherStudentService;
 import cn.edu.service.UserLoginService;
 import cn.edu.utils.ApplicationUtils;
 import cn.edu.utils.Constant;
+import cn.edu.utils.Result;
 import cn.edu.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -101,7 +102,8 @@ public class TeacherServiceImpl implements TeacherService {
      * @return int
      **/
     @Override
-    public int insert(Teacher teacher) {
+    public Result insert(Teacher teacher) {
+        Result result = new Result();
         teacher.setTeacherId(ApplicationUtils.GUID32());
         teacher.setDeleteStatus(Constant.isNotDelete);
         UserLogin userLogin = new UserLogin();
@@ -111,14 +113,22 @@ public class TeacherServiceImpl implements TeacherService {
         userLogin.setUserType(Constant.isTeacher);
         String t = userLoginService.insert(userLogin);
         if(t.compareTo("插入成功")!=0){//插入登录表失败
-            return 0;
+            result.setSuccess(false);
+            result.setMessage(t);
+            return result;
         }
         int t1 = teacherMapper.insertSelective(teacher);
-        if(t1==0)return 0;
+        if(t1==0){
+            result.setMessage("新增失败");
+            result.setSuccess(false);
+            return result;
+        }
         if(teacher.getChangeGroupList()!=null &&teacher.getChangeGroupList().size()>0){
             changeTeacherGroupList(teacher);
         }
-        return  1;
+        result.setSuccess(true);
+        result.setMessage("新增成功");
+        return  result;
     }
 
     /**

@@ -79,15 +79,7 @@ public class StudentContorller {
     public Result insert(@RequestBody Student student){
         Result result = new Result();
         try{
-            int t = studentService.insert(student);
-            if(t == 0){
-                result.setSuccess(false);
-                result.setMessage("插入中间表或登录表失败");
-            }else{
-                result.setSuccess(true);
-                result.setMessage("学生信息插入成功");
-            }
-            result.setObject(t);
+            result = studentService.insert(student);
         }catch (Exception e){
             result.setMessage(e.getMessage());
             result.setSuccess(false);

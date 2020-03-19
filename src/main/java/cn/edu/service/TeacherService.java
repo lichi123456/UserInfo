@@ -1,7 +1,9 @@
 package cn.edu.service;
 
+import cn.edu.utils.Result;
 import cn.edu.vo.Teacher;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.Assert;
 
 import java.util.List;
 
@@ -16,7 +18,7 @@ public interface TeacherService {
     List<Teacher>getTeacherListWithConditionAndDeleteStatus(Teacher teacher,String deleteStatus);
     List<Teacher>getTeacherList();
     Teacher getOneTeacherById(String id);
-    int insert(Teacher teacher);
+    Result insert(Teacher teacher);
     int update(Teacher teacher);
     int delete(String id);
     int realDel(String id);

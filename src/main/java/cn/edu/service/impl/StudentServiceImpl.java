@@ -2,6 +2,7 @@ package cn.edu.service.impl;
 
 import cn.edu.dao.StudentMapper;
 import cn.edu.service.*;
+import cn.edu.utils.Result;
 import cn.edu.vo.*;
 import cn.edu.vo.Student;
 import cn.edu.service.StudentService;
@@ -79,7 +80,8 @@ public class StudentServiceImpl implements StudentService {
      * @return int
      **/
     @Override
-    public int insert(Student student) {
+    public Result insert(Student student) {
+        Result result = new Result();
         Assert.hasText(student.getStudentName(),"学生姓名不能为空");
         Assert.hasText(student.getStudentSex(),"学生性别不能为空");
         Assert.hasText(student.getStudentCode(),"学生学号不能为空");
@@ -95,14 +97,22 @@ public class StudentServiceImpl implements StudentService {
         //插入登录表
         String t = userLoginService.insert(userLogin);
         if(t.compareTo("插入成功")!=0){
-            return 0;
+            result.setMessage(t);
+            result.setSuccess(false);
+            return result;
         }
         int t1 = studentMapper.insertSelective(student);
-        if(t1==0)return 0;
+        if(t1==0){
+            result.setMessage("新增失败");
+            result.setSuccess(false);
+            return result;
+        }
         if(student.getChangeTutorList()!=null &&student.getChangeTutorList().size()>0){
             changeTutorList(student);
         }
-        return 1;
+        result.setObject(true);
+        result.setMessage("新增学生成功");
+        return result;
     }
 
     /**

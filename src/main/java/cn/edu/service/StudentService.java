@@ -1,5 +1,6 @@
 package cn.edu.service;
 
+import cn.edu.utils.Result;
 import cn.edu.vo.Student;
 
 import java.util.List;
@@ -13,7 +14,7 @@ import java.util.List;
  **/
 public interface StudentService {
     List<Student>getStudentListWithConditionAndDeleteStatus(Student student,String deleteStatus);
-    int insert(Student student);
+    Result insert(Student student);
     int delete(String id);
     int realDel(String id);
     int update(Student student);

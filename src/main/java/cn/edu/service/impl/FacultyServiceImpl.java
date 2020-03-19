@@ -102,6 +102,14 @@ public class FacultyServiceImpl implements FacultyService {
         return facultyMapper.deleteByPrimaryKey(id);
     }
 
+    /**
+     * @Author wys
+     * @ClassName getAllList
+     * @Description //TODO
+     * @Date 16:51 2020/2/15 院系-专业-班级信息组装
+     * @Param []
+     * @return java.util.List<cn.edu.vo.Faculty>
+     **/
     @Override
     public List<Faculty> getAllList() {
         List<Faculty>facultyList = getFacultyList();
