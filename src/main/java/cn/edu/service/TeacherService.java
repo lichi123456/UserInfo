@@ -24,4 +24,11 @@ public interface TeacherService {
     int realDel(String id);
     int changeTeacherGroupList(Teacher teacher);
     int Recover(String id);
+
+    /**
+     * @Author lichi
+     * @param teacher
+     * @return
+     */
+    Teacher getTeacherByTeacherCode(Teacher teacher);
 }

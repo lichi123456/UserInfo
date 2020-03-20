@@ -22,4 +22,11 @@ public interface StudentService {
     int changeTutorList(Student student);
     int Recover(String id);
 
+    /**
+     * 根据学生学号查找学生id
+     * @param student
+     * @return
+     */
+    Student getStudentIdByStudentCode(Student student);
+
 }

@@ -18,4 +18,14 @@ public class Constant {
     public static final String isTeacher = "2";
     //学生标识
     public static final String isStudent = "1";
+    // 证书数据导出表头
+    public static final String[] CERTIFICATE_EXCEL_HEADER =
+            {"*学号","*姓名","*证书名称","*指导老师工号1","*指导老师工号2","*指导老师工号3","*获取证书时间","*证书等级"};
+    //证书数据类型
+    public static final String CERTIFICATE_TYPE = "CERTIFICATE";
+    // 工作室数据表头
+    public  static final String[] STUDENT_EXCEL_HEADER = {"*学号","*姓名","*性别","*年级","*班级","*班级序号","*电话号码","*QQ","*邮箱"};
+    // 工作室学生
+    public static final String STUDENT_TYPE ="STUDENT";
+
 }

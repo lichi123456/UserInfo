@@ -253,4 +253,21 @@ public class TeacherServiceImpl implements TeacherService {
         teacher.setDeleteStatus(Constant.isNotDelete);
         return teacherMapper.updateByPrimaryKeySelective(teacher);
     }
+
+    /**
+     *
+     *
+     * @description:通过教师工号得到教师
+     * @param teacher
+     * @return: cn.edu.vo.Teacher
+     * @author: 李翅
+     * @time: 2020/3/19 20:41
+     */
+    @Override
+    public Teacher getTeacherByTeacherCode(Teacher teacher) {
+        Assert.hasText(teacher.getTeacherCode(),"教师工号不能为空");
+        Example example = new Example(Teacher.class);
+        example.and().andEqualTo("teacherCode",teacher.getTeacherCode());
+        return teacherMapper.selectOneByExample(example);
+    }
 }

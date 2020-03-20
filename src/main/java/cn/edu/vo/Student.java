@@ -1,5 +1,6 @@
 package cn.edu.vo;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -7,8 +8,7 @@ import java.util.Date;
 import java.util.List;
 import javax.persistence.*;
 
-@Getter
-@Setter
+@Data
 @Table(name = "`student`")
 public class Student {
     /**

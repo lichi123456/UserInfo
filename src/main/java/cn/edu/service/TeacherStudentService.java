@@ -20,4 +20,23 @@ public interface TeacherStudentService {
     int deleteByStudentIdAndTeacherId(TeacherStudent teacherStudent);
     List<TeacherStudent>getTeacherStudentByStudentId(String studentId);
     List<TeacherStudent>getTeacherStudentByTeacherId(String teacherId);
+
+    /**
+     * @Author lichi
+     * 判断是否存在
+     * @param teacher
+     * @param student
+     * @return
+     */
+    boolean isExistTeacherStudent(Teacher teacher,Student student);
+    /**
+     * @Author lichi
+     * 通过老师和学生插入数据
+     * @param teacher
+     * @param student
+     * @return
+     */
+    int insert(Teacher teacher,Student student);
+
+
 }

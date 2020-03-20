@@ -12,4 +12,11 @@
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="update_user" jdbcType="VARCHAR" property="updateUser" />
   </resultMap>
+  <select id = "getOrgzation" resultType="cn.edu.vo.Organization" parameterType="cn.edu.vo.Organization">
+    SELECT  * FROM organization WHERE 1 =1 AND
+    <if test="organizationId !=null">
+      organization.organization_id = #{organizationId}
+    </if>
+  </select>
+
 </mapper>

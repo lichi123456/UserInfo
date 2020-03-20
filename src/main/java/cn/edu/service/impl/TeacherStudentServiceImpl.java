@@ -136,4 +136,52 @@ public class TeacherStudentServiceImpl implements TeacherStudentService {
         example.and().andEqualTo("teacherId",teacherId);
         return teacherStudentMapper.selectByExample(example);
     }
+    /**
+     *判断是否存在
+     *
+     * @description:
+     * @param teacher
+     * @param student
+     * @return: boolean
+     * @author: 李翅
+     * @time: 2020/3/20 16:12
+     */
+    @Override
+    public boolean isExistTeacherStudent(Teacher teacher, Student student) {
+
+        Assert.hasText(teacher.getTeacherId(),"教师id不能为空");
+        Assert.hasText(student.getStudentId(),"学生id不能为空");
+        //true 为空
+        boolean isExist = true;
+        Example example = new Example(TeacherStudent.class);
+        example.and().andEqualTo("teacherId",teacher.getTeacherId());
+        example.and().andEqualTo("studentId",student.getStudentId());
+        TeacherStudent teacherStudent = teacherStudentMapper.selectOneByExample(example);
+        if(teacherStudent != null){
+            isExist = false;
+        }
+
+
+        return isExist;
+    }
+    /**
+     *
+     *
+     * @description: 通过老师和学生插入中间关系
+     * @param teacher
+     * @param student
+     * @return: int
+     * @author: 李翅
+     * @time: 2020/3/20 16:15
+     */
+    @Override
+    public int insert(Teacher teacher, Student student) {
+        Assert.hasText(teacher.getTeacherId(),"教师id不能为空");
+        Assert.hasText(student.getStudentId(),"学生id不能为空");
+        TeacherStudent teacherStudent = new TeacherStudent();
+        teacherStudent.setTeacherId(teacher.getTeacherId());
+        teacherStudent.setStudentId(student.getStudentId());
+        return teacherStudentMapper.insertSelective(teacherStudent);
+    }
+
 }

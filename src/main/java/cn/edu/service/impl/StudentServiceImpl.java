@@ -12,6 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+import tk.mybatis.mapper.entity.Example;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -288,6 +289,22 @@ public class StudentServiceImpl implements StudentService {
         Student student = getOneStudentById(id);
         student.setDeleteStatus(Constant.isNotDelete);
         return studentMapper.updateByPrimaryKeySelective(student);
+    }
+
+    /**
+     * @Author lichi
+     * @ClassName getStudentIdByStudentCode
+     * @Description //TODO 通过学号查找学生
+     * @Date 17:52 2020/3/10
+     * @Param [id]
+     * @return int
+     **/
+    @Override
+    public Student getStudentIdByStudentCode(Student student) {
+        Assert.hasText(student.getStudentId(),"studentId 不能为空");
+        Example example = new Example(Student.class);
+        example.and().andEqualTo("studentCode",student.getStudentCode());
+        return studentMapper.selectOneByExample(example);
     }
 
 }
