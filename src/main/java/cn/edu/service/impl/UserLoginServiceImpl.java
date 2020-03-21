@@ -126,6 +126,7 @@ public class UserLoginServiceImpl implements UserLoginService {
         }
         userRole.setRoleId(roleId);
         userRole.setUserId(userLogin.getUserId());
+        userRole.setCreateUser(userLogin.getCreateUser());
         int t = userLoginMapper.insertSelective(userLogin);
         if(t==0){
             return "插入登录表信息失败";

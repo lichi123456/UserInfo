@@ -5,14 +5,13 @@ import cn.edu.service.ClassesService;
 import cn.edu.service.MajorService;
 import cn.edu.service.StudentService;
 import cn.edu.utils.Constant;
-import cn.edu.vo.Classes;
-import cn.edu.vo.Faculty;
+import cn.edu.vo.*;
 import cn.edu.service.FacultyService;
 import cn.edu.utils.ApplicationUtils;
-import cn.edu.vo.Major;
-import cn.edu.vo.Student;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import tk.mybatis.mapper.entity.Example;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -76,7 +75,6 @@ public class FacultyServiceImpl implements FacultyService {
     @Override
     public int insert(Faculty faculty) {
         faculty.setFacultyId(ApplicationUtils.GUID32());
-//        faculty.setCreateUser();
         return facultyMapper.insert(faculty);
     }
 
@@ -91,7 +89,6 @@ public class FacultyServiceImpl implements FacultyService {
     @Override
     public int update(Faculty faculty) {
         faculty.setUpdateTime(new Date());
-//        faculty.setUpdateUser();
         return facultyMapper.updateByPrimaryKeySelective(faculty);
     }
 
@@ -131,8 +128,10 @@ public class FacultyServiceImpl implements FacultyService {
                 for (Classes c:classesList) {
                     List<Student>s1 = new ArrayList<>();
                     for(Student s:studentList){
-                        if(s.getClassId().compareTo(c.getClassId())==0){
-                            s1.add(s);
+                        if(StringUtils.isNotEmpty(s.getClassId())&&StringUtils.isNoneBlank(s.getClassId())){
+                            if(s.getClassId().compareTo(c.getClassId())==0){
+                                s1.add(s);
+                            }
                         }
                     }
                     c.setStudentList(s1);
@@ -150,4 +149,5 @@ public class FacultyServiceImpl implements FacultyService {
         }
         return list;
     }
+
 }
