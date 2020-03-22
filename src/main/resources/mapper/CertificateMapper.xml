@@ -17,5 +17,75 @@
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="update_user" jdbcType="VARCHAR" property="updateUser" />
   </resultMap>
+  <sql id = "CertificatecColumn">
 
+  </sql>
+  <select id="getCertificateDto" resultType="cn.edu.dto.CertificateDto"  parameterType="java.util.Map">
+    SELECT
+	a.user_id AS teacher1.teacherId ,
+	b.user_id AS student.student_id,
+	c.certificate_id AS certificate.certificate_id,
+	FROM (SELECT * FROM user_certificate uc where uc.user_type='2') a,
+	(SELECT * FROM user_certificate uc where uc.user_type='1') b,
+	teacher_student ts,
+	certificate c
+	WHERE a.user_id = ts.teacher_id
+	AND b.user_id = ts.student_id
+	AND a.certificate_id = b.certificate_id
+	AND c.certificate_id = a.certificate_id
+    <if test="studentId != null and studentId != ''" >
+      AND b.user_id = studentId
+    </if>
+    <if test="teacherId != null and teacherId != ''" >
+      AND a.user_id = teacherId
+    </if>
+    <if test="certificateId!= null and certificateId != ''" >
+      AND a.certificateId = certificateId
+    </if>
+  </select>
+    <select id="isExistStudentAndCertificate" resultType="java.lang.Integer"  parameterType="java.util.Map">
+    SELECT
+	count(*)
+	FROM (SELECT * FROM user_certificate uc where uc.user_type='2') a,
+	(SELECT * FROM user_certificate uc where uc.user_type='1') b,
+	teacher_student ts,
+	certificate c
+	WHERE a.user_id = ts.teacher_id
+	AND b.user_id = ts.student_id
+	AND a.certificate_id = b.certificate_id
+	AND c.certificate_id = a.certificate_id
+    <if test="studentId != null and studentId != ''" >
+        AND b.user_id = #{studentId}
+    </if>
+    <if test="teacherId != null and teacherId != ''" >
+        AND a.user_id = #{teacherId}
+    </if>
+    <if test="certificateId!= null and certificateId != ''" >
+        AND a.certificateId = #{certificateId}
+    </if>
+  </select>
+
+
+    <select id="getCertificateListN" resultType="cn.edu.vo.Certificate" parameterType="cn.edu.vo.Certificate" >
+        SELECT * from certificate WHERE 1=1
+        <if test="certificateId != null and certificateId !=''">
+
+            certificate.certificate_id  = #{certificateId}
+        </if>
+        <if test="certificateName != null and certificateName !=''">
+            and certificate.certificate_name like CONCAT('%',#{certificateId},'%')
+        </if>
+        AND certificate.delete_status = 'N'
+    </select>
+
+    <select id="getCertificateListY" resultType="cn.edu.vo.Certificate" parameterType="cn.edu.vo.Certificate" >
+        SELECT * from certificate WHERE 1=1
+        <if test="certificateId != null and certificateId !=''">
+            certificate.certificate_id  = #{certificateId}
+        </if>
+        <if test="certificateName != null and certificateName !=''">
+            and certificate.certificate_name like CONCAT('%',#{certificateId},'%')
+        </if>
+        AND certificate.delete_status = 'Y'
+    </select>
 </mapper>

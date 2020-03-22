@@ -139,7 +139,7 @@ public class ExcelUtils {
      * @throws IOException
      */
 
-    public ResponseEntity<byte[]> exportExcel(List<Object> objects,String [] excelHeader,String exportType,String excelSheet) throws IOException {
+    public ResponseEntity<byte[]> exportExcel(List<CertificateDto> objects, String [] excelHeader, String exportType, String excelSheet) throws IOException {
 
         HttpHeaders headers = null;
         ByteArrayOutputStream baos = null;
@@ -175,14 +175,14 @@ public class ExcelUtils {
                     row.createCell(0).setCellValue(certificateDto.getStudent().getStudentCode());
                     row.createCell(1).setCellValue(certificateDto.getStudent().getStudentName());
                     row.createCell(2).setCellValue(certificateDto.getCertificate().getCertificateName());
-                    if(certificateDto.getTeacher1().getTeacherCode()!=null && "".compareTo(certificateDto.getTeacher1().getTeacherCode())!=0){
-                        row.createCell(3).setCellValue(certificateDto.getTeacher1().getTeacherCode());
+                    if(certificateDto.getTeacher1().getTeacherName()!=null && "".compareTo(certificateDto.getTeacher1().getTeacherName())!=0){
+                        row.createCell(3).setCellValue(certificateDto.getTeacher1().getTeacherName());
                     }
-                    if(certificateDto.getTeacher2().getTeacherCode()!=null && "".compareTo(certificateDto.getTeacher2().getTeacherCode())!=0){
-                        row.createCell(4).setCellValue(certificateDto.getTeacher2().getTeacherCode());
+                    if(certificateDto.getTeacher2().getTeacherName()!=null && "".compareTo(certificateDto.getTeacher2().getTeacherName())!=0){
+                        row.createCell(4).setCellValue(certificateDto.getTeacher2().getTeacherName());
                     }
-                    if(certificateDto.getTeacher3().getTeacherCode()!=null && "".compareTo(certificateDto.getTeacher3().getTeacherCode())!=0){
-                        row.createCell(5).setCellValue(certificateDto.getTeacher3().getTeacherCode());
+                    if(certificateDto.getTeacher3().getTeacherName()!=null && "".compareTo(certificateDto.getTeacher3().getTeacherName())!=0){
+                        row.createCell(5).setCellValue(certificateDto.getTeacher3().getTeacherName());
                     }
                     if(certificateDto.getCertificate().getCertificateDate()!=null && "".compareTo(String.valueOf(certificateDto.getCertificate().getCertificateDate()))!=0){
                         row.createCell(6).setCellValue(certificateDto.getCertificate().getCertificateDate());

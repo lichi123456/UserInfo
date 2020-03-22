@@ -20,7 +20,7 @@ public class Constant {
     public static final String isStudent = "1";
     // 证书数据导出表头
     public static final String[] CERTIFICATE_EXCEL_HEADER =
-            {"*学号","*姓名","*证书名称","*指导老师工号1","*指导老师工号2","*指导老师工号3","*获取证书时间","*证书等级"};
+            {"*学号","*姓名","*证书名称","*指导老师","*指导老师","*指导老师","*获取证书时间","*证书等级"};
     //证书数据类型
     public static final String CERTIFICATE_TYPE = "CERTIFICATE";
     // 工作室数据表头

@@ -2,6 +2,7 @@ package cn.edu.contorller;
 
 import cn.edu.dto.CertificateDto;
 import cn.edu.service.*;
+import cn.edu.utils.Constant;
 import cn.edu.utils.ExcelUtils;
 import cn.edu.utils.Result;
 import cn.edu.vo.Certificate;
@@ -19,6 +20,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static cn.edu.utils.Constant.CERTIFICATE_TYPE;
 
 /**
  * @ClassName CertificateController
@@ -162,19 +165,19 @@ public class CertificateController {
         return result;
     }
 
-//    /**
-//     * @Author lichi
-//     * @ClassName exportExcel
-//     * @Description //TODO  导出表格数据
-//     * @Date 11:30 2020/1/19
-//     * @Param []
-//     * @return org.springframework.http.ResponseEntity<byte[]>
-//     **/
-//    @GetMapping("/exportExcel")
-//    public ResponseEntity<byte[]> exportExcel() throws IOException {
-//        //获取数据
-//        Student student = new Student();
-//        ExcelUtils excelUtils = new ExcelUtils();
-//        return excelUtils.exportExcel(studentService.);
-//    }
+    /**
+     * @Author lichi
+     * @ClassName exportExcel
+     * @Description //TODO  导出表格数据
+     * @Date 11:30 2020/1/19
+     * @Param []
+     * @return org.springframework.http.ResponseEntity<byte[]>
+     **/
+    @GetMapping("/exportExcel")
+    public ResponseEntity<byte[]> exportExcel() throws IOException {
+        //获取数据
+        Student student = new Student();
+        ExcelUtils excelUtils = new ExcelUtils();
+        return excelUtils.exportExcel(certificateService.getCertificateDto(null,null,null), Constant.CERTIFICATE_EXCEL_HEADER,CERTIFICATE_TYPE,"证书列表");
+    }
 }
