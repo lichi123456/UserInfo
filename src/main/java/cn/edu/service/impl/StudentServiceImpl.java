@@ -95,6 +95,7 @@ public class StudentServiceImpl implements StudentService {
         userLogin.setUserCode(student.getStudentCode());
         userLogin.setUserName(student.getStudentName());
         userLogin.setUserType(Constant.isStudent);
+        userLogin.setCreateUser(student.getCreateUser());
         //插入登录表
         String t = userLoginService.insert(userLogin);
         if(t.compareTo("插入成功")!=0){
@@ -111,7 +112,7 @@ public class StudentServiceImpl implements StudentService {
         if(student.getChangeTutorList()!=null &&student.getChangeTutorList().size()>0){
             changeTutorList(student);
         }
-        result.setObject(true);
+        result.setSuccess(true);
         result.setMessage("新增学生成功");
         return result;
     }
@@ -252,6 +253,7 @@ public class StudentServiceImpl implements StudentService {
                 TeacherStudent teacherStudent = new TeacherStudent();
                 teacherStudent.setTeacherId(id);
                 teacherStudent.setStudentId(student.getStudentId());
+                teacherStudent.setCreateUser(student.getCreateUser());
                 teacherStudentService.insert(teacherStudent);
             }
         }

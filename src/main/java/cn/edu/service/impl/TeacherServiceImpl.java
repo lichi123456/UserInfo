@@ -111,6 +111,7 @@ public class TeacherServiceImpl implements TeacherService {
         userLogin.setUserCode(teacher.getTeacherCode());
         userLogin.setUserName(teacher.getTeacherName());
         userLogin.setUserType(Constant.isTeacher);
+        userLogin.setCreateUser(teacher.getCreateUser());
         String t = userLoginService.insert(userLogin);
         if(t.compareTo("插入成功")!=0){//插入登录表失败
             result.setSuccess(false);
