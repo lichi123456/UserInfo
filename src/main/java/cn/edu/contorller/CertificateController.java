@@ -157,6 +157,7 @@ public class CertificateController {
                         }
                     }
                 }
+
             }
         }catch (Exception e){
             result.setMessage(e.getMessage());
