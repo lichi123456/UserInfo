@@ -2,6 +2,7 @@ package cn.edu.service;
 
 import cn.edu.utils.Result;
 import cn.edu.vo.Student;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -12,6 +13,7 @@ import java.util.List;
  * @Date 2020/2/14 17:17
  * @Version 1.0
  **/
+@Service
 public interface StudentService {
     List<Student>getStudentListWithConditionAndDeleteStatus(Student student,String deleteStatus);
     Result insert(Student student);

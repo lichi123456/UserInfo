@@ -5,9 +5,11 @@ import cn.edu.service.OrganizationCertificateService;
 import cn.edu.utils.ApplicationUtils;
 import cn.edu.vo.Organization;
 import cn.edu.vo.OrganizationCertificate;
+import cn.edu.vo.TeacherStudent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
 
@@ -23,10 +25,12 @@ public class OrganizationCertificateServiceImpl implements OrganizationCertifica
     @Autowired
     private OrganizationCertificateMapper organizationCertificateMapper;
     @Override
-    public List<Organization> getOrganizationByCertificateId(String certificateId) {
+    public List<OrganizationCertificate> getOrganizationByCertificateId(String certificateId) {
 
         Assert.hasText(certificateId,"证书id不能为空");
-        List<Organization> organizationList = organizationCertificateMapper.getOrganization(certificateId);
+        Example example = new Example(OrganizationCertificate.class);
+        example.and().andEqualTo("certificateId",certificateId);
+        List<OrganizationCertificate> organizationList = organizationCertificateMapper.selectByExample(example);
         return organizationList;
     }
 
@@ -37,10 +41,5 @@ public class OrganizationCertificateServiceImpl implements OrganizationCertifica
 
     }
 
-    @Override
-    public int delete(String id) {
-        Assert.hasText(id,"id不能为空");
-        organizationCertificateMapper.delete(id);
-        return 0;
-    }
+
 }

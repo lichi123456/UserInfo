@@ -17,7 +17,7 @@ public interface OrganizationCertificateService {
      * @param certificateId
      * @return
      */
-    List<Organization> getOrganizationByCertificateId(String certificateId);
+    List<OrganizationCertificate> getOrganizationByCertificateId(String certificateId);
 
     /**
      * 插入数据
@@ -26,12 +26,6 @@ public interface OrganizationCertificateService {
      */
     int insert(OrganizationCertificate organizationCertificate);
 
-    /**
-     * 删除通过id
-     * @param id
-     * @return
-     */
-    int delete(String id);
 
 
 }

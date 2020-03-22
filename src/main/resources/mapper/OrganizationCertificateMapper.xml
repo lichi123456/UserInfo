@@ -13,12 +13,5 @@
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="update_user" jdbcType="VARCHAR" property="updateUser" />
   </resultMap>
-  <select id="getOrganizationid" resultType="cn.edu.vo.Organization" parameterType="java.lang.String">
-    select * from organization_certificate AS a WHERE 1 = 1
-    <if test="certificateId != null"></if>
-    AND a.certificate = #{certificateId}
-  </select>
-  <delete id="delete">
-    DELETE FROM organization_certificate  WHERE  organization_id = #{id} or certificate_id = #{id}
-  </delete>
+
 </mapper>
