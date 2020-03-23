@@ -96,7 +96,7 @@ public class UserCertificateServiceImpl implements UserCertificateService {
         UserCertificate userCertificate = new UserCertificate();
         userCertificate.setUserId(teacher.getTeacherId());
         userCertificate.setCertificateId(certificate.getCertificateId());
-        userCertificate.setUserType(Constant.isTeacher);
+        userCertificate.setUserType(Constant.IS_TEACHER);
         return userCertificateMapper.insertSelective(userCertificate);
     }
 
@@ -107,7 +107,7 @@ public class UserCertificateServiceImpl implements UserCertificateService {
         UserCertificate userCertificate = new UserCertificate();
         userCertificate.setUserId(student.getStudentId());
         userCertificate.setCertificateId(certificate.getCertificateId());
-        userCertificate.setUserType(Constant.isStudent);
+        userCertificate.setUserType(Constant.IS_STUDENT);
         return userCertificateMapper.insertSelective(userCertificate);
     }
 

@@ -9,15 +9,15 @@ package cn.edu.utils;
  **/
 public class Constant {
     // 假删除标识-已删除
-    public static final String  isDelete = "Y";
+    public static final String  IS_DELETE = "Y";
     // 假删除标识-使用中
-    public static final String  isNotDelete ="N";
+    public static final String  IS_NOT_DELETE ="N";
     //管理员标识
-    public static final String isAdmin = "0";
+    public static final String IS_ADMIN = "0";
     //教师标识
-    public static final String isTeacher = "2";
+    public static final String IS_TEACHER = "2";
     //学生标识
-    public static final String isStudent = "1";
+    public static final String IS_STUDENT = "1";
     // 证书数据导出表头
     public static final String[] CERTIFICATE_EXCEL_HEADER =
             {"*学号","*姓名","*证书名称","*指导老师","*指导老师","*指导老师","*获取证书时间","*证书等级"};

@@ -39,7 +39,7 @@ public class StudentContorller {
         try{
             result.setSuccess(true);
             result.setMessage("获取学生信息列表成功");
-            result.setObject(studentService.getStudentListWithConditionAndDeleteStatus(student, Constant.isNotDelete));
+            result.setObject(studentService.getStudentListWithConditionAndDeleteStatus(student, Constant.IS_NOT_DELETE));
         }catch(Exception e){
             result.setMessage(e.getMessage());
             result.setSuccess(false);
@@ -60,7 +60,7 @@ public class StudentContorller {
         try{
             result.setSuccess(true);
             result.setMessage("获取学生信息列表成功");
-            result.setObject(studentService.getStudentListWithConditionAndDeleteStatus(student, Constant.isDelete));
+            result.setObject(studentService.getStudentListWithConditionAndDeleteStatus(student, Constant.IS_DELETE));
         }catch(Exception e){
             result.setMessage(e.getMessage());
             result.setSuccess(false);

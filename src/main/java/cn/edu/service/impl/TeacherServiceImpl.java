@@ -49,9 +49,9 @@ public class TeacherServiceImpl implements TeacherService {
     @Override
     public List<Teacher> getTeacherListWithConditionAndDeleteStatus(Teacher teacher,String deleteStatus) {
         List<Teacher>teacherList = null;
-        if(deleteStatus.trim().compareTo(Constant.isNotDelete)==0){
+        if(deleteStatus.trim().compareTo(Constant.IS_NOT_DELETE)==0){
             teacherList = teacherMapper.getTeacherListByName(teacher);
-        }else if(deleteStatus.trim().compareTo(Constant.isDelete)==0){
+        }else if(deleteStatus.trim().compareTo(Constant.IS_DELETE)==0){
             teacherList = teacherMapper.getDelTeacherListByName(teacher);
         }
 
@@ -65,7 +65,7 @@ public class TeacherServiceImpl implements TeacherService {
     @Override
     public List<Teacher> getTeacherList() {
         Example example = new Example(Teacher.class);
-        example.and().andEqualTo("deleteStatus",Constant.isNotDelete);
+        example.and().andEqualTo("deleteStatus",Constant.IS_NOT_DELETE);
         return teacherMapper.selectByExample(example);
     }
 
@@ -105,12 +105,12 @@ public class TeacherServiceImpl implements TeacherService {
     public Result insert(Teacher teacher) {
         Result result = new Result();
         teacher.setTeacherId(ApplicationUtils.GUID32());
-        teacher.setDeleteStatus(Constant.isNotDelete);
+        teacher.setDeleteStatus(Constant.IS_NOT_DELETE);
         UserLogin userLogin = new UserLogin();
         userLogin.setUserId(teacher.getTeacherId());
         userLogin.setUserCode(teacher.getTeacherCode());
         userLogin.setUserName(teacher.getTeacherName());
-        userLogin.setUserType(Constant.isTeacher);
+        userLogin.setUserType(Constant.IS_TEACHER);
         userLogin.setCreateUser(teacher.getCreateUser());
         String t = userLoginService.insert(userLogin);
         if(t.compareTo("插入成功")!=0){//插入登录表失败
@@ -166,7 +166,7 @@ public class TeacherServiceImpl implements TeacherService {
         Assert.hasText(id,"教师id不能为空");
         Teacher teacher = teacherMapper.selectByPrimaryKey(id);
         teacher.setUpdateTime(new Date());
-        teacher.setDeleteStatus(Constant.isDelete);
+        teacher.setDeleteStatus(Constant.IS_DELETE);
         return teacherMapper.updateByPrimaryKeySelective(teacher);
     }
 
@@ -251,7 +251,7 @@ public class TeacherServiceImpl implements TeacherService {
     public int Recover(String id) {
         Assert.hasText(id,"教师主键id不能为空");
         Teacher teacher = getOneTeacherById(id);
-        teacher.setDeleteStatus(Constant.isNotDelete);
+        teacher.setDeleteStatus(Constant.IS_NOT_DELETE);
         return teacherMapper.updateByPrimaryKeySelective(teacher);
     }
 

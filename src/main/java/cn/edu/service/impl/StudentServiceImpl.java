@@ -59,9 +59,9 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public List<Student> getStudentListWithConditionAndDeleteStatus(Student student,String deleteStatus) {
         List<Student>studentList = null;
-        if(deleteStatus.trim().compareTo(Constant.isNotDelete)==0){
+        if(deleteStatus.trim().compareTo(Constant.IS_NOT_DELETE)==0){
             studentList = studentMapper.getStudentListByName(student);
-        }else if(deleteStatus.trim().compareTo(Constant.isDelete)==0){
+        }else if(deleteStatus.trim().compareTo(Constant.IS_DELETE)==0){
             studentList = studentMapper.getDelStudentListByName(student);
         }
 
@@ -89,12 +89,12 @@ public class StudentServiceImpl implements StudentService {
         Assert.hasText(student.getClassId(),"学生班级id不能为空");
         Assert.hasText(student.getGroupId(),"学生小组id不能为空");
         student.setStudentId(ApplicationUtils.GUID32());
-        student.setDeleteStatus(Constant.isNotDelete);
+        student.setDeleteStatus(Constant.IS_NOT_DELETE);
         UserLogin userLogin = new UserLogin();
         userLogin.setUserId(student.getStudentId());
         userLogin.setUserCode(student.getStudentCode());
         userLogin.setUserName(student.getStudentName());
-        userLogin.setUserType(Constant.isStudent);
+        userLogin.setUserType(Constant.IS_STUDENT);
         userLogin.setCreateUser(student.getCreateUser());
         //插入登录表
         String t = userLoginService.insert(userLogin);
@@ -129,7 +129,7 @@ public class StudentServiceImpl implements StudentService {
     public int delete(String id) {
         Assert.hasText(id,"id不能为空");
         Student student = studentMapper.selectByPrimaryKey(id);
-        student.setDeleteStatus(Constant.isDelete);
+        student.setDeleteStatus(Constant.IS_DELETE);
         student.setUpdateTime(new Date());
 //        student.setUpdateUser();
         return studentMapper.updateByPrimaryKeySelective(student);
@@ -289,7 +289,7 @@ public class StudentServiceImpl implements StudentService {
     public int Recover(String id) {
         Assert.hasText(id,"学生主键id不能为空");
         Student student = getOneStudentById(id);
-        student.setDeleteStatus(Constant.isNotDelete);
+        student.setDeleteStatus(Constant.IS_NOT_DELETE);
         return studentMapper.updateByPrimaryKeySelective(student);
     }
 

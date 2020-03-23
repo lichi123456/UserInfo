@@ -58,23 +58,26 @@ public class UserLoginServiceImpl implements UserLoginService {
 
         Result result = new Result();
         if(userLogin!=null &&userLogin.getUserType()!=null){
-            if(userLogin.getUserType().compareTo(Constant.isTeacher)==0){
-                Teacher teacher = teacherService.getOneTeacherById(userLogin.getUserId());
-                if(teacher.getDeleteStatus().compareTo(Constant.isDelete)==0 || teacher.getDeleteStatus()==null){
-                    result.setMessage("当前账号已被禁用");
-                    result.setSuccess(false);
-                    return result;
-                }
-            }else if(userLogin.getUserType().compareTo(Constant.isStudent)==0){
-                Student student = studentService.getOneStudentById(userLogin.getUserId());
-                if(student.getDeleteStatus().compareTo(Constant.isDelete)==0 ||student.getDeleteStatus()==null){
-                    result.setMessage("当前账号已被禁用");
-                    result.setSuccess(false);
-                    return result;
-                }
-            }else if(userLogin.getUserType().compareTo(Constant.isAdmin)==0){
-
+            if(userLogin.getDeleteStatus().compareTo(Constant.IS_DELETE)==0 || userLogin.getDeleteStatus()==null){
+                result.setMessage("当前账号已被禁用");
+                result.setSuccess(false);
+                return result;
             }
+//            if(userLogin.getUserType().compareTo(Constant.isTeacher)==0){
+//                Teacher teacher = teacherService.getOneTeacherById(userLogin.getUserId());
+//                if(teacher.getDeleteStatus().compareTo(Constant.isDelete)==0 || teacher.getDeleteStatus()==null){
+//
+//                }
+//            }else if(userLogin.getUserType().compareTo(Constant.isStudent)==0){
+//                Student student = studentService.getOneStudentById(userLogin.getUserId());
+//                if(student.getDeleteStatus().compareTo(Constant.isDelete)==0 ||student.getDeleteStatus()==null){
+//                    result.setMessage("当前账号已被禁用");
+//                    result.setSuccess(false);
+//                    return result;
+//                }
+//            }else if(userLogin.getUserType().compareTo(Constant.isAdmin)==0){
+//
+//            }
         }
         if(StringUtils.isEmpty(userLogin)){
             result.setSuccess(false);
@@ -111,7 +114,7 @@ public class UserLoginServiceImpl implements UserLoginService {
             }
         }
         userLogin.setUserPassword("123456");
-        userLogin.setDeleteStatus(Constant.isNotDelete);
+        userLogin.setDeleteStatus(Constant.IS_NOT_DELETE);
         List<Role>roleList = roleService.getRoleList();
         String roleId = null;
         for (Role r:roleList) {
@@ -183,13 +186,13 @@ public class UserLoginServiceImpl implements UserLoginService {
     public List<UserLogin> getDeleteUserList(UserLogin userLogin) {
        List<UserLogin>userLoginList = userLoginMapper.getDeleteUserList(userLogin);
        for(UserLogin u:userLoginList){
-           if(u.getUserType().compareTo(Constant.isStudent)==0){
+           if(u.getUserType().compareTo(Constant.IS_STUDENT)==0){
                Student student = studentService.getOneStudentById(u.getUserId());
                u.setUserTypeName("学生");
                u.setTel(student.getStudentTel());
                u.setQq(student.getStudentQq());
                u.setEmail(student.getStudentEmail());
-           }else if(u.getUserType().compareTo(Constant.isTeacher)==0){
+           }else if(u.getUserType().compareTo(Constant.IS_TEACHER)==0){
                 Teacher teacher = teacherService.getOneTeacherById(u.getUserId());
                 u.setUserTypeName("教师");
                 u.setTel(teacher.getTeacherTel());
@@ -214,9 +217,9 @@ public class UserLoginServiceImpl implements UserLoginService {
     public int RecoverUser(UserLogin userLogin) {
         Assert.hasText(userLogin.getUserId(),"主键id不能为空");
         Assert.hasText(userLogin.getUserType(),"角色类型不能为空");
-        if(userLogin.getUserType().compareTo(Constant.isStudent)==0){
+        if(userLogin.getUserType().compareTo(Constant.IS_STUDENT)==0){
             return studentService.Recover(userLogin.getUserId());
-        }else if (userLogin.getUserType().compareTo(Constant.isTeacher)==0){
+        }else if (userLogin.getUserType().compareTo(Constant.IS_TEACHER)==0){
             return teacherService.Recover(userLogin.getUserId());
         }else{
 
@@ -250,9 +253,9 @@ public class UserLoginServiceImpl implements UserLoginService {
     public int RealDeleteUser(UserLogin userLogin) {
         Assert.hasText(userLogin.getUserType(),"角色类型不能为空");
         Assert.hasText(userLogin.getUserId(),"角色主键id不能为空");
-        if(userLogin.getUserType().compareTo(Constant.isStudent)==0){
+        if(userLogin.getUserType().compareTo(Constant.IS_STUDENT)==0){
             return studentService.realDel(userLogin.getUserId());
-        }else if(userLogin.getUserType().compareTo(Constant.isTeacher)==0){
+        }else if(userLogin.getUserType().compareTo(Constant.IS_TEACHER)==0){
             return teacherService.realDel(userLogin.getUserId());
         }else{
 

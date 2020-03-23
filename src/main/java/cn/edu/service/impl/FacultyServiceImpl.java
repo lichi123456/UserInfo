@@ -119,7 +119,7 @@ public class FacultyServiceImpl implements FacultyService {
         List<Major>majorList = majorService.getMajorList();
         List<Classes>classesList = classesService.getClassesList();
         Student student = new Student();
-        List<Student>studentList = studentService.getStudentListWithConditionAndDeleteStatus(student, Constant.isNotDelete);
+        List<Student>studentList = studentService.getStudentListWithConditionAndDeleteStatus(student, Constant.IS_NOT_DELETE);
         List<Faculty>list=new ArrayList<>();
         for (Faculty f:facultyList ) {
             List<Major>m1 = new ArrayList<>();

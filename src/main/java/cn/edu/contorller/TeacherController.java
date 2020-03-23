@@ -42,7 +42,7 @@ public class TeacherController {
         try{
             result.setSuccess(true);
             result.setMessage("获取教师非禁用列表成功");
-            result.setObject(teacherService.getTeacherListWithConditionAndDeleteStatus(teacher, Constant.isNotDelete));
+            result.setObject(teacherService.getTeacherListWithConditionAndDeleteStatus(teacher, Constant.IS_NOT_DELETE));
         }catch(Exception e){
             result.setMessage(e.getMessage());
             result.setSuccess(false);
@@ -63,7 +63,7 @@ public class TeacherController {
         try{
             result.setSuccess(true);
             result.setMessage("获取教师禁用列表成功");
-            result.setObject(teacherService.getTeacherListWithConditionAndDeleteStatus(teacher, Constant.isDelete));
+            result.setObject(teacherService.getTeacherListWithConditionAndDeleteStatus(teacher, Constant.IS_DELETE));
         }catch(Exception e){
             result.setMessage(e.getMessage());
             result.setSuccess(false);

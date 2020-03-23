@@ -66,7 +66,7 @@ public class CertificateServiceImpl implements CertificateService {
         Assert.hasText(certificate.getCertificateDate().toString(),"证书获取时间不能为空");
         Assert.hasText(certificate.getMatchId(),"赛事id不能为空");
         certificate.setCertificateId(ApplicationUtils.GUID32());
-        certificate.setDeleteStatus(Constant.isNotDelete);
+        certificate.setDeleteStatus(Constant.IS_NOT_DELETE);
         int t = certificateMapper.insert(certificate);
         if(t == 0){
             result.setMessage(certificate.getCertificateName()+"新增失败");
@@ -98,8 +98,8 @@ public class CertificateServiceImpl implements CertificateService {
             certificate.setCertificateId(certificateId);
         }
         List<CertificateDto> certificateDtoList = new ArrayList<>();
-        List<Student> students = studentService.getStudentListWithConditionAndDeleteStatus(student,Constant.isNotDelete);
-        List<Certificate> certificates = getCertificateListWithConditionAndDeleteStatus(certificate,Constant.isNotDelete);
+        List<Student> students = studentService.getStudentListWithConditionAndDeleteStatus(student,Constant.IS_NOT_DELETE);
+        List<Certificate> certificates = getCertificateListWithConditionAndDeleteStatus(certificate,Constant.IS_NOT_DELETE);
         for (Student s:students) {
             for(Certificate c : certificates){
                 if(isExistStudentAndCertificate(s.getStudentId(),null,certificateId)){
@@ -122,9 +122,9 @@ public class CertificateServiceImpl implements CertificateService {
     @Override
     public List<Certificate> getCertificateListWithConditionAndDeleteStatus(Certificate certificate, String deleteStatus) {
         List<Certificate> certificateList = null;
-        if(deleteStatus.trim().compareTo(Constant.isNotDelete)==0){
+        if(deleteStatus.trim().compareTo(Constant.IS_NOT_DELETE)==0){
             certificateList = certificateMapper.getCertificateListN(certificate);
-        }else if(deleteStatus.trim().compareTo(Constant.isNotDelete)==0){
+        }else if(deleteStatus.trim().compareTo(Constant.IS_NOT_DELETE)==0){
             certificateList = certificateMapper.getCertificateListY(certificate);
         }
         List<Certificate>list=new ArrayList<>();
