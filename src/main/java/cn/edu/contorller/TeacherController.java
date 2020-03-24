@@ -67,6 +67,7 @@ public class TeacherController {
     @PostMapping("/deleteList/")
     public Result getDelTeacherListWithCondition(@RequestBody Teacher teacher){
         Result result = new Result();
+
         try{
             result.setSuccess(true);
             result.setMessage("获取教师禁用列表成功");

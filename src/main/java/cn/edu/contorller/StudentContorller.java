@@ -275,7 +275,7 @@ public class StudentContorller {
     }
 
     /**
-     * 道出数据
+     * 导出数据
      * lichi
      * @return
      * @throws IOException
@@ -287,7 +287,7 @@ public class StudentContorller {
     }
 
     /**
-     * 道出模板
+     * 导出模板
      * @return
      * @throws IOException
      */

@@ -38,4 +38,21 @@
     </if>
 
   </select>
+  <select id="getAllStudentDto" resultType="cn.edu.dto.StudentDto" >
+    SELECT s.student_code AS studentCode,
+    s.student_name AS studentName,
+    s.student_sex AS studentSex,
+    f.faculty_name AS facultyName,
+    m.major_name AS majorName,
+    c.class_name AS className,
+    g.group_name AS groupName,
+    s.student_tel AS studentTel,
+    s.student_qq AS studentQq,
+    s.student_email AS studentEmail
+    FROM major m, faculty f,classes c,Student s ,groups g
+    WHERE m.faculty_id = f.faculty_id
+    AND m.major_id = c.major_id
+    AND s.class_id = c.class_id
+    AND s.group_id = g.group_id
+  </select>
 </mapper>
