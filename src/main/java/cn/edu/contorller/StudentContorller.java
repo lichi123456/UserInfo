@@ -1,13 +1,22 @@
 package cn.edu.contorller;
 
+import cn.edu.service.ClassesService;
+import cn.edu.service.GroupsService;
 import cn.edu.service.TeacherStudentService;
 import cn.edu.utils.Constant;
+import cn.edu.utils.ExcelUtils;
 import cn.edu.vo.Student;
 import cn.edu.service.StudentService;
 import cn.edu.utils.ApplicationUtils;
 import cn.edu.utils.Result;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @ClassName StudentContorller
@@ -24,6 +33,10 @@ public class StudentContorller {
 
     @Autowired
     private TeacherStudentService teacherStudentService;
+    @Autowired
+    private ClassesService classesService;
+    @Autowired
+    private GroupsService groupsService;
 
     /**
      * @Author wys
@@ -206,5 +219,81 @@ public class StudentContorller {
         String id = ApplicationUtils.GUID32();
         System.out.println(id);
         return id;
+    }
+
+    @PostMapping("/importExcel")
+    public Result importExcel(MultipartFile file){
+        Result result = new Result();
+        ExcelUtils excelUtils = new ExcelUtils();
+        //excel 导入数据demo
+        List<List<Object>> dataList;
+        List<Student>list = new ArrayList<>();
+        try {
+            dataList = excelUtils.importExcel(file);
+            //数据封装格式一，将表格中的数据遍历取出后封装进对象放进List
+            for (int i = 0; i < dataList.size(); i++) {
+                Student student = new Student();
+                if(dataList.get(i).get(0)!=null&&dataList.get(i).get(0)!=""){
+                    student.setStudentCode((String) dataList.get(i).get(0));
+                }
+                if(dataList.get(i).get(1)!=null&&dataList.get(i).get(1)!=""){
+                    student.setStudentName((String) dataList.get(i).get(1));
+                }
+                if(dataList.get(i).get(2)!=null&&dataList.get(i).get(2)!=""){
+                    student.setStudentSex((String) dataList.get(i).get(2));
+                }
+                if(dataList.get(i).get(5)!=null&&dataList.get(i).get(5)!=""){
+                    student.setClassId(classesService.getIdByName((String) dataList.get(i).get(5)));
+                }
+                if(dataList.get(i).get(6)!=null&&dataList.get(i).get(6)!=""){
+                    student.setGroupId(groupsService.getIdByname((String) dataList.get(i).get(6)));
+                }
+                if(dataList.get(i).get(7)!=null&&dataList.get(i).get(7)!=""){
+                    student.setStudentTel((String) dataList.get(i).get(7));
+                }
+                if(dataList.get(i).get(8)!=null&&dataList.get(i).get(8)!=""){
+                    student.setStudentQq((String) dataList.get(i).get(8));
+                }
+                if(dataList.get(i).get(9)!=null&&dataList.get(i).get(9)!=""){
+                    student.setStudentEmail((String) dataList.get(i).get(9));
+                }
+                list.add(student);
+            }
+            result.setSuccess(true);
+            result.setMessage("导入成功");
+            for(Student s:list){
+                if (s.getStudentName() != null && s.getStudentName() != "") {
+                    studentService.insert(s);
+                }
+
+            }
+        } catch (Exception e) {
+            result.setMessage(e.getMessage());
+            result.setSuccess(false);
+        }
+        return result;
+    }
+
+    /**
+     * 道出数据
+     * lichi
+     * @return
+     * @throws IOException
+     */
+    @GetMapping("/exportExcel")
+    public ResponseEntity<byte[]> exportExcel() throws IOException {
+        ExcelUtils excelUtils = new ExcelUtils();
+        return excelUtils.exportExcelStudent(studentService.getAllStudentDto());
+    }
+
+    /**
+     * 道出模板
+     * @return
+     * @throws IOException
+     */
+    @GetMapping("/exportExcelModel")
+    public ResponseEntity<byte[]> exportExcelModel() throws IOException {
+
+        return studentService.exportExcelModel();
     }
 }

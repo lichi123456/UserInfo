@@ -1,8 +1,11 @@
 package cn.edu.service;
 
+import cn.edu.dto.StudentDto;
 import cn.edu.utils.Result;
 import cn.edu.vo.Student;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -23,7 +26,7 @@ public interface StudentService {
     Student getOneStudentById(String id);
     int changeTutorList(Student student);
     int Recover(String id);
-
+    ResponseEntity<byte[]> exportExcelModel();
     /**
      * 根据学生学号查找学生id
      * @param student
@@ -31,6 +34,11 @@ public interface StudentService {
      */
     Student getStudentIdByStudentCode(Student student);
 
+    /**
+     * 得到所有的studentDto
+     * @return
+     */
+    List<StudentDto> getAllStudentDto();
 
 
 }

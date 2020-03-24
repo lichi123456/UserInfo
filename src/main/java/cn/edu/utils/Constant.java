@@ -27,5 +27,9 @@ public class Constant {
     public  static final String[] STUDENT_EXCEL_HEADER = {"*学号","*姓名","*性别","*年级","*班级","*班级序号","*电话号码","*QQ","*邮箱"};
     // 工作室学生
     public static final String STUDENT_TYPE ="STUDENT";
+    //性别
+    public static final String[] SEX_TYPE = {"男","女"};
+    //教师
+    public static final String[] TEACHER_EXCEL_HEADER = {"*工号","*姓名","*性别","*电话号码","QQ号","电子邮箱"};
 
 }

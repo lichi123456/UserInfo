@@ -4,10 +4,12 @@ import cn.edu.Application;
 import cn.edu.dao.GroupsMapper;
 import cn.edu.service.GroupsService;
 import cn.edu.utils.ApplicationUtils;
+import cn.edu.vo.Classes;
 import cn.edu.vo.Groups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
 
@@ -84,5 +86,14 @@ GroupsServiceImpl implements GroupsService {
         Assert.hasText(groups.getGroupId(),"小组id不能为空");
         Assert.hasText(groups.getGroupName(),"小组名称不能为空");
         return groupsMapper.updateByPrimaryKeySelective(groups);
+    }
+
+    @Override
+    public String getIdByname(String groups) {
+        Assert.hasText(groups,"小组名称不能为空");
+        Example example = new Example(Groups.class);
+        example.and().andEqualTo("groupName",groups);
+        Groups groups1 = groupsMapper.selectOneByExample(example);
+        return groups1.getGroupName();
     }
 }

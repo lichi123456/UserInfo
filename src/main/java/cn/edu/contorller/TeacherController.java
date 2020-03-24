@@ -4,10 +4,17 @@ import cn.edu.service.TeacherGroupService;
 import cn.edu.service.TeacherService;
 import cn.edu.service.TeacherStudentService;
 import cn.edu.utils.Constant;
+import cn.edu.utils.ExcelUtils;
 import cn.edu.utils.Result;
 import cn.edu.vo.Teacher;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @ClassName TeacherController
@@ -229,5 +236,81 @@ public class TeacherController {
             result.setMessage(e.getMessage());
         }
         return result;
+    }
+    @PostMapping("/importExcel")
+    public Result importExcel(MultipartFile file){
+        /**
+         * @Author lichi
+         * @ClassName importExcel
+         * @Description //TODO  导入表格数据
+         * @Date 11:30 2020/1/19
+         * @Param [file]
+         * @return cn.edu.utils.Result
+         **/
+        Result result = new Result();
+        ExcelUtils excelUtils = new ExcelUtils();
+        //excel 导入数据demo
+        List<List<Object>> dataList;
+        List<Teacher> list = new ArrayList<>();
+        try {
+            dataList = excelUtils.importExcel(file);
+            //数据封装格式一，将表格中的数据遍历取出后封装进对象放进List
+            for (int i = 0; i < dataList.size(); i++) {
+                Teacher teacher = new Teacher();
+                if(dataList.get(i).get(0)!=null&&(String) dataList.get(i).get(0)!=""){
+                    teacher.setTeacherCode((String) dataList.get(i).get(0));
+                }
+                if(dataList.get(i).get(1)!=null&&(String) dataList.get(i).get(1)!=""){
+                    teacher.setTeacherName((String) dataList.get(i).get(1));
+                }
+                if(dataList.get(i).get(2)!=null&&(String) dataList.get(i).get(2)!=""){
+                    teacher.setTeacherSex((String) dataList.get(i).get(2));
+                }
+                if(dataList.get(i).get(3)!=null&&(String) dataList.get(i).get(3)!=""){
+                    teacher.setTeacherTel((String) dataList.get(i).get(3));
+                }
+                if(dataList.get(i).get(4)!=null&&(String) dataList.get(i).get(4)!=""){
+                    teacher.setTeacherQq((String) dataList.get(i).get(4));
+                }
+
+                if(dataList.get(i).get(5)!=null&&(String) dataList.get(i).get(5)!=""){
+                    teacher.setTeacherEmail((String) dataList.get(i).get(5));
+                }
+                list.add(teacher);
+            }
+            result.setSuccess(true);
+            result.setMessage("导入成功");
+            for(Teacher s:list){
+                if(s.getTeacherCode()!=""){
+                    teacherService.insert(s);
+                }
+            }
+        } catch (Exception e) {
+            result.setMessage(e.getMessage());
+            result.setSuccess(false);
+        }
+        return result;
+    }
+    /**
+     * 道出数据
+     * lichi
+     * @return
+     * @throws IOException
+     */
+    @GetMapping("/exportExcel")
+    public ResponseEntity<byte[]> exportExcel() throws IOException {
+        ExcelUtils excelUtils = new ExcelUtils();
+        return excelUtils.exportExcelTeacher(teacherService.getTeacherList());
+    }
+
+    /**
+     * 道出模板
+     * @return
+     * @throws IOException
+     */
+    @GetMapping("/exportExcelModel")
+    public ResponseEntity<byte[]> exportExcelModel() throws IOException {
+        ExcelUtils excelUtils = new ExcelUtils();
+        return excelUtils.exportExcelTeacherModel();
     }
 }

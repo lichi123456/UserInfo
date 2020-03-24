@@ -17,4 +17,5 @@ public interface GroupsService {
     int insert(Groups groups);
     int delete(String groupId);
     int update(Groups groups);
+    String getIdByname(String groups);
 }

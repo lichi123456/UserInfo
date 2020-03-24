@@ -11,6 +11,7 @@ import cn.edu.utils.ApplicationUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.ArrayList;
@@ -148,6 +149,14 @@ public class FacultyServiceImpl implements FacultyService {
             list.add(f);
         }
         return list;
+    }
+
+    @Override
+    public Faculty getFacultyByName(String facultyName) {
+        Assert.hasText(facultyName,"facultyName 不能为空");
+        Example example = new Example(Faculty.class);
+        example.and().andEqualTo("facultyName",facultyName);
+        return facultyMapper.selectOneByExample(example);
     }
 
 }

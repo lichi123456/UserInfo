@@ -1,7 +1,9 @@
 package cn.edu.service.impl;
 
 import cn.edu.dao.StudentMapper;
+import cn.edu.dto.StudentDto;
 import cn.edu.service.*;
+import cn.edu.utils.ExcelUtils;
 import cn.edu.utils.Result;
 import cn.edu.vo.*;
 import cn.edu.vo.Student;
@@ -10,13 +12,13 @@ import cn.edu.utils.Constant;
 import cn.edu.utils.ApplicationUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+import org.springframework.web.multipart.MultipartFile;
 import tk.mybatis.mapper.entity.Example;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * @ClassName StudentServiceImpl
@@ -293,6 +295,42 @@ public class StudentServiceImpl implements StudentService {
         return studentMapper.updateByPrimaryKeySelective(student);
     }
 
+
+
+    @Override
+    public ResponseEntity<byte[]> exportExcelModel() {
+        //得到相应数据
+        List<Faculty> faculties = facultyService.getAllList();
+        List<Major> majors = majorService.getMajorList();
+        String[] faculty = new String[faculties.size()];
+        int i = 0;
+        for(Faculty f:faculties){
+            faculty[i] = f.getFacultyName();
+        }
+        Map<String,String[]> schoolMap = new HashMap<String, String[]>();
+        String[] fatherNameArr = new String[majors.size()+faculties.size()];
+        int count = 0;
+        for(Faculty f:faculties){
+            fatherNameArr[count++] = f.getFacultyName();
+            schoolMap.put(f.getFacultyName(),majorService.getMajorsByFaculty(f));
+        }
+
+        for(Major m:majors){
+            fatherNameArr[count++]=m.getMajorName();
+            schoolMap.put(m.getMajorName(),classesService.getClassesNameBy(m));
+        }
+        List<Groups> groups = groupsService.getGroupList();
+        String[] group = new String[groups.size()];
+        for(int k = 0;k < groups.size();k++){
+            group[k] = groups.get(k).getGroupName();
+        }
+        ExcelUtils excelUtils = new ExcelUtils();
+        excelUtils.exportExcelStudentModel(faculty,fatherNameArr,schoolMap,group);
+        return excelUtils.exportExcelStudentModel(faculty,fatherNameArr,schoolMap,group);
+    }
+
+
+
     /**
      * @Author lichi
      * @ClassName getStudentIdByStudentCode
@@ -309,6 +347,11 @@ public class StudentServiceImpl implements StudentService {
         return studentMapper.selectOneByExample(example);
     }
 
+    @Override
+    public List<StudentDto> getAllStudentDto() {
+        List<StudentDto> studentDtos = studentMapper.getAllStudentDto();
+        return studentDtos;
+    }
 
 
 }

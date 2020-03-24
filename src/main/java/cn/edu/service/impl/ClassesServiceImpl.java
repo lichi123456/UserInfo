@@ -4,10 +4,14 @@ import cn.edu.dao.ClassesMapper;
 import cn.edu.vo.Classes;
 import cn.edu.service.ClassesService;
 import cn.edu.utils.ApplicationUtils;
+import cn.edu.vo.Major;
+import cn.edu.vo.Student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+import tk.mybatis.mapper.entity.Example;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -93,5 +97,32 @@ public class ClassesServiceImpl implements ClassesService {
     @Override
     public int delete(String id) {
         return classesMapper.deleteByPrimaryKey(id);
+    }
+
+    @Override
+    public String[] getClassesNameBy(Major major) {
+        Assert.hasText(major.getMajorId(),"MajorId 不能为空");
+        Example example = new Example(Classes.class);
+        example.and().andEqualTo("majorId",major.getMajorId());
+        List<Classes> classesList = classesMapper.selectByExample(example);
+        String [] classList = new String[classesList.size()];
+        for(int i=0;i<classesList.size();i++){
+            classList[i]=classesList.get(i).getClassName();
+        }
+        return classList;
+    }
+
+    /**
+     * 李翅
+     * 通过id获得姓名
+     * @param className
+     * @return
+     */
+    @Override
+    public String getIdByName(String className) {
+        Example example = new Example(Classes.class);
+        example.and().andEqualTo("className",className);
+        Classes classes = classesMapper.selectOneByExample(example);
+        return classes.getClassId();
     }
 }

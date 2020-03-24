@@ -1,13 +1,17 @@
 package cn.edu.service.impl;
 
 import cn.edu.dao.MajorMapper;
+import cn.edu.vo.Faculty;
 import cn.edu.vo.Major;
 import cn.edu.service.MajorService;
 import cn.edu.utils.ApplicationUtils;
+import cn.edu.vo.Student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+import tk.mybatis.mapper.entity.Example;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -90,5 +94,23 @@ public class MajorServiceImpl implements MajorService {
     @Override
     public int delete(String id) {
         return majorMapper.deleteByPrimaryKey(id);
+    }
+
+    /**
+     * 得到facultyId的值
+     * @param faculty
+     * @return
+     */
+    @Override
+    public String[] getMajorsByFaculty(Faculty faculty) {
+        Assert.hasText(faculty.getFacultyId(),"facultyId 不能为空");
+        Example example = new Example(Major.class);
+        example.and().andEqualTo("facultyId",faculty.getFacultyId());
+        List<Major> majors = majorMapper.selectByExample(example);
+        String[] majorList = new String[majors.size()];
+        for(int i = 0;i<majors.size();i++){
+            majorList[i]=majors.get(i).getMajorName();
+        }
+        return majorList;
     }
 }

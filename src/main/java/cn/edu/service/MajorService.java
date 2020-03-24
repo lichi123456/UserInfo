@@ -1,5 +1,6 @@
 package cn.edu.service;
 
+import cn.edu.vo.Faculty;
 import cn.edu.vo.Major;
 
 import java.util.List;
@@ -18,4 +19,5 @@ public interface MajorService {
     int insert(Major major);
     int update(Major major);
     int delete(String id);
+    String[] getMajorsByFaculty(Faculty faculty);
 }
