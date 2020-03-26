@@ -232,6 +232,9 @@ public class StudentContorller {
             dataList = excelUtils.importExcel(file);
             //数据封装格式一，将表格中的数据遍历取出后封装进对象放进List
             for (int i = 0; i < dataList.size(); i++) {
+                if(dataList.get(i).size()<10){
+                    break;
+                }
                 Student student = new Student();
                 if(dataList.get(i).get(0)!=null&&dataList.get(i).get(0)!=""){
                     student.setStudentCode((String) dataList.get(i).get(0));

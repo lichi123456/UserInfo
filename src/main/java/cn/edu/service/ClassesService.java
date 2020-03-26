@@ -18,6 +18,6 @@ public interface ClassesService {
     int insert(Classes classes);
     int update(Classes classes);
     int delete(String id);
-    String[] getClassesNameBy(Major major);
+    String[] getClassesNameByMajorId(Major major);
     String getIdByName(String className);
 }

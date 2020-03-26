@@ -17,9 +17,21 @@ import java.io.Serializable;
 @Data
 public class CertificateDto implements Serializable {
     private Student student;
+    private Student student2;
+    private Student student3;
     private Certificate certificate;
     private Teacher teacher1;
     private Teacher teacher2;
     private Teacher teacher3;
-
+    private String studentId;
+    private String studentCode;
+    private String studentName;
+    private String certificateId;
+    private String certificateLevel;
+    private String certificateName;
+    private String certificateDate;
+    private String matchType;
+    private String matchLevel;
+    private String teacherId;
+    private String teacherName;
 }

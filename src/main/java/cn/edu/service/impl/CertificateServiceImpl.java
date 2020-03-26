@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import tk.mybatis.mapper.entity.Example;
 
+import java.io.ObjectStreamClass;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -84,7 +85,8 @@ public class CertificateServiceImpl implements CertificateService {
         params.put("studentId",studentId);
         params.put("teacherId",teacherId);
         params.put("CertificateId",CertificateId);
-        return certificateMapper.getCertificateDto(params);
+        List<CertificateDto>list = certificateMapper.getCertificateDto(params);
+        return list;
     }
 
     @Override
@@ -105,12 +107,12 @@ public class CertificateServiceImpl implements CertificateService {
                 if(isExistStudentAndCertificate(s.getStudentId(),null,certificateId)){
                     List<CertificateDto> certificateDtos = getCertificateDto(s.getStudentId(),null,certificateId);
                     CertificateDto certificateDto = certificateDtos.get(0);
-                    if(certificateDtos.size()<=2){
-                        certificateDto.setTeacher2(certificateDtos.get(1).getTeacher1());
-                    }
-                    if(certificateDtos.size()<=3){
-                        certificateDto.setTeacher3(certificateDtos.get(2).getTeacher1());
-                    }
+//                    if(certificateDtos.size()<=2){
+//                        certificateDto.setTeacher2(certificateDtos.get(1).getTeacher1());
+//                    }
+//                    if(certificateDtos.size()<=3){
+//                        certificateDto.setTeacher3(certificateDtos.get(2).getTeacher1());
+//                    }
                     certificateDtoList.add(certificateDto);
                 }
 

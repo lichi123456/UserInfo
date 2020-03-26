@@ -21,18 +21,38 @@
 
   </sql>
   <select id="getCertificateDto" resultType="cn.edu.dto.CertificateDto"  parameterType="java.util.Map">
-    SELECT
-	a.user_id AS teacher1.teacherId ,
-	b.user_id AS student.student_id,
-	c.certificate_id AS certificate.certificate_id,
-	FROM (SELECT * FROM user_certificate uc where uc.user_type='2') a,
-	(SELECT * FROM user_certificate uc where uc.user_type='1') b,
-	teacher_student ts,
-	certificate c
-	WHERE a.user_id = ts.teacher_id
-	AND b.user_id = ts.student_id
-	AND a.certificate_id = b.certificate_id
-	AND c.certificate_id = a.certificate_id
+      SELECT
+      b.user_id AS studentId,
+      s.student_code AS studentCode,
+      s.student_name As studentName,
+      c.certificate_id AS certificateId,
+      c.certificate_level AS certificateLevel,
+      ml.level_name AS matchLevel,
+      mt.type_name AS matchType,
+      c.certificate_name AS certificateName,
+      c.certificate_date As certificateDate,
+      a.user_id AS teacherId,
+      t.teacher_name AS teacher_name
+      FROM
+      (SELECT * FROM user_certificate uc WHERE uc.user_type = '2') a,
+      (SELECT * FROM user_certificate uc WHERE uc.user_type = '1') b,
+      teacher_student ts,
+      certificate c,
+      teacher t,
+      student s,
+      matchs m,
+      match_level ml,
+      match_type mt
+      WHERE
+      a.user_id = ts.teacher_id
+      AND a.user_id = t.teacher_id
+      AND b.user_id = ts.student_id
+      AND b.user_id = s.student_id
+      AND a.certificate_id = b.certificate_id
+      AND a.certificate_id = c.certificate_id
+      AND m.match_id = c.match_id
+      AND m.match_level_id = ml.level_id
+      AND m.match_type_id = mt.type_id
     <if test="studentId != null and studentId != ''" >
       AND b.user_id = studentId
     </if>

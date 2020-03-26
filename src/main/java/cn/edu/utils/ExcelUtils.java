@@ -8,6 +8,7 @@ import cn.edu.dto.StudentDto;
 import cn.edu.vo.Certificate;
 import cn.edu.vo.Student;
 import cn.edu.vo.Teacher;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFDateUtil;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.util.HSSFColor;
@@ -169,6 +170,9 @@ public class ExcelUtils {
             Row row = sheet.createRow(0);//创建行
             CellStyle style = wb.createCellStyle();
             style.setAlignment(HorizontalAlignment.CENTER);//对齐方式
+            style.setFillForegroundColor((short)43);
+            style.setFillForegroundColor(IndexedColors.GREY_40_PERCENT.getIndex());
+            style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
 
             //导入头部
             for (int i = 0; i < excelHeader.length; i++) {
@@ -185,25 +189,20 @@ public class ExcelUtils {
                 for (int i = 0; i < objects.size(); i++) {
                     row = sheet.createRow(i + 1);
                     certificateDto = (CertificateDto) objects.get(i);
-                    row.createCell(0).setCellValue(certificateDto.getStudent().getStudentCode());
-                    row.createCell(1).setCellValue(certificateDto.getStudent().getStudentName());
-                    row.createCell(2).setCellValue(certificateDto.getCertificate().getCertificateName());
-                    if (certificateDto.getTeacher1().getTeacherName() != null && "".compareTo(certificateDto.getTeacher1().getTeacherName()) != 0) {
-                        row.createCell(3).setCellValue(certificateDto.getTeacher1().getTeacherName());
-                    }
-                    if (certificateDto.getTeacher2().getTeacherName() != null && "".compareTo(certificateDto.getTeacher2().getTeacherName()) != 0) {
-                        row.createCell(4).setCellValue(certificateDto.getTeacher2().getTeacherName());
-                    }
-                    if (certificateDto.getTeacher3().getTeacherName() != null && "".compareTo(certificateDto.getTeacher3().getTeacherName()) != 0) {
-                        row.createCell(5).setCellValue(certificateDto.getTeacher3().getTeacherName());
-                    }
-                    if (certificateDto.getCertificate().getCertificateDate() != null && "".compareTo(String.valueOf(certificateDto.getCertificate().getCertificateDate())) != 0) {
-                        row.createCell(6).setCellValue(certificateDto.getCertificate().getCertificateDate());
-                    }
-                    if (certificateDto.getCertificate().getCertificateLevel() != null && "".compareTo(String.valueOf(certificateDto.getCertificate().getCertificateLevel())) != 0) {
-                        row.createCell(7).setCellValue(certificateDto.getCertificate().getCertificateLevel());
-                    }
-
+                    row.createCell(0).setCellValue(certificateDto.getStudentCode());
+                    row.createCell(1).setCellValue(certificateDto.getStudentName());
+//                    row.createCell(2).setCellValue(certificateDto.getStudentCode());
+//                    row.createCell(3).setCellValue(certificateDto.getStudentName());
+//                    row.createCell(4).setCellValue(certificateDto.getStudentCode());
+//                    row.createCell(5).setCellValue(certificateDto.getStudentName());
+                    row.createCell(6).setCellValue(certificateDto.getCertificateName());
+                    row.createCell(7).setCellValue(certificateDto.getMatchType());
+                    row.createCell(8).setCellValue(certificateDto.getMatchLevel());
+                        row.createCell(9).setCellValue(certificateDto.getCertificateLevel());
+                        row.createCell(10).setCellValue(certificateDto.getCertificateDate());
+                        row.createCell(11).setCellValue(certificateDto.getTeacherName());
+//                        row.createCell(11).setCellValue(certificateDto.getTeacher1().getTeacherName());
+//                        row.createCell(11).setCellValue(certificateDto.getTeacher1().getTeacherName());
                 }
             }
 
@@ -227,7 +226,6 @@ public class ExcelUtils {
         ByteArrayOutputStream baos = null;
         try {
             Workbook wb = new XSSFWorkbook();
-
             String[] excelHeader = Constant.STUDENT_EXCEL_HEADER;
             int[] ColumnLength = new int[excelHeader.length];
             for (int i = 0; i < excelHeader.length; i++) {
@@ -239,17 +237,19 @@ public class ExcelUtils {
             Row row = sheetPro.createRow(0);//创建行
             CellStyle style = wb.createCellStyle();
             style.setAlignment(HorizontalAlignment.CENTER);//对齐方式
-            style.setFillBackgroundColor(IndexedColors.GREY_80_PERCENT.getIndex());
+
+            style.setFillForegroundColor((short)43);
+            style.setFillForegroundColor(IndexedColors.GREY_40_PERCENT.getIndex());
+            style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
 
             //导入头部
             for (int i = 0; i < excelHeader.length; i++) {
                 Cell cell = row.createCell(i);
                 cell.setCellValue(excelHeader[i]);
                 cell.setCellStyle(style);
-            }
-            for(int i = 0; i < excelHeader.length; i++){
                 sheetPro.setColumnWidth(i,(short)ColumnLength[i]*3000);//设置列宽
             }
+
             //创建一个专门用来存放地区信息的隐藏sheet页
             //因此也不能在现实页之前创建，否则无法隐藏。
             Sheet hideSheet = wb.createSheet("school");
@@ -268,7 +268,7 @@ public class ExcelUtils {
                 Row hiderow = hideSheet.createRow(rowId++);
                 hiderow.createCell(0).setCellValue(key);
                 for (int j = 0; j < son.length; j++) {
-                    Cell cell = row.createCell(j + 1);
+                    Cell cell = hiderow.createCell(j + 1);
                     cell.setCellValue(son[j]);
                 }
                 // 添加名称管理器
@@ -283,6 +283,17 @@ public class ExcelUtils {
             //利用名称管理器关联到隐藏sheet中信息
             XSSFDataValidationHelper dvHelper = new XSSFDataValidationHelper((XSSFSheet)sheetPro);
             DataValidationConstraint facultyConstraint = dvHelper.createExplicitListConstraint(faculty);
+            //添加性别
+            String [] sex = Constant.SEX_TYPE;
+            XSSFDataValidationHelper helper = new XSSFDataValidationHelper(sheetPro);
+            DataValidationConstraint sexConstraint = helper.createExplicitListConstraint(sex);
+            CellRangeAddressList sexRangeAddressList = new CellRangeAddressList(1, 102, 2, 2);
+            //验证
+            DataValidation sexDataValidation = helper.createValidation(sexConstraint, sexRangeAddressList);
+            sexDataValidation.createErrorBox("error","请选择正确的性别");
+            sexDataValidation.setShowErrorBox(true);
+            sexDataValidation.setSuppressDropDownArrow(true);
+            sheetPro.addValidationData(sexDataValidation);
             // 四个参数分别是：起始行、终止行、起始列、终止列
             CellRangeAddressList facultyRangeAddressList = new CellRangeAddressList(1, 102, 3, 3);
             DataValidation facultyDataValidation = dvHelper.createValidation(facultyConstraint, facultyRangeAddressList);
@@ -291,22 +302,11 @@ public class ExcelUtils {
             facultyDataValidation.setShowErrorBox(true);
             facultyDataValidation.setSuppressDropDownArrow(true);
             sheetPro.addValidationData(facultyDataValidation);
-            //添加性别
-            String [] sex = Constant.SEX_TYPE;
-            XSSFDataValidationHelper helper = new XSSFDataValidationHelper(sheetPro);
-            DataValidationConstraint sexConstraint = helper.createExplicitListConstraint(sex);
-            CellRangeAddressList sexRangeAddressList = new CellRangeAddressList(1, 102, 2, 2);
-            DataValidation sexDataValidation = helper.createValidation(sexConstraint, sexRangeAddressList);
-            //验证
-            sexDataValidation.createErrorBox("error","请选择正确的性别");
-            sexDataValidation.setShowErrorBox(true);
-            sexDataValidation.setSuppressDropDownArrow(true);
-            sheetPro.addValidationData(sexDataValidation);
 
             //添加团队
             XSSFDataValidationHelper grouphelper = new XSSFDataValidationHelper(sheetPro);
             DataValidationConstraint groupConstraint = grouphelper.createExplicitListConstraint(group);
-            CellRangeAddressList groupRangeAddressList = new CellRangeAddressList(1, 102, 7, 7);
+            CellRangeAddressList groupRangeAddressList = new CellRangeAddressList(1, 102, 6, 6);
             DataValidation groupDataValidation = grouphelper.createValidation(groupConstraint, groupRangeAddressList);
             //验证
             groupDataValidation.createErrorBox("error","请选择正确的团队");
@@ -323,7 +323,7 @@ public class ExcelUtils {
 
             headers = new HttpHeaders();
             headers.setContentDispositionFormData("attachment",
-                    new String(("学生信息表" + excel2007U).getBytes("UTF-8"), "iso-8859-1"));
+                    new String(("学生信息表模板" + excel2007U).getBytes("UTF-8"), "iso-8859-1"));
             headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
             baos = new ByteArrayOutputStream();
             wb.write(baos);
@@ -443,7 +443,9 @@ public class ExcelUtils {
             Row row = sheetPro.createRow(0);//创建行
             CellStyle style = wb.createCellStyle();
             style.setAlignment(HorizontalAlignment.CENTER);//对齐方式
-            style.setFillBackgroundColor(IndexedColors.GREY_80_PERCENT.getIndex());//背景色
+            style.setFillForegroundColor((short)43);
+            style.setFillForegroundColor(IndexedColors.GREY_40_PERCENT.getIndex());
+            style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
             //导入头部
             for (int i = 0; i < excelHeader.length; i++) {
                 Cell cell = row.createCell(i);
@@ -465,7 +467,7 @@ public class ExcelUtils {
             sheetPro.addValidationData(sexDataValidation);
             headers = new HttpHeaders();
             headers.setContentDispositionFormData("attachment",
-                    new String(("教师信息表" + excel2007U).getBytes("UTF-8"), "iso-8859-1"));
+                    new String(("教师信息表模板" + excel2007U).getBytes("UTF-8"), "iso-8859-1"));
             headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
             baos = new ByteArrayOutputStream();
             wb.write(baos);
@@ -502,7 +504,9 @@ public class ExcelUtils {
             Row row = sheet.createRow(0);//创建行
             CellStyle style = wb.createCellStyle();
             style.setAlignment(HorizontalAlignment.CENTER);//对齐方式
-
+            style.setFillForegroundColor((short)43);
+            style.setFillForegroundColor(IndexedColors.GREY_40_PERCENT.getIndex());
+            style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
             //导入头部
             for(int i = 0; i < excelHeader.length;i++){
                 Cell cell = row.createCell(i);
@@ -570,8 +574,8 @@ public class ExcelUtils {
         HttpHeaders headers = null;
         ByteArrayOutputStream baos = null;
         try{
-            //0，1，2，3，4，5，6，7，8
-            String[] excelHeader = Constant.STUDENT_EXCEL_HEADER;
+            //0，1，2，3，4，5，6，7，8.....
+            String[] excelHeader = Constant.TEACHER_EXCEL_HEADER;
             int[] ColumnLength = new int[excelHeader.length];
             for (int i = 0; i < excelHeader.length; i++) {
                 ColumnLength[i] = 2;

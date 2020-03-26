@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @ClassName StudentServiceImpl
@@ -62,9 +63,11 @@ public class StudentServiceImpl implements StudentService {
     public List<Student> getStudentListWithConditionAndDeleteStatus(Student student,String deleteStatus) {
         List<Student>studentList = null;
         if(deleteStatus.trim().compareTo(Constant.IS_NOT_DELETE)==0){
-            studentList = studentMapper.getStudentListByName(student);
+            List<Student>students = studentMapper.getStudentListByName(student);
+            studentList =  students.stream().sorted(Comparator.comparing(Student::getStudentCode)).collect(Collectors.toList());
         }else if(deleteStatus.trim().compareTo(Constant.IS_DELETE)==0){
-            studentList = studentMapper.getDelStudentListByName(student);
+            List<Student>students = studentMapper.getStudentListByName(student);
+            studentList = students.stream().sorted(Comparator.comparing(Student::getStudentCode)).collect(Collectors.toList());
         }
 
         List<Student>list=new ArrayList<>();
@@ -300,14 +303,14 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public ResponseEntity<byte[]> exportExcelModel() {
         //得到相应数据
-        List<Faculty> faculties = facultyService.getAllList();
+        List<Faculty> faculties = facultyService.getAllList();//获取FMC信息
         List<Major> majors = majorService.getMajorList();
         String[] faculty = new String[faculties.size()];
         int i = 0;
         for(Faculty f:faculties){
-            faculty[i] = f.getFacultyName();
+            faculty[i++] = f.getFacultyName();
         }
-        Map<String,String[]> schoolMap = new HashMap<String, String[]>();
+        Map<String,String[]> schoolMap = new HashMap<>();
         String[] fatherNameArr = new String[majors.size()+faculties.size()];
         int count = 0;
         for(Faculty f:faculties){
@@ -317,7 +320,7 @@ public class StudentServiceImpl implements StudentService {
 
         for(Major m:majors){
             fatherNameArr[count++]=m.getMajorName();
-            schoolMap.put(m.getMajorName(),classesService.getClassesNameBy(m));
+            schoolMap.put(m.getMajorName(),classesService.getClassesNameByMajorId(m));
         }
         List<Groups> groups = groupsService.getGroupList();
         String[] group = new String[groups.size()];
@@ -325,7 +328,6 @@ public class StudentServiceImpl implements StudentService {
             group[k] = groups.get(k).getGroupName();
         }
         ExcelUtils excelUtils = new ExcelUtils();
-        excelUtils.exportExcelStudentModel(faculty,fatherNameArr,schoolMap,group);
         return excelUtils.exportExcelStudentModel(faculty,fatherNameArr,schoolMap,group);
     }
 

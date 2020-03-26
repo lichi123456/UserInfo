@@ -116,11 +116,13 @@ public class FacultyServiceImpl implements FacultyService {
      **/
     @Override
     public List<Faculty> getAllList() {
+        //院系，专业，班级，学生信息获取
         List<Faculty>facultyList = getFacultyList();
         List<Major>majorList = majorService.getMajorList();
         List<Classes>classesList = classesService.getClassesList();
         Student student = new Student();
         List<Student>studentList = studentService.getStudentListWithConditionAndDeleteStatus(student, Constant.IS_NOT_DELETE);
+        //信息组装
         List<Faculty>list=new ArrayList<>();
         for (Faculty f:facultyList ) {
             List<Major>m1 = new ArrayList<>();

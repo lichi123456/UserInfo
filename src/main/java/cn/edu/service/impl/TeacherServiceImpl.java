@@ -15,8 +15,10 @@ import org.springframework.util.Assert;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @ClassName TeacherServiceImpl
@@ -50,9 +52,11 @@ public class TeacherServiceImpl implements TeacherService {
     public List<Teacher> getTeacherListWithConditionAndDeleteStatus(Teacher teacher,String deleteStatus) {
         List<Teacher>teacherList = null;
         if(deleteStatus.trim().compareTo(Constant.IS_NOT_DELETE)==0){
-            teacherList = teacherMapper.getTeacherListByName(teacher);
+            List<Teacher>teachers = teacherMapper.getTeacherListByName(teacher);
+            teacherList = teachers.stream().sorted(Comparator.comparing(Teacher::getTeacherCode)).collect(Collectors.toList());
         }else if(deleteStatus.trim().compareTo(Constant.IS_DELETE)==0){
-            teacherList = teacherMapper.getDelTeacherListByName(teacher);
+            List<Teacher>teachers = teacherMapper.getDelTeacherListByName(teacher);
+            teacherList = teachers.stream().sorted(Comparator.comparing(Teacher::getTeacherCode)).collect(Collectors.toList());
         }
 
         List<Teacher>list=new ArrayList<>();

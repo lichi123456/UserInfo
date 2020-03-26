@@ -100,7 +100,7 @@ public class ClassesServiceImpl implements ClassesService {
     }
 
     @Override
-    public String[] getClassesNameBy(Major major) {
+    public String[] getClassesNameByMajorId(Major major) {
         Assert.hasText(major.getMajorId(),"MajorId 不能为空");
         Example example = new Example(Classes.class);
         example.and().andEqualTo("majorId",major.getMajorId());

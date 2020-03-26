@@ -20,16 +20,16 @@ public class Constant {
     public static final String IS_STUDENT = "1";
     // 证书数据导出表头
     public static final String[] CERTIFICATE_EXCEL_HEADER =
-            {"*学号","*姓名","*证书名称","*指导老师","*指导老师","*指导老师","*获取证书时间","*证书等级"};
+            {"学号1","姓名1","学号2","姓名2","学号3","姓名3","证书名称","类别","级别","证书等级","获取证书时间","指导老师1","指导老师2","指导老师3"};
     //证书数据类型
     public static final String CERTIFICATE_TYPE = "CERTIFICATE";
     // 工作室数据表头
-    public  static final String[] STUDENT_EXCEL_HEADER = {"*学号","*姓名","*性别","*年级","*班级","*班级序号","*电话号码","*QQ","*邮箱"};
+    public  static final String[] STUDENT_EXCEL_HEADER = {"学号","姓名","性别","院系","专业","班级","所属工作室分组","电话号码","QQ","邮箱"};
     // 工作室学生
     public static final String STUDENT_TYPE ="STUDENT";
     //性别
     public static final String[] SEX_TYPE = {"男","女"};
     //教师
-    public static final String[] TEACHER_EXCEL_HEADER = {"*工号","*姓名","*性别","*电话号码","QQ号","电子邮箱"};
+    public static final String[] TEACHER_EXCEL_HEADER = {"工号","姓名","性别","电话号码","QQ号","电子邮箱"};
 
 }

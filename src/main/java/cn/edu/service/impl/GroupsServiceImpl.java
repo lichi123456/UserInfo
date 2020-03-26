@@ -94,6 +94,6 @@ GroupsServiceImpl implements GroupsService {
         Example example = new Example(Groups.class);
         example.and().andEqualTo("groupName",groups);
         Groups groups1 = groupsMapper.selectOneByExample(example);
-        return groups1.getGroupName();
+        return groups1.getGroupId();
     }
 }
