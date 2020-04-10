@@ -3,10 +3,7 @@ package cn.edu.service;
 import cn.edu.dto.CertificateDto;
 import cn.edu.utils.Result;
 import cn.edu.vo.Certificate;
-import cn.edu.vo.Student;
-
 import java.util.List;
-import java.util.Map;
 
 /**
  * @ClassName CertificateService
@@ -56,5 +53,19 @@ public interface CertificateService {
      * @return
      */
     List<Certificate>getCertificateListWithConditionAndDeleteStatus(Certificate certificate, String deleteStatus);
+
+    /**
+     * 修改数据
+     * @param certificate
+     * @return
+     */
+    int update(Certificate certificate);
+    /**
+     * 删除数据
+     * @param id
+     * @return
+     */
+    int delete(String id);
+    int realDel(String id);
 
 }

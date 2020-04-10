@@ -9,16 +9,14 @@ import cn.edu.utils.Constant;
 import cn.edu.utils.Result;
 import cn.edu.vo.Certificate;
 import cn.edu.vo.Student;
+import cn.edu.vo.TeacherStudent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import tk.mybatis.mapper.entity.Example;
 
 import java.io.ObjectStreamClass;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @ClassName CertificateServiceImpl
@@ -65,7 +63,7 @@ public class CertificateServiceImpl implements CertificateService {
         Assert.hasText(certificate.getCertificateId(),"证书id不能为空");
         Assert.hasText(certificate.getCertificateLevel(),"证书等级不能为空");
         Assert.hasText(certificate.getCertificateDate().toString(),"证书获取时间不能为空");
-        Assert.hasText(certificate.getMatchId(),"赛事id不能为空");
+
         certificate.setCertificateId(ApplicationUtils.GUID32());
         certificate.setDeleteStatus(Constant.IS_NOT_DELETE);
         int t = certificateMapper.insert(certificate);
@@ -136,6 +134,34 @@ public class CertificateServiceImpl implements CertificateService {
         return list;
     }
 
+    @Override
+    public int update(Certificate certificate) {
+        Assert.hasText(certificate.getCertificateName(),"证书名称不能为空");
+        Assert.hasText(certificate.getCertificateId(),"证书id不能为空");
+        Assert.hasText(certificate.getCertificateLevel(),"证书等级不能为空");
+        Assert.hasText(certificate.getCertificateDate().toString(),"证书获取时间不能为空");
+        Assert.hasText(certificate.getMatchId(),"赛事id不能为空");
+        Result result = new Result();
+        certificate.setUpdateTime(new Date());
+        return certificateMapper.updateByPrimaryKeySelective(certificate);
+    }
+
+    @Override
+    public int delete(String id) {
+        Assert.hasText(id,"id不能为空");
+        Certificate certificate = certificateMapper.selectByPrimaryKey(id);
+        certificate.setDeleteStatus(Constant.IS_DELETE);
+        certificate.setUpdateTime(new Date());
+        return certificateMapper.updateByPrimaryKeySelective(certificate);
+    }
+
+    @Override
+    public int realDel(String id) {
+        Assert.hasText(id,"id不能为空");
+
+        return certificateMapper.deleteByPrimaryKey(id);
+    }
+
 
     @Override
     public boolean isExistStudentAndCertificate(String studentId, String teacherId, String CertificateId) {
@@ -144,11 +170,15 @@ public class CertificateServiceImpl implements CertificateService {
         params.put("teacherId",teacherId);
         params.put("CertificateId",CertificateId);
         int t = certificateMapper.isExistStudentAndCertificate(params);
+
         if(t>0){
             return true;
         }
         return false;
     }
+
+
+
 
 
 

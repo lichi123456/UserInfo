@@ -1,7 +1,9 @@
 package cn.edu.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 import javax.persistence.*;
@@ -20,6 +22,8 @@ public class Certificate {
     /**
      * 证书获取时间
      */
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(name = "`certificate_date`")
     private Date certificateDate;
 

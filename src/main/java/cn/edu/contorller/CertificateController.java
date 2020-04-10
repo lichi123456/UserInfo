@@ -1,25 +1,31 @@
 package cn.edu.contorller;
 
+import cn.edu.Application;
 import cn.edu.dto.CertificateDto;
 import cn.edu.service.*;
-import cn.edu.utils.Constant;
-import cn.edu.utils.ExcelUtils;
-import cn.edu.utils.Result;
+import cn.edu.service.impl.FileServiceImpl;
+import cn.edu.utils.*;
 import cn.edu.vo.Certificate;
 import cn.edu.vo.Student;
 import cn.edu.vo.Teacher;
 import cn.edu.vo.UserCertificate;
+import jdk.nashorn.internal.codegen.TypeMap;
+import jdk.nashorn.internal.ir.RuntimeNode;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.xmlbeans.impl.jam.JMethod;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 import static cn.edu.utils.Constant.CERTIFICATE_TYPE;
 
@@ -30,6 +36,7 @@ import static cn.edu.utils.Constant.CERTIFICATE_TYPE;
  * @Date 2020/2/28 16:44
  * @Version 1.0
  **/
+@Slf4j
 @RestController
 @RequestMapping("/certificate")
 public class CertificateController {
@@ -47,6 +54,14 @@ public class CertificateController {
     private UserCertificateService userCertificateService;
     @Autowired
     private TeacherStudentService teacherStudentService;
+    @Autowired
+    private static final Logger logger = LoggerFactory.getLogger(CertificateController.class);
+    @Autowired
+    private FileServiceImpl fileService;
+    @Value("${webappfile.uploadPath}")
+    private String uploadPath;
+    @Value("${server.port}")
+    private String port;
     /**
      *
      *
@@ -176,9 +191,81 @@ public class CertificateController {
      **/
     @GetMapping("/exportExcel")
     public ResponseEntity<byte[]> exportExcel() throws IOException {
+
         //获取数据
         Student student = new Student();
         ExcelUtils excelUtils = new ExcelUtils();
         return excelUtils.exportExcel(certificateService.getCertificateDto(null,null,null), Constant.CERTIFICATE_EXCEL_HEADER,CERTIFICATE_TYPE,"证书列表");
     }
+
+    @PostMapping("/addImage")
+    public Result addImage(@RequestParam(name = "file", required = false) MultipartFile file,HttpServletRequest request, HttpServletResponse response) {
+        //项目存放路径
+        String str=uploadPath;
+        String webPath = "account/img";
+        logger.info("webPath = "+webPath);
+        //得到上传时的文件名字
+        String originalname=file.getOriginalFilename();
+        //substring(originalname.lastIndexOf(".")截取图片名后缀
+        String newName= originalname.substring(originalname.lastIndexOf("."));
+        //利用UUidUtil工具类生成新的文件名字
+        newName =ApplicationUtils.GUID32()+newName;
+        String webFilePath = PathUtil.appendWebPath(webPath,newName);
+        logger.info("newname ="+newName);
+        logger.info("webFilePath ="+webFilePath);
+        Result result = new Result();
+        String filePath = PathUtil.appendWebPath(uploadPath, webFilePath);
+        Map<String, String> result2 = fileService.uploadReal(filePath, file);
+        result2.put("webUrl", webFilePath);
+        result.setSuccess(true);
+        String path = webPath+"/"+newName;
+        result.setObject(path);
+        return result;
+    }
+
+    /**
+     *
+     * @param studentId
+     * @return
+     */
+    @PostMapping("/addCertificate/")
+    public Result insertCertificate(@RequestBody Certificate certificate){
+        Result result = new Result();
+
+        String id =  ApplicationUtils.GUID32();
+        if(certificate!=null){
+            certificate.setCertificateId(id);
+            certificate.setCertificateDate(new Date());
+//            logger.info(certificate.getCertificateName());
+//            logger.info(certificate.getMatchId());
+            logger.info("CertificateId"+certificate.getCertificateId());
+            result = certificateService.insert(certificate);
+            result.setSuccess(true);
+            result.setObject(certificate.getCertificateId());
+
+        }else{
+            result.setSuccess(false);
+            result.setMessage("传入证书为空");
+//            logger.info("传入证书为空");
+        }
+
+        return result;
+    }
+    @PostMapping("/addUserCertificate/")
+    public Result insertUserCertificate(@RequestBody UserCertificate userCertificate){
+        Result result = new Result();
+        int i = userCertificateService.insert(userCertificate);
+        if(i!=0){
+            result.setMessage("导入成功");
+            result.setSuccess(true);
+
+        }else{
+            result.setSuccess(false);
+            result.setMessage("导入失败");
+        }
+
+        return result;
+    }
+
+
 }
