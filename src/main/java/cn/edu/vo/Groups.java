@@ -24,12 +24,6 @@ public class Groups {
     private String groupName;
 
     /**
-     * 职位（成员，组长，财务等）
-     */
-    @Column(name = "`group_position`")
-    private String groupPosition;
-
-    /**
      * 创建时间
      */
     @Column(name = "`create_time`")

@@ -61,7 +61,11 @@ public class TeacherServiceImpl implements TeacherService {
 
         List<Teacher>list=new ArrayList<>();
         teacherList.stream().forEach(s->{
-            list.add(getOneTeacherById(s.getTeacherId()));
+            try {
+                list.add(getOneTeacherById(s.getTeacherId()));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         });
         return list;
     }
@@ -82,7 +86,7 @@ public class TeacherServiceImpl implements TeacherService {
      * @return cn.edu.vo.Teacher
      **/
     @Override
-    public Teacher getOneTeacherById(String id) {
+    public Teacher getOneTeacherById(String id) throws Exception {
         Assert.hasText(id,"教师id不能为空");
         Teacher teacher = teacherMapper.selectByPrimaryKey(id);
         List<Groups> groupList = teacherGroupService.getGroupListByTeacherId(id);
@@ -106,7 +110,7 @@ public class TeacherServiceImpl implements TeacherService {
      * @return int
      **/
     @Override
-    public Result insert(Teacher teacher) {
+    public Result insert(Teacher teacher) throws Exception {
         Result result = new Result();
         teacher.setTeacherId(ApplicationUtils.GUID32());
         teacher.setDeleteStatus(Constant.IS_NOT_DELETE);
@@ -145,7 +149,7 @@ public class TeacherServiceImpl implements TeacherService {
      * @return int
      **/
     @Override
-    public int update(Teacher teacher) {
+    public int update(Teacher teacher) throws Exception {
         Assert.hasText(teacher.getTeacherId(),"教师主键不能为空");
         Assert.hasText(teacher.getTeacherCode(),"教师工号不能为空");
         Assert.hasText(teacher.getTeacherName(),"教师姓名不能为空");
@@ -252,7 +256,7 @@ public class TeacherServiceImpl implements TeacherService {
      * @return int
      **/
     @Override
-    public int Recover(String id) {
+    public int Recover(String id) throws Exception {
         Assert.hasText(id,"教师主键id不能为空");
         Teacher teacher = getOneTeacherById(id);
         teacher.setDeleteStatus(Constant.IS_NOT_DELETE);

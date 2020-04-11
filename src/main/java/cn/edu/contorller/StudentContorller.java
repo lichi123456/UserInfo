@@ -3,12 +3,9 @@ package cn.edu.contorller;
 import cn.edu.service.ClassesService;
 import cn.edu.service.GroupsService;
 import cn.edu.service.TeacherStudentService;
-import cn.edu.utils.Constant;
-import cn.edu.utils.ExcelUtils;
+import cn.edu.utils.*;
 import cn.edu.vo.Student;
 import cn.edu.service.StudentService;
-import cn.edu.utils.ApplicationUtils;
-import cn.edu.utils.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -206,20 +203,6 @@ public class StudentContorller {
         }
         return result;
     }
-    /**
-     * @Author wys
-     * @ClassName getUUID
-     * @Description //TODO  只是为了方便插入数据库写的方法
-     * @Date 11:07 2020/2/22
-     * @Param []
-     * @return java.lang.String
-     **/
-    @GetMapping("/UUID")
-    public String getUUID(){
-        String id = ApplicationUtils.GUID32();
-        System.out.println(id);
-        return id;
-    }
 
     @PostMapping("/importExcel")
     public Result importExcel(MultipartFile file){
@@ -298,5 +281,35 @@ public class StudentContorller {
     public ResponseEntity<byte[]> exportExcelModel() throws IOException {
 
         return studentService.exportExcelModel();
+    }
+    /**
+     * @Author wys
+     * @ClassName getUUID
+     * @Description //TODO  只是为了方便插入数据库写的方法
+     * @Date 11:07 2020/2/22
+     * @Param []
+     * @return java.lang.String
+     **/
+    @GetMapping("/UUID")
+    public String getUUID(){
+        String id = ApplicationUtils.GUID32();
+        System.out.println(id);
+        return id;
+    }
+    /**
+     * @Author wys
+     * @ClassName DES
+     * @Description //TODO  加密解密一览
+     * @Date 9:55 2020/4/11
+     * @Param []
+     * @return void
+     **/
+    @GetMapping("/des")
+    public void DES() throws Exception {
+        String tt = "admin256";
+        String oo = DESPlus.Encrypt(tt);
+        System.out.println(oo);
+        String ss = DESPlus.Decrypt(oo);
+        System.out.println(ss);
     }
 }

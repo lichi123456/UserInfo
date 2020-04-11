@@ -45,8 +45,8 @@ public class Menu {
     /**
      * 状态标识，N：禁用，Y：启用
      */
-    @Column(name = "`menu_status`")
-    private String menuStatus;
+    @Column(name = "`delete_status`")
+    private String deleteStatus;
 
     /**
      * 创建时间

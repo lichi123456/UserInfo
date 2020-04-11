@@ -72,7 +72,11 @@ public class StudentServiceImpl implements StudentService {
 
         List<Student>list=new ArrayList<>();
         studentList.stream().forEach(s->{
+            try {
                 list.add(getOneStudentById(s.getStudentId()));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         });
         return list;
     }
@@ -86,7 +90,7 @@ public class StudentServiceImpl implements StudentService {
      * @return int
      **/
     @Override
-    public Result insert(Student student) {
+    public Result insert(Student student) throws Exception {
         Result result = new Result();
         Assert.hasText(student.getStudentName(),"学生姓名不能为空");
         Assert.hasText(student.getStudentSex(),"学生性别不能为空");
@@ -167,7 +171,7 @@ public class StudentServiceImpl implements StudentService {
      * @return int
      **/
     @Override
-    public int update(Student student) {
+    public int update(Student student) throws Exception {
         Assert.hasText(student.getStudentId(),"学生主键不能为空");
         Assert.hasText(student.getStudentCode(),"学生学号不能为空");
         Assert.hasText(student.getStudentName(),"学生姓名不能为空");
@@ -190,7 +194,7 @@ public class StudentServiceImpl implements StudentService {
      * @return cn.edu.vo.Student
      **/
     @Override
-    public Student getOneStudentById(String id) {
+    public Student getOneStudentById(String id) throws Exception {
         Assert.hasText(id, "id不能为空");
         //获取基本信息
         Student student = studentMapper.selectByPrimaryKey(id);
@@ -291,7 +295,7 @@ public class StudentServiceImpl implements StudentService {
      * @return int
      **/
     @Override
-    public int Recover(String id) {
+    public int Recover(String id) throws Exception {
         Assert.hasText(id,"学生主键id不能为空");
         Student student = getOneStudentById(id);
         student.setDeleteStatus(Constant.IS_NOT_DELETE);

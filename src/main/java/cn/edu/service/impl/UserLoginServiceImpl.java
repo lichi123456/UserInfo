@@ -4,6 +4,7 @@ import cn.edu.dao.UserLoginMapper;
 import cn.edu.service.*;
 import cn.edu.utils.ApplicationUtils;
 import cn.edu.utils.Constant;
+import cn.edu.utils.DESPlus;
 import cn.edu.vo.*;
 import cn.edu.utils.Result;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,7 +49,7 @@ public class UserLoginServiceImpl implements UserLoginService {
      * @return cn.edu.utils.Result
      **/
     @Override
-    public Result getLoginUser(String code, String password) {
+    public Result getLoginUser(String code, String password) throws Exception {
         Assert.hasText(code,"账号不能为空");
         Assert.hasText(password,"密码不能为空");
         //根据code获取登录信息表信息
@@ -63,27 +64,12 @@ public class UserLoginServiceImpl implements UserLoginService {
                 result.setSuccess(false);
                 return result;
             }
-//            if(userLogin.getUserType().compareTo(Constant.isTeacher)==0){
-//                Teacher teacher = teacherService.getOneTeacherById(userLogin.getUserId());
-//                if(teacher.getDeleteStatus().compareTo(Constant.isDelete)==0 || teacher.getDeleteStatus()==null){
-//
-//                }
-//            }else if(userLogin.getUserType().compareTo(Constant.isStudent)==0){
-//                Student student = studentService.getOneStudentById(userLogin.getUserId());
-//                if(student.getDeleteStatus().compareTo(Constant.isDelete)==0 ||student.getDeleteStatus()==null){
-//                    result.setMessage("当前账号已被禁用");
-//                    result.setSuccess(false);
-//                    return result;
-//                }
-//            }else if(userLogin.getUserType().compareTo(Constant.isAdmin)==0){
-//
-//            }
         }
         if(StringUtils.isEmpty(userLogin)){
             result.setSuccess(false);
             result.setMessage("没有此账号");
         }else{
-            if (userLogin.getUserPassword().compareTo(password)!=0){
+            if (DESPlus.Decrypt(userLogin.getUserPassword()).compareTo(password)!=0){
                 result.setSuccess(false);
                 result.setMessage("密码错误");
             }else{
@@ -104,7 +90,7 @@ public class UserLoginServiceImpl implements UserLoginService {
      * @return int
      **/
     @Override
-    public String insert(UserLogin userLogin) {
+    public String insert(UserLogin userLogin) throws Exception {
         Example example = new Example(UserLogin.class);
         example.and().andEqualTo("userCode",userLogin.getUserCode());
         UserLogin userLogin1 = userLoginMapper.selectOneByExample(example);
@@ -113,7 +99,7 @@ public class UserLoginServiceImpl implements UserLoginService {
                 return "该账号已注册，无法再次插入";
             }
         }
-        userLogin.setUserPassword("123456");
+        userLogin.setUserPassword(DESPlus.Encrypt("123456"));
         userLogin.setDeleteStatus(Constant.IS_NOT_DELETE);
         List<Role>roleList = roleService.getRoleList();
         String roleId = null;
@@ -150,12 +136,12 @@ public class UserLoginServiceImpl implements UserLoginService {
      * @return int
      **/
     @Override
-    public int updatePasswordByUserCode(String userId,String newPassword) {
+    public int updatePasswordByUserCode(String userId,String newPassword) throws Exception {
         Assert.hasText(userId,"用户id不能为空");
         Assert.hasText(newPassword,"新密码不能为空");
         UserLogin userLogin = userLoginMapper.selectByPrimaryKey(userId);
         if(userLogin!=null && userLogin.getUserId()!=null){
-            userLogin.setUserPassword(newPassword);
+            userLogin.setUserPassword(DESPlus.Encrypt(newPassword));
         }
         return userLoginMapper.updateByPrimaryKeySelective(userLogin);
     }
@@ -169,9 +155,9 @@ public class UserLoginServiceImpl implements UserLoginService {
      * @return java.lang.String
      **/
     @Override
-    public String getPasswordById(String id) {
+    public String getPasswordById(String id) throws Exception {
         Assert.hasText(id,"id不能为空");
-        return userLoginMapper.selectByPrimaryKey(id).getUserPassword();
+        return DESPlus.Decrypt(userLoginMapper.selectByPrimaryKey(id).getUserPassword());
     }
 
     /**
@@ -183,9 +169,10 @@ public class UserLoginServiceImpl implements UserLoginService {
      * @return java.util.List<cn.edu.vo.UserLogin>
      **/
     @Override
-    public List<UserLogin> getDeleteUserList(UserLogin userLogin) {
+    public List<UserLogin> getDeleteUserList(UserLogin userLogin) throws Exception {
        List<UserLogin>userLoginList = userLoginMapper.getDeleteUserList(userLogin);
        for(UserLogin u:userLoginList){
+           u.setUserPassword(DESPlus.Decrypt(u.getUserPassword()));
            if(u.getUserType().compareTo(Constant.IS_STUDENT)==0){
                Student student = studentService.getOneStudentById(u.getUserId());
                u.setUserTypeName("学生");
@@ -214,7 +201,7 @@ public class UserLoginServiceImpl implements UserLoginService {
      * @return int
      **/
     @Override
-    public int RecoverUser(UserLogin userLogin) {
+    public int RecoverUser(UserLogin userLogin) throws Exception {
         Assert.hasText(userLogin.getUserId(),"主键id不能为空");
         Assert.hasText(userLogin.getUserType(),"角色类型不能为空");
         if(userLogin.getUserType().compareTo(Constant.IS_STUDENT)==0){
@@ -236,9 +223,11 @@ public class UserLoginServiceImpl implements UserLoginService {
      * @return cn.edu.vo.UserLogin
      **/
     @Override
-    public UserLogin getUserLoginById(String id) {
+    public UserLogin getUserLoginById(String id) throws Exception {
         Assert.hasText(id,"主键id不能为空");
-        return userLoginMapper.selectByPrimaryKey(id);
+        UserLogin userLogin = userLoginMapper.selectByPrimaryKey(id);
+        userLogin.setUserPassword(DESPlus.Decrypt(userLogin.getUserPassword()));
+        return userLogin;
     }
 
     /**

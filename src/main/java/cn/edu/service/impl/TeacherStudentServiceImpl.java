@@ -40,7 +40,7 @@ public class TeacherStudentServiceImpl implements TeacherStudentService {
      * @return java.util.List<cn.edu.vo.Teacher>
      **/
     @Override
-    public List<Teacher> getTeacherListByStudentId(String id) {
+    public List<Teacher> getTeacherListByStudentId(String id) throws Exception {
         Example example = new Example(TeacherStudent.class);
         example.and().andEqualTo("studentId",id);
         List<TeacherStudent> teacherStudent = teacherStudentMapper.selectByExample(example);
@@ -52,7 +52,7 @@ public class TeacherStudentServiceImpl implements TeacherStudentService {
     }
 
     @Override
-    public List<Student> getStudentListByTeacherId(String id) {
+    public List<Student> getStudentListByTeacherId(String id) throws Exception {
         /**
          * @Author wys
          * @ClassName getStudentListByTeacherId

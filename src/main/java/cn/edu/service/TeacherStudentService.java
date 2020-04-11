@@ -14,8 +14,8 @@ import java.util.List;
  * @Version 1.0
  **/
 public interface TeacherStudentService {
-    List<Teacher>getTeacherListByStudentId(String id);
-    List<Student>getStudentListByTeacherId(String id);
+    List<Teacher>getTeacherListByStudentId(String id) throws Exception;
+    List<Student>getStudentListByTeacherId(String id) throws Exception;
     int insert(TeacherStudent teacherStudent);
     int deleteByStudentIdAndTeacherId(TeacherStudent teacherStudent);
     List<TeacherStudent>getTeacherStudentByStudentId(String studentId);

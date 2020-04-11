@@ -61,7 +61,7 @@ public class TeacherGroupServiceImpl implements TeacherGroupService {
      * @return java.util.List<cn.edu.vo.TeacherGroup>
      **/
     @Override
-    public List<Teacher> getTeacherListByGroupId(String groupId) {
+    public List<Teacher> getTeacherListByGroupId(String groupId) throws Exception {
         Assert.hasText(groupId,"组别id不能为空");
         Example example = new Example(TeacherGroup.class);
         example.and().andEqualTo("groupId",groupId);

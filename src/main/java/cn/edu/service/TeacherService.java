@@ -17,13 +17,13 @@ import java.util.List;
 public interface TeacherService {
     List<Teacher>getTeacherListWithConditionAndDeleteStatus(Teacher teacher,String deleteStatus);
     List<Teacher>getTeacherList();
-    Teacher getOneTeacherById(String id);
-    Result insert(Teacher teacher);
-    int update(Teacher teacher);
+    Teacher getOneTeacherById(String id) throws Exception;
+    Result insert(Teacher teacher) throws Exception;
+    int update(Teacher teacher) throws Exception;
     int delete(String id);
     int realDel(String id);
     int changeTeacherGroupList(Teacher teacher);
-    int Recover(String id);
+    int Recover(String id) throws Exception;
 
     /**
      * @Author lichi

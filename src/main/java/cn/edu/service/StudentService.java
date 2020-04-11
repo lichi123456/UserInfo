@@ -19,13 +19,13 @@ import java.util.List;
 @Service
 public interface StudentService {
     List<Student>getStudentListWithConditionAndDeleteStatus(Student student,String deleteStatus);
-    Result insert(Student student);
+    Result insert(Student student) throws Exception;
     int delete(String id);
     int realDel(String id);
-    int update(Student student);
-    Student getOneStudentById(String id);
+    int update(Student student) throws Exception;
+    Student getOneStudentById(String id) throws Exception;
     int changeTutorList(Student student);
-    int Recover(String id);
+    int Recover(String id) throws Exception;
     ResponseEntity<byte[]> exportExcelModel();
     /**
      * 根据学生学号查找学生id

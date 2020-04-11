@@ -10,7 +10,7 @@
     <result column="menu_path" jdbcType="VARCHAR" property="menuPath" />
     <result column="menu_icon" jdbcType="VARCHAR" property="menuIcon" />
     <result column="menu_parent_id" jdbcType="VARCHAR" property="menuParentId" />
-    <result column="menu_status" jdbcType="VARCHAR" property="menuStatus" />
+    <result column="delete_status" jdbcType="VARCHAR" property="deleteStatus" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="create_user" jdbcType="VARCHAR" property="createUser" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />

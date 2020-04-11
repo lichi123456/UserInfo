@@ -13,12 +13,12 @@ import java.util.List;
  * @Version 1.0
  **/
 public interface UserLoginService {
-    Result getLoginUser(String code, String password);
-    String insert(UserLogin userLogin);
-    int updatePasswordByUserCode(String userId,String newPassword);
-    String getPasswordById(String id);
-    List<UserLogin> getDeleteUserList(UserLogin userLogin);
-    int RecoverUser(UserLogin userLogin);
-    UserLogin getUserLoginById(String id);
+    Result getLoginUser(String code, String password) throws Exception;
+    String insert(UserLogin userLogin) throws Exception;
+    int updatePasswordByUserCode(String userId,String newPassword) throws Exception;
+    String getPasswordById(String id) throws Exception;
+    List<UserLogin> getDeleteUserList(UserLogin userLogin) throws Exception;
+    int RecoverUser(UserLogin userLogin) throws Exception;
+    UserLogin getUserLoginById(String id) throws Exception;
     int RealDeleteUser(UserLogin userLogin);
 }
