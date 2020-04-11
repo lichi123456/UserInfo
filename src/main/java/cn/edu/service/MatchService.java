@@ -1,5 +1,9 @@
 package cn.edu.service;
 
+import cn.edu.vo.Matchs;
+
+import java.util.List;
+
 /**
  * @Author wys
  * @ClassName MatchService
@@ -9,5 +13,10 @@ package cn.edu.service;
  * @return
  **/
 public interface MatchService {
+    /**
+     * 得到所有的赛事信息
+     * @return
+     */
+    List<Matchs> getAll();
 
 }

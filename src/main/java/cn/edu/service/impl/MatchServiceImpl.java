@@ -1,7 +1,13 @@
 package cn.edu.service.impl;
 
+import cn.edu.dao.MatchsMapper;
 import cn.edu.service.MatchService;
+import cn.edu.vo.Matchs;
+import org.apache.poi.ss.formula.functions.Match;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * @ClassName MatchServiceImpl
@@ -12,4 +18,11 @@ import org.springframework.stereotype.Service;
  **/
 @Service
 public class MatchServiceImpl implements MatchService {
+    @Autowired
+    private MatchsMapper matchsMapper;
+    @Override
+    public List<Matchs> getAll() {
+        List<Matchs> matches = matchsMapper.selectAll();
+        return matches;
+    }
 }
