@@ -1,5 +1,6 @@
 package cn.edu.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -40,7 +41,7 @@ public class UserLogin {
     /**
      * 用户类型名称
      */
-    @Column(name = "`user_type`")
+    @Transient
     private String userTypeName;
     /**
      * 电话号码
@@ -63,6 +64,7 @@ public class UserLogin {
      * 最后一次登录时间
      */
     @Column(name = "`last_login`")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date lastLogin;
 
     /**
@@ -74,6 +76,7 @@ public class UserLogin {
      * 创建时间
      */
     @Column(name = "`create_time`")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date createTime;
 
     /**
@@ -86,6 +89,7 @@ public class UserLogin {
      * 修改日期
      */
     @Column(name = "`update_time`")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date updateTime;
 
     /**

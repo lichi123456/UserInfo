@@ -111,7 +111,6 @@
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-core</artifactId>
         </dependency>
-
     </dependencies>
 
     <build>
@@ -150,5 +149,7 @@
                 </dependencies>
             </plugin>
         </plugins>
+
+    <finalName>UserInfo</finalName>
     </build>
 </project>

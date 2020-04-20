@@ -60,6 +60,14 @@ public class UserLoginController {
         return result;
     }
 
+    /**
+     * @Author wys
+     * @ClassName Recover
+     * @Description //TODO  恢复使用
+     * @Date 20:45 2020/4/19
+     * @Param [userLogin]
+     * @return cn.edu.utils.Result
+     **/
     @PutMapping("/")
     public Result Recover(@RequestBody UserLogin userLogin){
         Result result = new Result();
@@ -73,6 +81,14 @@ public class UserLoginController {
         }
         return result;
     }
+    /**
+     * @Author wys
+     * @ClassName realDeleteUser
+     * @Description //TODO 删除该用户
+     * @Date 20:45 2020/4/19
+     * @Param [userLogin]
+     * @return cn.edu.utils.Result
+     **/
     @DeleteMapping("/")
     public Result realDeleteUser(@RequestBody UserLogin userLogin){
         Result result = new Result();

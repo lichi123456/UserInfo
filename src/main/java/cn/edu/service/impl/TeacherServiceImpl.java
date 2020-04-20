@@ -43,26 +43,24 @@ public class TeacherServiceImpl implements TeacherService {
     /**
      * @Author wys
      * @ClassName getTeacherList
-     * @Description //TODO  获取教师信息列表带模糊查询
+     * @Description //TODO  获取教师id列表带模糊查询
      * @Date 15:13 2020/2/29
      * @Param []
      * @return java.util.List<cn.edu.vo.Teacher>
      **/
     @Override
     public List<Teacher> getTeacherListWithConditionAndDeleteStatus(Teacher teacher,String deleteStatus) {
-        List<Teacher>teacherList = null;
+        List<String>teacherList = null;
         if(deleteStatus.trim().compareTo(Constant.IS_NOT_DELETE)==0){
-            List<Teacher>teachers = teacherMapper.getTeacherListByName(teacher);
-            teacherList = teachers.stream().sorted(Comparator.comparing(Teacher::getTeacherCode)).collect(Collectors.toList());
+            teacherList = teacherMapper.getTeacherListByName(teacher);
         }else if(deleteStatus.trim().compareTo(Constant.IS_DELETE)==0){
-            List<Teacher>teachers = teacherMapper.getDelTeacherListByName(teacher);
-            teacherList = teachers.stream().sorted(Comparator.comparing(Teacher::getTeacherCode)).collect(Collectors.toList());
+            teacherList = teacherMapper.getDelTeacherListByName(teacher);
         }
 
         List<Teacher>list=new ArrayList<>();
         teacherList.stream().forEach(s->{
             try {
-                list.add(getOneTeacherById(s.getTeacherId()));
+                list.add(getOneTeacherById(s));
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -70,6 +68,14 @@ public class TeacherServiceImpl implements TeacherService {
         return list;
     }
 
+    /**
+     * @Author wys
+     * @ClassName getTeacherList
+     * @Description //TODO  获取教师信息,不进行组装
+     * @Date 14:58 2020/4/20
+     * @Param []
+     * @return java.util.List<cn.edu.vo.Teacher>
+     **/
     @Override
     public List<Teacher> getTeacherList() {
         Example example = new Example(Teacher.class);
@@ -80,7 +86,7 @@ public class TeacherServiceImpl implements TeacherService {
     /**
      * @Author wys
      * @ClassName getOneTeacherById
-     * @Description //TODO  获取一个教师信息
+     * @Description //TODO  获取一个教师详细信息
      * @Date 15:12 2020/2/29
      * @Param [id]
      * @return cn.edu.vo.Teacher

@@ -1,5 +1,6 @@
 package cn.edu.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -52,6 +53,7 @@ public class Menu {
      * 创建时间
      */
     @Column(name = "`create_time`")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date createTime;
 
     /**
@@ -64,6 +66,7 @@ public class Menu {
      * 修改日期
      */
     @Column(name = "`update_time`")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date updateTime;
 
     /**

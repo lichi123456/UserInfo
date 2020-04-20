@@ -7,7 +7,7 @@ import tk.mybatis.mapper.common.Mapper;
 import java.util.List;
 
 public interface StudentMapper extends Mapper<Student> {
-    List<Student> getStudentListByName(Student student);
-    List<Student>getDelStudentListByName(Student student);
+    List<String> getStudentListByName(Student student);
+    List<String>getDelStudentListByName(Student student);
     List<StudentDto>getAllStudentDto();
 }

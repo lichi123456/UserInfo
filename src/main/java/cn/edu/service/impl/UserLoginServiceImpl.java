@@ -14,6 +14,7 @@ import org.springframework.util.StringUtils;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -75,11 +76,27 @@ public class UserLoginServiceImpl implements UserLoginService {
             }else{
                 result.setSuccess(true);
                 result.setObject(userLogin);
+                setLastLoginTime(userLogin);
                 result.setMessage("密码正确");
             }
         }
         return result;
     }
+
+    /**
+     * @Author wys
+     * @ClassName setLastLoginTime
+     * @Description //TODO  最后一次登录时间
+     * @Date 21:11 2020/4/19
+     * @Param [userLogin]
+     * @return void
+     **/
+    @Override
+    public void setLastLoginTime(UserLogin userLogin) {
+        userLogin.setLastLogin(new Date());
+        userLoginMapper.updateByPrimaryKeySelective(userLogin);
+    }
+
 
     /**
      * @Author wys
@@ -143,6 +160,7 @@ public class UserLoginServiceImpl implements UserLoginService {
         if(userLogin!=null && userLogin.getUserId()!=null){
             userLogin.setUserPassword(DESPlus.Encrypt(newPassword));
         }
+        userLogin.setUpdateTime(new Date());
         return userLoginMapper.updateByPrimaryKeySelective(userLogin);
     }
 

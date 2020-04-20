@@ -61,19 +61,17 @@ public class StudentServiceImpl implements StudentService {
      **/
     @Override
     public List<Student> getStudentListWithConditionAndDeleteStatus(Student student,String deleteStatus) {
-        List<Student>studentList = null;
+        List<String>studentList = null;
         if(deleteStatus.trim().compareTo(Constant.IS_NOT_DELETE)==0){
-            List<Student>students = studentMapper.getStudentListByName(student);
-            studentList =  students.stream().sorted(Comparator.comparing(Student::getStudentCode)).collect(Collectors.toList());
+            studentList = studentMapper.getStudentListByName(student);
         }else if(deleteStatus.trim().compareTo(Constant.IS_DELETE)==0){
-            List<Student>students = studentMapper.getStudentListByName(student);
-            studentList = students.stream().sorted(Comparator.comparing(Student::getStudentCode)).collect(Collectors.toList());
+            studentList = studentMapper.getDelStudentListByName(student);
         }
 
         List<Student>list=new ArrayList<>();
         studentList.stream().forEach(s->{
             try {
-                list.add(getOneStudentById(s.getStudentId()));
+                list.add(getOneStudentById(s));//信息装配
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -297,7 +295,7 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public int Recover(String id) throws Exception {
         Assert.hasText(id,"学生主键id不能为空");
-        Student student = getOneStudentById(id);
+        Student student = studentMapper.selectByPrimaryKey(id);
         student.setDeleteStatus(Constant.IS_NOT_DELETE);
         return studentMapper.updateByPrimaryKeySelective(student);
     }

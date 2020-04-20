@@ -123,13 +123,13 @@ public class FacultyServiceImpl implements FacultyService {
         Student student = new Student();
         List<Student>studentList = studentService.getStudentListWithConditionAndDeleteStatus(student, Constant.IS_NOT_DELETE);
         //信息组装
-        List<Faculty>list=new ArrayList<>();
+        List<Faculty>list=new ArrayList<>();//院系
         for (Faculty f:facultyList ) {
-            List<Major>m1 = new ArrayList<>();
+            List<Major>m1 = new ArrayList<>();//专业
             for (Major m:majorList) {
-                List<Classes>c1 = new ArrayList<>();
+                List<Classes>c1 = new ArrayList<>();//班级
                 for (Classes c:classesList) {
-                    List<Student>s1 = new ArrayList<>();
+                    List<Student>s1 = new ArrayList<>();//学生
                     for(Student s:studentList){
                         if(StringUtils.isNotEmpty(s.getClassId())&&StringUtils.isNoneBlank(s.getClassId())){
                             if(s.getClassId().compareTo(c.getClassId())==0){

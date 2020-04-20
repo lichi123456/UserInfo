@@ -14,6 +14,7 @@ import java.util.List;
  **/
 public interface UserLoginService {
     Result getLoginUser(String code, String password) throws Exception;
+    void setLastLoginTime(UserLogin userLogin);
     String insert(UserLogin userLogin) throws Exception;
     int updatePasswordByUserCode(String userId,String newPassword) throws Exception;
     String getPasswordById(String id) throws Exception;

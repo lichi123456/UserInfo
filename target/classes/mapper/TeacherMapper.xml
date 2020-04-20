@@ -19,21 +19,22 @@
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="update_user" jdbcType="VARCHAR" property="updateUser" />
   </resultMap>
-  <!--获取未被删除学生信息-->
-  <select id="getTeacherListByName" resultType="cn.edu.vo.Teacher" parameterType="cn.edu.vo.Teacher">
-    SELECT * from teacher WHERE 1=1
+  <!--获取未被删除教师信息-->
+  <select id="getTeacherListByName" resultType="java.lang.String" parameterType="cn.edu.vo.Teacher">
+    SELECT teacher_id
+    from teacher WHERE delete_status = 'N'
     <if test="condition!=null and condition!=''">
-      and teacher.teacher_name like CONCAT('%',#{condition},'%')
+      and teacher_name like CONCAT('%',#{condition},'%')
     </if>
-    and teacher.delete_status = 'N'
+    GROUP BY teacher_code ASC
   </select>
-  <!--获取已删除学生信息-->
-  <select id="getDelTeacherListByName" resultType="cn.edu.vo.Teacher" parameterType="cn.edu.vo.Teacher">
-    SELECT * from teacher WHERE 1=1
-    and teacher.delete_status = 'Y'
+  <!--获取已删除教师信息-->
+  <select id="getDelTeacherListByName" resultType="java.lang.String" parameterType="cn.edu.vo.Teacher">
+    SELECT teacher_id
+    from teacher WHERE delete_status = 'Y'
     <if test="condition!=null and condition!=''">
-      and teacher.teacher_name like CONCAT('%',#{condition},'%')
+      and teacher_name like CONCAT('%',#{condition},'%')
     </if>
-
+    GROUP BY teacher_code ASC
   </select>
 </mapper>
