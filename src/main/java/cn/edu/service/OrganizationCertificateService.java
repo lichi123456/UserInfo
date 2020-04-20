@@ -26,6 +26,7 @@ public interface OrganizationCertificateService {
      */
     int insert(OrganizationCertificate organizationCertificate);
 
+    List<Certificate> getAllCertificate();
 
 
 }

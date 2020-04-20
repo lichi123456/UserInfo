@@ -285,4 +285,12 @@ public class TeacherServiceImpl implements TeacherService {
         example.and().andEqualTo("teacherCode",teacher.getTeacherCode());
         return teacherMapper.selectOneByExample(example);
     }
+
+    @Override
+    public Teacher getTeacherByTeacherCode(String teacerCode) {
+        Assert.hasText(teacerCode,"教师工号不能为空");
+        Example example = new Example(Teacher.class);
+        example.and().andEqualTo("teacherCode",teacerCode);
+        return teacherMapper.selectOneByExample(example);
+    }
 }

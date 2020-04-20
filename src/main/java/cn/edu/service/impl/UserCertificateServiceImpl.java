@@ -1,10 +1,8 @@
 package cn.edu.service.impl;
 
-import cn.edu.dao.CertificateMapper;
 import cn.edu.dao.UserCertificateMapper;
 import cn.edu.service.CertificateService;
 import cn.edu.service.UserCertificateService;
-import cn.edu.utils.ApplicationUtils;
 import cn.edu.utils.Constant;
 import cn.edu.vo.Certificate;
 import cn.edu.vo.Student;
@@ -16,6 +14,7 @@ import org.springframework.util.Assert;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -34,11 +33,11 @@ public class UserCertificateServiceImpl implements UserCertificateService {
     @Override
     public List<Certificate> getCertificateListOfId(String id) {
         Assert.hasText(id,"证书id不能为空");
-        List<String> ids = userCertificateMapper.getCertificateIdListOfId(id);
+      //  List<String> ids = userCertificateMapper.getCertificateIdListOfId(id);
         List<Certificate> certificates = new ArrayList<>();
-        for (String certificateId:ids) {
-            certificates.add(certificateService.getOneCertificateById(id));
-        }
+//        for (String certificateId:ids) {
+//            certificates.add(certificateService.getOneCertificateById(id));
+//        }
         return certificates;
     }
 
@@ -50,16 +49,14 @@ public class UserCertificateServiceImpl implements UserCertificateService {
     @Override
     public List<UserCertificate> getListofCertificate(String certificateId) {
         Assert.hasText(certificateId,"证书id不能为空");
-        List<UserCertificate> userCertificates = userCertificateMapper.getListofCertificate(certificateId);
-        return userCertificates;
+       // List<UserCertificate> userCertificates = userCertificateMapper.getListofCertificate(certificateId);
+        return null;
     }
 
     @Override
     public boolean getUserCertificate(String userId, String certificateId) {
-        Assert.hasText(userId,"userid 不能为空");
-        Assert.hasText(certificateId,"certificated 不能为空");
         Example example = new Example(UserCertificate.class);
-        example.and().andEqualTo("userId",userId);
+        example.and().andEqualTo("student_id1",userId);
         example.and().andEqualTo("certificateId",certificateId);
         List<UserCertificate> userCertificates = userCertificateMapper.selectByExample(example);
         //true 为空
@@ -70,23 +67,28 @@ public class UserCertificateServiceImpl implements UserCertificateService {
         return isEntry;
     }
 
+    /**
+     * 得到所用的用户证书列表
+     * @return
+     */
+    @Override
+    public List<UserCertificate> getUserCertificate() {
+
+        return userCertificateMapper.selectAll();
+    }
+
 
     @Override
     public int insert(UserCertificate userCertificate) {
-        Assert.hasText(userCertificate.getUserId(),"用户id不能为空");
-        Assert.hasText(userCertificate.getCertificateId(),"证书id不能为空");
-        Assert.hasText(userCertificate.getUserType(),"数据类型不能为空");
+
         return userCertificateMapper.insertSelective(userCertificate);
     }
 
     @Override
     public int deleteByCertificateAndUser(UserCertificate userCertificate) {
-        Assert.hasText(userCertificate.getUserId(),"userId 不能为空");
-        Assert.hasText(userCertificate.getCertificateId(),"certificateId不能为空");
+
         Example example =new Example(UserCertificate.class);
-        example.and().andEqualTo("userId",userCertificate.getUserId());
-        example.and().andEqualTo("certificateId",userCertificate.getCertificateId());
-        return userCertificateMapper.deleteByExample(example);
+        return  0;
     }
 
     @Override
@@ -94,10 +96,7 @@ public class UserCertificateServiceImpl implements UserCertificateService {
         Assert.hasText(teacher.getTeacherId(),"userId 不能为空");
         Assert.hasText(certificate.getCertificateId(),"certificateId不能为空");
         UserCertificate userCertificate = new UserCertificate();
-        userCertificate.setUserId(teacher.getTeacherId());
-        userCertificate.setCertificateId(certificate.getCertificateId());
-        userCertificate.setUserType(Constant.IS_TEACHER);
-        return userCertificateMapper.insertSelective(userCertificate);
+        return  0;
     }
 
     @Override
@@ -105,10 +104,20 @@ public class UserCertificateServiceImpl implements UserCertificateService {
         Assert.hasText(student.getStudentId(),"userId 不能为空");
         Assert.hasText(certificate.getCertificateId(),"certificateId不能为空");
         UserCertificate userCertificate = new UserCertificate();
-        userCertificate.setUserId(student.getStudentId());
-        userCertificate.setCertificateId(certificate.getCertificateId());
-        userCertificate.setUserType(Constant.IS_STUDENT);
+
         return userCertificateMapper.insertSelective(userCertificate);
+    }
+
+    @Override
+    public int update(UserCertificate userCertificate) {
+        Assert.hasText(userCertificate.getUserCerId().toString(),"用户证书id不能为空");
+        userCertificate.setUpdateTime(new Date());
+        return userCertificateMapper.updateByPrimaryKey(userCertificate);
+    }
+
+    @Override
+    public int delete(Long id) {
+        return userCertificateMapper.deleteByPrimaryKey(id);
     }
 
 

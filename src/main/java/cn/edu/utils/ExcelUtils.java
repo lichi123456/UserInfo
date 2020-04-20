@@ -142,83 +142,83 @@ public class ExcelUtils {
         return value;
     }
 
-    /**
-     * 导出数据
-     *
-     * @param objects
-     * @param excelHeader
-     * @param exportType  导入数据的类型
-     * @param excelSheet  导入数据的表名
-     * @return
-     * @throws IOException
-     */
-
-    public ResponseEntity<byte[]> exportExcel(List<CertificateDto> objects, String[] excelHeader, String exportType, String excelSheet) throws IOException {
-
-        HttpHeaders headers = null;
-        ByteArrayOutputStream baos = null;
-        try {
-            //获取表头长度
-            int length = excelHeader.length;
-            int[] ColumnLength = new int[length];//列宽数组
-            for (int i = 0; i < length; i++) {
-                ColumnLength[i] = 2;
-            }
-            Workbook wb = new XSSFWorkbook();
-
-            Sheet sheet = wb.createSheet("证书信息");//创建工作表
-            Row row = sheet.createRow(0);//创建行
-            CellStyle style = wb.createCellStyle();
-            style.setAlignment(HorizontalAlignment.CENTER);//对齐方式
-            style.setFillForegroundColor((short)43);
-            style.setFillForegroundColor(IndexedColors.GREY_40_PERCENT.getIndex());
-            style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-
-            //导入头部
-            for (int i = 0; i < excelHeader.length; i++) {
-                Cell cell = row.createCell(i);
-                cell.setCellValue(excelHeader[i]);
-                cell.setCellStyle(style);
-            }
-            for (int i = 0; i < excelHeader.length; i++) {
-                sheet.setColumnWidth(i, (short) ColumnLength[i] * 3000);//设置列宽
-            }
-            if (exportType.equals(CERTIFICATE_TYPE)) {
-                CertificateDto certificateDto = null;
-                //导入数据库数据
-                for (int i = 0; i < objects.size(); i++) {
-                    row = sheet.createRow(i + 1);
-                    certificateDto = (CertificateDto) objects.get(i);
-                    row.createCell(0).setCellValue(certificateDto.getStudentCode());
-                    row.createCell(1).setCellValue(certificateDto.getStudentName());
-//                    row.createCell(2).setCellValue(certificateDto.getStudentCode());
-//                    row.createCell(3).setCellValue(certificateDto.getStudentName());
-//                    row.createCell(4).setCellValue(certificateDto.getStudentCode());
-//                    row.createCell(5).setCellValue(certificateDto.getStudentName());
-                    row.createCell(6).setCellValue(certificateDto.getCertificateName());
-                    row.createCell(7).setCellValue(certificateDto.getMatchType());
-                    row.createCell(8).setCellValue(certificateDto.getMatchLevel());
-                        row.createCell(9).setCellValue(certificateDto.getCertificateLevel());
-                        row.createCell(10).setCellValue(certificateDto.getCertificateDate());
-                        row.createCell(11).setCellValue(certificateDto.getTeacherName());
-//                        row.createCell(11).setCellValue(certificateDto.getTeacher1().getTeacherName());
-//                        row.createCell(11).setCellValue(certificateDto.getTeacher1().getTeacherName());
-                }
-            }
-
-
-            headers = new HttpHeaders();
-            headers.setContentDispositionFormData("attachment",
-                    new String((excelSheet + excel2007U).getBytes("UTF-8"), "iso-8859-1"));
-            headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-            baos = new ByteArrayOutputStream();
-            wb.write(baos);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return new ResponseEntity<byte[]>(baos.toByteArray(), headers, HttpStatus.CREATED);
-    }
+//    /**
+//     * 导出数据
+//     *
+//     * @param objects
+//     * @param excelHeader
+//     * @param exportType  导入数据的类型
+//     * @param excelSheet  导入数据的表名
+//     * @return
+//     * @throws IOException
+//     */
+//
+//    public ResponseEntity<byte[]> exportExcel(List<CertificateDto> objects, String[] excelHeader, String exportType, String excelSheet) throws IOException {
+//
+//        HttpHeaders headers = null;
+//        ByteArrayOutputStream baos = null;
+//        try {
+//            //获取表头长度
+//            int length = excelHeader.length;
+//            int[] ColumnLength = new int[length];//列宽数组
+//            for (int i = 0; i < length; i++) {
+//                ColumnLength[i] = 2;
+//            }
+//            Workbook wb = new XSSFWorkbook();
+//
+//            Sheet sheet = wb.createSheet("证书信息");//创建工作表
+//            Row row = sheet.createRow(0);//创建行
+//            CellStyle style = wb.createCellStyle();
+//            style.setAlignment(HorizontalAlignment.CENTER);//对齐方式
+//            style.setFillForegroundColor((short)43);
+//            style.setFillForegroundColor(IndexedColors.GREY_40_PERCENT.getIndex());
+//            style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+//
+//            //导入头部
+//            for (int i = 0; i < excelHeader.length; i++) {
+//                Cell cell = row.createCell(i);
+//                cell.setCellValue(excelHeader[i]);
+//                cell.setCellStyle(style);
+//            }
+//            for (int i = 0; i < excelHeader.length; i++) {
+//                sheet.setColumnWidth(i, (short) ColumnLength[i] * 3000);//设置列宽
+//            }
+//            if (exportType.equals(CERTIFICATE_TYPE)) {
+//                CertificateDto certificateDto = null;
+//                //导入数据库数据
+//                for (int i = 0; i < objects.size(); i++) {
+//                    row = sheet.createRow(i + 1);
+//                    certificateDto = (CertificateDto) objects.get(i);
+//                    row.createCell(0).setCellValue(certificateDto.getStudentCode());
+//                    row.createCell(1).setCellValue(certificateDto.getStudentName());
+////                    row.createCell(2).setCellValue(certificateDto.getStudentCode());
+////                    row.createCell(3).setCellValue(certificateDto.getStudentName());
+////                    row.createCell(4).setCellValue(certificateDto.getStudentCode());
+////                    row.createCell(5).setCellValue(certificateDto.getStudentName());
+//                    row.createCell(6).setCellValue(certificateDto.getCertificateName());
+//                    row.createCell(7).setCellValue(certificateDto.getMatchType());
+//                    row.createCell(8).setCellValue(certificateDto.getMatchLevel());
+//                        row.createCell(9).setCellValue(certificateDto.getCertificateLevel());
+//                        row.createCell(10).setCellValue(certificateDto.getCertificateDate());
+//                        row.createCell(11).setCellValue(certificateDto.getTeacherName());
+////                        row.createCell(11).setCellValue(certificateDto.getTeacher1().getTeacherName());
+////                        row.createCell(11).setCellValue(certificateDto.getTeacher1().getTeacherName());
+//                }
+//            }
+//
+//
+//            headers = new HttpHeaders();
+//            headers.setContentDispositionFormData("attachment",
+//                    new String((excelSheet + excel2007U).getBytes("UTF-8"), "iso-8859-1"));
+//            headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+//            baos = new ByteArrayOutputStream();
+//            wb.write(baos);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//
+//        return new ResponseEntity<byte[]>(baos.toByteArray(), headers, HttpStatus.CREATED);
+//    }
 
 
     public ResponseEntity<byte[]> exportExcelStudentModel(String[] faculty, String[] fathrtNameArr, Map<String, String[]> schoolMap,String[] group) {

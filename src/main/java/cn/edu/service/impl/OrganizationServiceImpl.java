@@ -55,4 +55,10 @@ public class OrganizationServiceImpl implements OrganizationService {
         Organization organization = getOrganizationById(id);
         return organizationMapper.deleteByPrimaryKey(id);
     }
+
+    @Override
+    public List<Organization> getOrgnization() {
+        return organizationMapper.selectAll();
+    }
+
 }

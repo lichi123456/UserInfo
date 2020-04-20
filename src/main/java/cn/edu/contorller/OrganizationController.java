@@ -7,8 +7,11 @@ package cn.edu.contorller;
  * @Version: 1.0
  */
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import cn.edu.service.OrganizationService;
+import cn.edu.utils.Result;
+import cn.edu.vo.Organization;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @ClassName CertificateController
@@ -20,4 +23,42 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/organization")
 public class OrganizationController {
+    @Autowired
+    private OrganizationService organizationService;
+    @DeleteMapping("/{id}")
+    public Result delete(@PathVariable String id){
+        Result result = new Result();
+        result.setSuccess(true);
+        result.setMessage("删除成功");
+        int i = organizationService.delete(id);
+        if(i == 0){
+            result.setSuccess(false);
+            result.setMessage("删除失败");
+        }
+        return result;
+    }
+    @PostMapping("/")
+    public Result insert(@RequestBody Organization organization){
+        Result result = new Result();
+        result.setSuccess(true);
+        result.setMessage("新增成功");
+        int i = organizationService.insert(organization);
+        if(i == 0){
+            result.setSuccess(false);
+            result.setMessage("新增失败");
+        }
+        return result;
+    }
+    @PutMapping("/")
+    public Result Update(@RequestBody Organization organization){
+        Result result = new Result();
+        result.setSuccess(true);
+        result.setMessage("修改成功");
+        int i = organizationService.update(organization);
+        if(i == 0){
+            result.setSuccess(false);
+            result.setMessage("修改失败");
+        }
+        return result;
+    }
 }

@@ -31,4 +31,5 @@ public interface TeacherService {
      * @return
      */
     Teacher getTeacherByTeacherCode(Teacher teacher);
+    Teacher getTeacherByTeacherCode(String teacerCode);
 }

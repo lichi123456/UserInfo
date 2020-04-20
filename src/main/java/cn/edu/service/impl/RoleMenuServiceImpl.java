@@ -37,4 +37,5 @@ public class RoleMenuServiceImpl implements RoleMenuService {
         example.and().andEqualTo("roleId",roleId);
         return roleMenuMapper.selectByExample(example);
     }
+
 }

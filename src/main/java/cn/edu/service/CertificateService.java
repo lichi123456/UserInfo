@@ -44,15 +44,9 @@ public interface CertificateService {
     boolean  isExistStudentAndCertificate(String studentId,String teacherId,String CertificateId);
 
 
-    List<CertificateDto> getCertificateDtoList(String studentId, String teacherId, String certificateId );
 
-    /**
-     * 查找数据
-     * @param certificate
-     * @param deleteStatus
-     * @return
-     */
-    List<Certificate>getCertificateListWithConditionAndDeleteStatus(Certificate certificate, String deleteStatus);
+
+
 
     /**
      * 修改数据
@@ -67,5 +61,11 @@ public interface CertificateService {
      */
     int delete(String id);
     int realDel(String id);
+
+    /**
+     * 得到所有的证书
+     * @return
+     */
+    List<Certificate> getCertificates();
 
 }

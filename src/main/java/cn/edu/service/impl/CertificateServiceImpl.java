@@ -87,52 +87,9 @@ public class CertificateServiceImpl implements CertificateService {
         return list;
     }
 
-    @Override
-    public List<CertificateDto> getCertificateDtoList(String studentId, String teacherId, String certificateId ){
-        Student student = new Student();
-        if(studentId!=null){
-            student.setStudentId(studentId);
-        }
-        Certificate certificate = new Certificate();
-        if(certificateId !=null){
-            certificate.setCertificateId(certificateId);
-        }
-        List<CertificateDto> certificateDtoList = new ArrayList<>();
-        List<Student> students = studentService.getStudentListWithConditionAndDeleteStatus(student,Constant.IS_NOT_DELETE);
-        List<Certificate> certificates = getCertificateListWithConditionAndDeleteStatus(certificate,Constant.IS_NOT_DELETE);
-        for (Student s:students) {
-            for(Certificate c : certificates){
-                if(isExistStudentAndCertificate(s.getStudentId(),null,certificateId)){
-                    List<CertificateDto> certificateDtos = getCertificateDto(s.getStudentId(),null,certificateId);
-                    CertificateDto certificateDto = certificateDtos.get(0);
-//                    if(certificateDtos.size()<=2){
-//                        certificateDto.setTeacher2(certificateDtos.get(1).getTeacher1());
-//                    }
-//                    if(certificateDtos.size()<=3){
-//                        certificateDto.setTeacher3(certificateDtos.get(2).getTeacher1());
-//                    }
-                    certificateDtoList.add(certificateDto);
-                }
 
-            }
-        }
-        return certificateDtoList;
-    }
 
-    @Override
-    public List<Certificate> getCertificateListWithConditionAndDeleteStatus(Certificate certificate, String deleteStatus) {
-        List<Certificate> certificateList = null;
-        if(deleteStatus.trim().compareTo(Constant.IS_NOT_DELETE)==0){
-            certificateList = certificateMapper.getCertificateListN(certificate);
-        }else if(deleteStatus.trim().compareTo(Constant.IS_NOT_DELETE)==0){
-            certificateList = certificateMapper.getCertificateListY(certificate);
-        }
-        List<Certificate>list=new ArrayList<>();
-        certificateList.stream().forEach(s->{
-            list.add(getOneCertificateById(s.getCertificateId()));
-        });
-        return list;
-    }
+
 
     @Override
     public int update(Certificate certificate) {
@@ -162,6 +119,12 @@ public class CertificateServiceImpl implements CertificateService {
         return certificateMapper.deleteByPrimaryKey(id);
     }
 
+    @Override
+    public List<Certificate> getCertificates() {
+
+        return certificateMapper.selectAll();
+    }
+
 
     @Override
     public boolean isExistStudentAndCertificate(String studentId, String teacherId, String CertificateId) {
@@ -176,9 +139,6 @@ public class CertificateServiceImpl implements CertificateService {
         }
         return false;
     }
-
-
-
 
 
 

@@ -352,6 +352,14 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
+    public Student getStudentIdByStudentCode(String studentCode) {
+        Assert.hasText(studentCode,"studentCode 不能为空");
+        Example example = new Example(Student.class);
+        example.and().andEqualTo("studentCode",studentCode);
+        return studentMapper.selectOneByExample(example);
+    }
+
+    @Override
     public List<StudentDto> getAllStudentDto() {
         List<StudentDto> studentDtos = studentMapper.getAllStudentDto();
         return studentDtos;

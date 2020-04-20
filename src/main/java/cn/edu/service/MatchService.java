@@ -1,5 +1,6 @@
 package cn.edu.service;
 
+import cn.edu.vo.MatchLevel;
 import cn.edu.vo.Matchs;
 
 import java.util.List;
@@ -18,5 +19,7 @@ public interface MatchService {
      * @return
      */
     List<Matchs> getAll();
+    Matchs getMatchs(String id);
+    List<MatchLevel> getMatchLevelList();
 
 }

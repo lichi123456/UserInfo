@@ -33,6 +33,7 @@ public interface StudentService {
      * @return
      */
     Student getStudentIdByStudentCode(Student student);
+    Student getStudentIdByStudentCode(String studentCode);
 
     /**
      * 得到所有的studentDto

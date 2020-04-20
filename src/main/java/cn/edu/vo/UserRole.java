@@ -8,8 +8,6 @@ import java.util.Date;
 import javax.persistence.*;
 
 @Table(name = "`user_role`")
-@Getter
-@Setter
 public class UserRole {
     /**
      * 主键id
@@ -57,8 +55,128 @@ public class UserRole {
     private String updateUser;
 
     /**
-     * 存放额外信息
+     * 获取主键id
+     *
+     * @return user_role_id - 主键id
      */
-    @Transient
-    private Object object;
+    public Long getUserRoleId() {
+        return userRoleId;
+    }
+
+    /**
+     * 设置主键id
+     *
+     * @param userRoleId 主键id
+     */
+    public void setUserRoleId(Long userRoleId) {
+        this.userRoleId = userRoleId;
+    }
+
+    /**
+     * 获取用户登录表主键id
+     *
+     * @return user_id - 用户登录表主键id
+     */
+    public String getUserId() {
+        return userId;
+    }
+
+    /**
+     * 设置用户登录表主键id
+     *
+     * @param userId 用户登录表主键id
+     */
+    public void setUserId(String userId) {
+        this.userId = userId == null ? null : userId.trim();
+    }
+
+    /**
+     * 获取角色表id
+     *
+     * @return role_id - 角色表id
+     */
+    public String getRoleId() {
+        return roleId;
+    }
+
+    /**
+     * 设置角色表id
+     *
+     * @param roleId 角色表id
+     */
+    public void setRoleId(String roleId) {
+        this.roleId = roleId == null ? null : roleId.trim();
+    }
+
+    /**
+     * 获取创建时间
+     *
+     * @return create_time - 创建时间
+     */
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    /**
+     * 设置创建时间
+     *
+     * @param createTime 创建时间
+     */
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    /**
+     * 获取创建人
+     *
+     * @return create_user - 创建人
+     */
+    public String getCreateUser() {
+        return createUser;
+    }
+
+    /**
+     * 设置创建人
+     *
+     * @param createUser 创建人
+     */
+    public void setCreateUser(String createUser) {
+        this.createUser = createUser == null ? null : createUser.trim();
+    }
+
+    /**
+     * 获取修改日期
+     *
+     * @return update_time - 修改日期
+     */
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    /**
+     * 设置修改日期
+     *
+     * @param updateTime 修改日期
+     */
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    /**
+     * 获取修改人
+     *
+     * @return update_user - 修改人
+     */
+    public String getUpdateUser() {
+        return updateUser;
+    }
+
+    /**
+     * 设置修改人
+     *
+     * @param updateUser 修改人
+     */
+    public void setUpdateUser(String updateUser) {
+        this.updateUser = updateUser == null ? null : updateUser.trim();
+    }
 }

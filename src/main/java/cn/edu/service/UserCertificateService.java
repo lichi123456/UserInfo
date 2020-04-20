@@ -1,11 +1,9 @@
 package cn.edu.service;
 
-import cn.edu.dao.UserCertificateMapper;
 import cn.edu.vo.Certificate;
 import cn.edu.vo.Student;
 import cn.edu.vo.Teacher;
 import cn.edu.vo.UserCertificate;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
@@ -40,6 +38,12 @@ public interface UserCertificateService {
     boolean getUserCertificate(String userId,String certificateId);
 
     /**
+     * 得到所有的用户证书列表
+     * @return
+     */
+    List<UserCertificate> getUserCertificate();
+
+    /**
      * 插入相对应的数据
      * @param userCertificate
      */
@@ -66,6 +70,10 @@ public interface UserCertificateService {
      * @return
      */
     int insert(Student student,Certificate certificate);
+
+    int update(UserCertificate userCertificate);
+
+    int delete(Long id);
 
 
 }

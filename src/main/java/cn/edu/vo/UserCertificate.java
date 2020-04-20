@@ -1,15 +1,10 @@
 package cn.edu.vo;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.Getter;
-import lombok.Setter;
-
+import lombok.Data;
 import java.util.Date;
 import javax.persistence.*;
-
+@Data
 @Table(name = "`user_certificate`")
-@Getter
-@Setter
 public class UserCertificate {
     /**
      * 主键id
@@ -19,22 +14,10 @@ public class UserCertificate {
     private Long userCerId;
 
     /**
-     * 用户表（学生/教师）主键id
-     */
-    @Column(name = "`user_id`")
-    private String userId;
-
-    /**
      * 证书id
      */
     @Column(name = "`certificate_id`")
     private String certificateId;
-
-    /**
-     * 用户类型（教师，学生，管理员）
-     */
-    @Column(name = "`user_type`")
-    private String userType;
 
     /**
      * 创建时间
@@ -63,8 +46,111 @@ public class UserCertificate {
     private String updateUser;
 
     /**
-     * 存放额外信息
+     * 用户表（学生/教师）主键id
      */
-    @Transient
-    private Object object;
+    @Column(name = "`student_id1`")
+    private String studentId1;
+
+    /**
+     * 学生
+     */
+    @Column(name = "`student_id2`")
+    private String studentId2;
+
+    /**
+     * 学生
+     */
+    @Column(name = "`student_id3`")
+    private String studentId3;
+
+    /**
+     * 学生
+     */
+    @Column(name = "`student_id4`")
+    private String studentId4;
+
+    /**
+     * 学生
+     */
+    @Column(name = "`student_id5`")
+    private String studentId5;
+
+    /**
+     * 学生
+     */
+    @Column(name = "`student_id6`")
+    private String studentId6;
+
+    /**
+     * 学生
+     */
+    @Column(name = "`student_id7`")
+    private String studentId7;
+
+    /**
+     * 学生
+     */
+    @Column(name = "`student_id8`")
+    private String studentId8;
+
+    /**
+     * 学生
+     */
+    @Column(name = "`student_id9`")
+    private String studentId9;
+
+    /**
+     * 学生
+     */
+    @Column(name = "`student_id10`")
+    private String studentId10;
+
+    /**
+     * 老师
+
+     */
+    @Column(name = "`teacher_id1`")
+    private String teacherId1;
+
+    /**
+     * 老师
+     */
+    @Column(name = "`teacher_id2`")
+    private String teacherId2;
+
+    /**
+     * 老师
+     */
+    @Column(name = "`teacher_id3`")
+    private String teacherId3;
+
+    /**
+     * 证书地址
+     */
+    @Column(name = "`url`")
+    private String url;
+
+    /**
+     * 证书等级
+     */
+    @Column(name = "`certificate_level`")
+    private String certificateLevel;
+
+    /**
+     * 赛事Id
+     */
+    @Column(name = "`match_id`")
+    private String matchId;
+
+    /**
+     * 赛事类别
+     */
+    @Column(name = "`match_type`")
+    private String matchType;
+
+    /**
+     * 赛事等级2段
+     */
+    @Column(name = "`match_level_level`")
+    private String matchLevelLevel;
 }

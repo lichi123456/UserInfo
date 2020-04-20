@@ -6,6 +6,7 @@ import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
+import java.util.List;
 import javax.persistence.*;
 
 @Table(name = "`certificate`")
@@ -88,5 +89,10 @@ public class Certificate {
      */
     @Transient
     private Object object;
+    /**
+     * 存放额外信息
+     */
+    @Transient
+    private List<Organization> organizations;
 
 }

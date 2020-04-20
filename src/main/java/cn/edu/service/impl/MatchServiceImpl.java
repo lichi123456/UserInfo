@@ -1,7 +1,9 @@
 package cn.edu.service.impl;
 
+import cn.edu.dao.MatchLevelMapper;
 import cn.edu.dao.MatchsMapper;
 import cn.edu.service.MatchService;
+import cn.edu.vo.MatchLevel;
 import cn.edu.vo.Matchs;
 import org.apache.poi.ss.formula.functions.Match;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +22,21 @@ import java.util.List;
 public class MatchServiceImpl implements MatchService {
     @Autowired
     private MatchsMapper matchsMapper;
+    @Autowired
+    private MatchLevelMapper matchLevelMapper;
     @Override
     public List<Matchs> getAll() {
         List<Matchs> matches = matchsMapper.selectAll();
         return matches;
+    }
+
+    @Override
+    public Matchs getMatchs(String id) {
+        return matchsMapper.selectByPrimaryKey(id);
+    }
+
+    @Override
+    public List<MatchLevel> getMatchLevelList() {
+        return matchLevelMapper.selectAll();
     }
 }
