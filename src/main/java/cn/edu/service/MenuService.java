@@ -14,4 +14,8 @@ import java.util.List;
 public interface MenuService {
     List<Menu> getMenuList();
     Menu getMenuById(String menuId);
+    List<Menu> getChildList(String menuParentId);
+    List<Menu> getMenuTree(List<Menu>menuList);
+    int deleteMenu(String menuId);
+    int recoverMenu(String menuId);
 }

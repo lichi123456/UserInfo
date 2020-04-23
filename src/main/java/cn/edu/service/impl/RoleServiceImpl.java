@@ -1,6 +1,7 @@
 package cn.edu.service.impl;
 
 import cn.edu.dao.RoleMapper;
+import cn.edu.utils.Constant;
 import cn.edu.vo.Menu;
 import cn.edu.vo.Role;
 import cn.edu.vo.RoleMenu;
@@ -59,30 +60,15 @@ public class RoleServiceImpl implements RoleService {
         List<Menu>menuList = new ArrayList<>();
         for (RoleMenu m:roleMenuList) {
             Menu menu = menuService.getMenuById(m.getMenuId());
-            menuList.add(menu);
-        }
-        List<Menu>menuTree = new ArrayList<>();
-        for (Menu m:menuList ) {
-            if(m.getMenuParentId().compareTo("-1")==0){//当当前节点为root节点时
-                List<Menu>list1 =new ArrayList<>();
-                for(Menu mc:menuList){
-                    if(mc.getMenuParentId().compareTo(m.getMenuId())==0){//子节点的父节点为当前节点，则进入当前节点列表
-                        list1.add(mc);
-                    }else if(mc.getMenuParentId().compareTo("-1")==0){
-                        continue;
-                    }
-                }
-                m.setMenuList(list1);
-                menuTree.add(m);
+            if(menu.getDeleteStatus().compareTo(Constant.IS_NOT_DELETE)==0){
+                menuList.add(menu);
             }
         }
-        List<Menu>list1 = new ArrayList<>();
-        //排序
-        menuTree.stream().sorted(Comparator.comparing(Menu::getMenuPath)).forEach(e->{
-            list1.add(e);
-        });
-        return list1;
+        List<Menu>menuTree = menuService.getMenuTree(menuList);
+
+        return menuTree;
     }
+
 
     @Override
     public List<Role> getRoleList() {

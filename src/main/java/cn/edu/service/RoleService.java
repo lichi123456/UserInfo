@@ -16,4 +16,5 @@ public interface RoleService {
     Role getOneRole(String id);
     List<Menu> getMenuByRoleId(String id);
     List<Role>getRoleList();
+
 }
