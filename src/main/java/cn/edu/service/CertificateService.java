@@ -66,6 +66,6 @@ public interface CertificateService {
      * 得到所有的证书
      * @return
      */
-    List<Certificate> getCertificates();
+    List<Certificate> getCertificates(Certificate certificate,String flag);
 
 }

@@ -3,11 +3,13 @@ package cn.edu.service.impl;
 import cn.edu.dao.CertificateMapper;
 import cn.edu.dto.CertificateDto;
 import cn.edu.service.CertificateService;
+import cn.edu.service.OrganizationCertificateService;
 import cn.edu.service.StudentService;
 import cn.edu.utils.ApplicationUtils;
 import cn.edu.utils.Constant;
 import cn.edu.utils.Result;
 import cn.edu.vo.Certificate;
+import cn.edu.vo.Organization;
 import cn.edu.vo.Student;
 import cn.edu.vo.TeacherStudent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +33,8 @@ public class CertificateServiceImpl implements CertificateService {
     private CertificateMapper certificateMapper;
     @Autowired
     private StudentService studentService;
+    @Autowired
+    private OrganizationCertificateService organizationCertificateService;
 
 
     @Override
@@ -62,17 +66,22 @@ public class CertificateServiceImpl implements CertificateService {
         Assert.hasText(certificate.getCertificateName(),"证书名称不能为空");
         Assert.hasText(certificate.getCertificateId(),"证书id不能为空");
         Assert.hasText(certificate.getCertificateLevel(),"证书等级不能为空");
-        Assert.hasText(certificate.getCertificateDate().toString(),"证书获取时间不能为空");
-
-        certificate.setCertificateId(ApplicationUtils.GUID32());
         certificate.setDeleteStatus(Constant.IS_NOT_DELETE);
         int t = certificateMapper.insert(certificate);
+
+        if(certificate.getOrganizationIds()!=null&&certificate.getOrganizationIds().size()!=0){
+            for (String o :certificate.getOrganizationIds()) {
+                organizationCertificateService.insert(certificate.getCertificateId(),o);
+            }
+        }
+
         if(t == 0){
             result.setMessage(certificate.getCertificateName()+"新增失败");
             result.setSuccess(false);
             return result;
         }
-        result.setObject(true);
+        result.setObject(certificate);
+        result.setSuccess(true);
         result.setMessage("新增成功");
         return result;
     }
@@ -96,9 +105,7 @@ public class CertificateServiceImpl implements CertificateService {
         Assert.hasText(certificate.getCertificateName(),"证书名称不能为空");
         Assert.hasText(certificate.getCertificateId(),"证书id不能为空");
         Assert.hasText(certificate.getCertificateLevel(),"证书等级不能为空");
-        Assert.hasText(certificate.getCertificateDate().toString(),"证书获取时间不能为空");
         Assert.hasText(certificate.getMatchId(),"赛事id不能为空");
-        Result result = new Result();
         certificate.setUpdateTime(new Date());
         return certificateMapper.updateByPrimaryKeySelective(certificate);
     }
@@ -120,9 +127,14 @@ public class CertificateServiceImpl implements CertificateService {
     }
 
     @Override
-    public List<Certificate> getCertificates() {
+    public List<Certificate> getCertificates(Certificate certificate,String flag) {
 
-        return certificateMapper.selectAll();
+        if(flag.equals(Constant.IS_NOT_DELETE ) ){
+            return certificateMapper.getCertificateListN(certificate);
+        }else{
+            return certificateMapper.getCertificateListY(certificate);
+        }
+
     }
 
 

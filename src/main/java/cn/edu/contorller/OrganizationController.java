@@ -13,6 +13,9 @@ import cn.edu.vo.Organization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @ClassName CertificateController
  * @Description 发证机关管理接口
@@ -58,6 +61,21 @@ public class OrganizationController {
         if(i == 0){
             result.setSuccess(false);
             result.setMessage("修改失败");
+        }
+        return result;
+    }
+    @GetMapping("/")
+    public Result GetOrg(){
+        Result result = new Result();
+        result.setSuccess(true);
+        result.setMessage("修改成功");
+        List<Organization> organizations = new ArrayList<>();
+        organizations = organizationService.getOrgnization();
+        if(organizations.size() == 0){
+            result.setSuccess(false);
+            result.setMessage("修改失败");
+        }else{
+            result.setObject(organizations);
         }
         return result;
     }

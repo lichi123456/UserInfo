@@ -113,6 +113,7 @@ public class UserCertificateServiceImpl implements UserCertificateService {
         Assert.hasText(userCertificate.getUserCerId().toString(),"用户证书id不能为空");
         userCertificate.setUpdateTime(new Date());
         return userCertificateMapper.updateByPrimaryKey(userCertificate);
+
     }
 
     @Override

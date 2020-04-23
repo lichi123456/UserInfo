@@ -44,7 +44,7 @@ public interface OrganizationService {
     int delete(String id);
 
     /**
-     * 得到所有的证书
+     * 得到所有的证书组织
      * @return
      */
     List<Organization> getOrgnization();

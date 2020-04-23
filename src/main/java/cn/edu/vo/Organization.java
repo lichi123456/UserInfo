@@ -1,15 +1,12 @@
 package cn.edu.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import java.util.Date;
 import javax.persistence.*;
-
+@Data
 @Table(name = "`organization`")
-@Getter
-@Setter
 public class Organization {
     /**
      * 发证机关id
@@ -28,7 +25,6 @@ public class Organization {
      * 创建时间
      */
     @Column(name = "`create_time`")
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date createTime;
 
     /**
@@ -40,8 +36,8 @@ public class Organization {
     /**
      * 修改日期
      */
-    @Column(name = "`update_time`")
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+    @Column(name = "`update_time`")
     private Date updateTime;
 
     /**
@@ -51,8 +47,16 @@ public class Organization {
     private String updateUser;
 
     /**
-     * 存放额外信息
+     * 地点
      */
-    @Transient
-    private Object object;
+    @Column(name = "`organization_location`")
+    private String organizationLocation;
+
+    /**
+     * 电话
+     */
+    @Column(name = "`organization_tel`")
+    private String organizationTel;
+
+
 }

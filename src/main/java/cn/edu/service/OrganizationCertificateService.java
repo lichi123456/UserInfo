@@ -25,8 +25,15 @@ public interface OrganizationCertificateService {
      * @return
      */
     int insert(OrganizationCertificate organizationCertificate);
+    int insert(String CertificateId,String OrganizationId);
 
-    List<Certificate> getAllCertificate();
+    /**
+     * 删除证书相关信息
+     * @param certificateId
+     * @return
+     */
+    int delete(String certificateId);
+    List<Certificate> getAllCertificate(Certificate certificate);
 
 
 }

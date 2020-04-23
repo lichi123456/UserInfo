@@ -94,5 +94,14 @@ public class Certificate {
      */
     @Transient
     private List<Organization> organizations;
+    @Transient
+    private List<String> organizationIds;
+    /**
+     * 存放组织名字
+     */
+    @Transient
+    private String organizationNames;
+    @Transient
+    private String matchName;
 
 }

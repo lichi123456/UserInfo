@@ -44,6 +44,7 @@ public class CertificateController {
     //导入老师服务
     @Autowired
     private TeacherService teacherService;
+
     //用户证书关联服务
     @Autowired
     private UserCertificateService userCertificateService;
@@ -404,43 +405,51 @@ public class CertificateController {
 
         return result;
     }
-    @PutMapping("/updateCertificate/student/")
-    public Result updateCertificate(UserCertificate userCertificate) throws Exception {
+    @PutMapping("/updateCertificate/")
+    public Result updateCertificate( @RequestBody Certificate certificate) throws Exception {
         Result result = new Result();
         result.setSuccess(true);
         result.setMessage("修改成功");
-        userCertificate.setUpdateTime(new Date());
-        int i = userCertificateService.update(userCertificate);
+        certificate.setUpdateTime(new Date());
+        int i = certificateService.update(certificate);
+        organizationCertificateService.delete(certificate.getCertificateId());
+        if(certificate.getOrganizationIds()!=null&&certificate.getOrganizationIds().size()!=0){
+            for (String o :certificate.getOrganizationIds()) {
+                organizationCertificateService.insert(certificate.getCertificateId(),o);
+            }
+        }
         if(i == 0){
             result.setSuccess(false);
             result.setMessage("修改失败");
         }
-
         return result;
     }
-    @DeleteMapping("/updateCertificate/student/{id}")
+    @DeleteMapping("/deleteCertificate/{id}")
     public Result deleteCertificate(@PathVariable String  id) throws Exception {
         Result result = new Result();
         result.setSuccess(true);
-        result.setMessage("修改成功");
-        Long Id = Long.valueOf(id);
+        result.setMessage("删除成功");
 
-        int i = userCertificateService.delete(Id);
+        int i = certificateService.delete(id);
         if(i == 0){
             result.setSuccess(false);
-            result.setMessage("修改失败");
+            result.setMessage("删除失败");
         }
 
         return result;
     }
 
 
-    @GetMapping("/getAllCertificate/")
-    public Result getAllCertificate() {
+    @PostMapping("/getAllCertificate/")
+    public Result getAllCertificate(@RequestBody Certificate certificate) {
         Result result = new Result();
         result.setSuccess(true);
         result.setMessage("添加成功");
-        List<Certificate> certificates= organizationCertificateService.getAllCertificate();
+        Certificate certificate1 = new Certificate();
+        if(certificate.getCertificateName()!=null && certificate.getCertificateName().length()!=0){
+            certificate1.setCertificateName(certificate.getCertificateName());
+        }
+        List<Certificate> certificates= organizationCertificateService.getAllCertificate(certificate1);
         result.setObject(certificates);
         return result;
     }
@@ -465,43 +474,128 @@ public class CertificateController {
             userCertificate.setCertificateId(certificateDto.getCertificateId());
         }
         if(certificateDto.getStudent1()!=null && certificateDto.getStudent1().length()!=0){
-            userCertificate.setStudentId1(studentService.getStudentIdByStudentCode(certificateDto.getStudent1()).getStudentId());
+            Student student =  studentService.getStudentIdByStudentCode(certificateDto.getStudent1());
+            if(student!=null) {
+                userCertificate.setStudentId1(studentService.getStudentIdByStudentCode(certificateDto.getStudent1()).getStudentId());
+            }else{
+                result.setMessage("学生1未注册");
+                result.setSuccess(false);
+                return result;
+            }
         }
         if(certificateDto.getStudent2()!=null && certificateDto.getStudent2().length()!=0){
-            userCertificate.setStudentId2(studentService.getStudentIdByStudentCode(certificateDto.getStudent2()).getStudentId());
+            Student student =  studentService.getStudentIdByStudentCode(certificateDto.getStudent2());
+            if(student!=null) {
+                userCertificate.setStudentId2(studentService.getStudentIdByStudentCode(certificateDto.getStudent2()).getStudentId());
+            }else{
+                result.setMessage("学生2未注册");
+                result.setSuccess(false);
+                return result;
+            }
         }
         if(certificateDto.getStudent3()!=null && certificateDto.getStudent3().length()!=0){
-            userCertificate.setStudentId3(studentService.getStudentIdByStudentCode(certificateDto.getStudent3()).getStudentId());
+            Student student =  studentService.getStudentIdByStudentCode(certificateDto.getStudent3());
+            if(student!=null) {
+                userCertificate.setStudentId3(studentService.getStudentIdByStudentCode(certificateDto.getStudent3()).getStudentId());
+            }else{
+                result.setMessage("学生3未注册");
+                result.setSuccess(false);
+                return result;
+            }
         }
         if(certificateDto.getStudent4()!=null && certificateDto.getStudent4().length()!=0){
-            userCertificate.setStudentId4(studentService.getStudentIdByStudentCode(certificateDto.getStudent4()).getStudentId());
+            Student student =  studentService.getStudentIdByStudentCode(certificateDto.getStudent4());
+            if(student!=null) {
+                userCertificate.setStudentId4(studentService.getStudentIdByStudentCode(certificateDto.getStudent4()).getStudentId());
+            }else{
+                result.setMessage("学生4未注册");
+                result.setSuccess(false);
+                return result;
+            }
         }
         if(certificateDto.getStudent5()!=null && certificateDto.getStudent5().length()!=0){
-            userCertificate.setStudentId5(studentService.getStudentIdByStudentCode(certificateDto.getStudent5()).getStudentId());
+            Student student =  studentService.getStudentIdByStudentCode(certificateDto.getStudent5());
+            if(student!=null) {
+                userCertificate.setStudentId5(studentService.getStudentIdByStudentCode(certificateDto.getStudent5()).getStudentId());
+            }else{
+                result.setMessage("学生5未注册");
+                result.setSuccess(false);
+                return result;
+            }
         }
         if(certificateDto.getStudent6()!=null && certificateDto.getStudent6().length()!=0){
-            userCertificate.setStudentId6(studentService.getStudentIdByStudentCode(certificateDto.getStudent6()).getStudentId());
+            Student student =  studentService.getStudentIdByStudentCode(certificateDto.getStudent6());
+            if(student!=null) {
+                userCertificate.setStudentId6(studentService.getStudentIdByStudentCode(certificateDto.getStudent6()).getStudentId());
+            }else{
+                result.setMessage("学生6未注册");
+                result.setSuccess(false);
+                return result;
+            }
         }
         if(certificateDto.getStudent7()!=null && certificateDto.getStudent7().length()!=0){
-            userCertificate.setStudentId7(studentService.getStudentIdByStudentCode(certificateDto.getStudent7()).getStudentId());
+            Student student =  studentService.getStudentIdByStudentCode(certificateDto.getStudent7());
+            if(student!=null) {
+                userCertificate.setStudentId7(studentService.getStudentIdByStudentCode(certificateDto.getStudent7()).getStudentId());
+            }
         }
         if(certificateDto.getStudent8()!=null && certificateDto.getStudent8().length()!=0){
-            userCertificate.setStudentId8(studentService.getStudentIdByStudentCode(certificateDto.getStudent8()).getStudentId());
+            Student student =  studentService.getStudentIdByStudentCode(certificateDto.getStudent8());
+            if(student!=null) {
+                userCertificate.setStudentId8(studentService.getStudentIdByStudentCode(certificateDto.getStudent8()).getStudentId());
+            }else{
+                result.setMessage("学生7未注册");
+                result.setSuccess(false);
+                return result;
+            }
         }
         if(certificateDto.getStudent9()!=null && certificateDto.getStudent9().length()!=0){
-            userCertificate.setStudentId9(studentService.getStudentIdByStudentCode(certificateDto.getStudent9()).getStudentId());
+            Student student =  studentService.getStudentIdByStudentCode(certificateDto.getStudent9());
+            if(student!=null) {
+                userCertificate.setStudentId9(studentService.getStudentIdByStudentCode(certificateDto.getStudent9()).getStudentId());
+            }else{
+                result.setMessage("学生未注册");
+            }
         }
         if(certificateDto.getStudent10()!=null && certificateDto.getStudent10().length()!=0){
-            userCertificate.setStudentId10(studentService.getStudentIdByStudentCode(certificateDto.getStudent10()).getStudentId());
+            Student student =  studentService.getStudentIdByStudentCode(certificateDto.getStudent10());
+            if(student!=null) {
+                userCertificate.setStudentId10(studentService.getStudentIdByStudentCode(certificateDto.getStudent10()).getStudentId());
+            }else{
+                result.setMessage("学生5未注册");
+                result.setSuccess(false);
+                return result;
+            }
         }
         if(certificateDto.getTeacher1()!=null && certificateDto.getTeacher1().length()!=0){
-            userCertificate.setTeacherId1(teacherService.getTeacherByTeacherCode(certificateDto.getTeacher1()).getTeacherId());
+            Teacher teacher =  teacherService.getTeacherByTeacherCode(certificateDto.getTeacher1());
+            if(teacher!=null) {
+                userCertificate.setTeacherId1(teacherService.getTeacherByTeacherCode(certificateDto.getTeacher1()).getTeacherId());
+            }else{
+                result.setMessage("教师1未在教师列表中注册");
+                result.setSuccess(false);
+                return result;
+            }
         }
         if(certificateDto.getTeacher2()!=null && certificateDto.getTeacher2().length()!=0){
-            userCertificate.setTeacherId2(teacherService.getTeacherByTeacherCode(certificateDto.getTeacher2()).getTeacherId());
+            Teacher teacher =  teacherService.getTeacherByTeacherCode(certificateDto.getTeacher2());
+            if(teacher!=null) {
+                userCertificate.setTeacherId2(teacherService.getTeacherByTeacherCode(certificateDto.getTeacher2()).getTeacherId());
+            }else{
+                result.setMessage("教师2未在教师列表中注册");
+                result.setSuccess(false);
+                return result;
+            }
         }
         if(certificateDto.getTeacher3()!=null && certificateDto.getTeacher3().length()!=0){
-            userCertificate.setTeacherId3(teacherService.getTeacherByTeacherCode(certificateDto.getTeacher3()).getTeacherId());
+            Teacher teacher =  teacherService.getTeacherByTeacherCode(certificateDto.getTeacher3());
+            if(teacher!=null) {
+                userCertificate.setTeacherId3(teacherService.getTeacherByTeacherCode(certificateDto.getTeacher3()).getTeacherId());
+            }else{
+                result.setMessage("教师3未在教师列表中注册");
+                result.setSuccess(false);
+                return result;
+            }
         }
         if(certificateDto.getUrl()!=null && certificateDto.getUrl().length()!=0){
             userCertificate.setUrl(certificateDto.getUrl());
@@ -526,6 +620,7 @@ public class CertificateController {
             result.setMessage("插入失败");
             result.setSuccess(false);
         }
+
         return result;
     }
 
@@ -536,50 +631,129 @@ public class CertificateController {
         result.setMessage("添加成功");
         logger.info("Url"+certificateDto.getUrl());
         UserCertificate userCertificate = new UserCertificate();
-        if(certificateDto.getId()!=null){
-            userCertificate.setUserCerId(certificateDto.getId());
-        }
-        if(certificateDto.getCertificateId()!=null && certificateDto.getCertificateId().length()!=0){
-            userCertificate.setCertificateId(certificateDto.getCertificateId());
-        }
         if(certificateDto.getStudent1()!=null && certificateDto.getStudent1().length()!=0){
-            userCertificate.setStudentId1(studentService.getStudentIdByStudentCode(certificateDto.getStudent1()).getStudentId());
+            Student student =  studentService.getStudentIdByStudentCode(certificateDto.getStudent1());
+            if(student!=null) {
+                userCertificate.setStudentId1(studentService.getStudentIdByStudentCode(certificateDto.getStudent1()).getStudentId());
+            }else{
+                result.setMessage("学生1未注册");
+                result.setSuccess(false);
+                return result;
+            }
         }
         if(certificateDto.getStudent2()!=null && certificateDto.getStudent2().length()!=0){
-            userCertificate.setStudentId2(studentService.getStudentIdByStudentCode(certificateDto.getStudent2()).getStudentId());
+            Student student =  studentService.getStudentIdByStudentCode(certificateDto.getStudent2());
+            if(student!=null) {
+                userCertificate.setStudentId2(studentService.getStudentIdByStudentCode(certificateDto.getStudent2()).getStudentId());
+            }else{
+                result.setMessage("学生2未注册");
+                result.setSuccess(false);
+                return result;
+            }
         }
         if(certificateDto.getStudent3()!=null && certificateDto.getStudent3().length()!=0){
-            userCertificate.setStudentId3(studentService.getStudentIdByStudentCode(certificateDto.getStudent3()).getStudentId());
+            Student student =  studentService.getStudentIdByStudentCode(certificateDto.getStudent3());
+            if(student!=null) {
+                userCertificate.setStudentId3(studentService.getStudentIdByStudentCode(certificateDto.getStudent3()).getStudentId());
+            }else{
+                result.setMessage("学生3未注册");
+                result.setSuccess(false);
+                return result;
+            }
         }
         if(certificateDto.getStudent4()!=null && certificateDto.getStudent4().length()!=0){
-            userCertificate.setStudentId4(studentService.getStudentIdByStudentCode(certificateDto.getStudent4()).getStudentId());
+            Student student =  studentService.getStudentIdByStudentCode(certificateDto.getStudent4());
+            if(student!=null) {
+                userCertificate.setStudentId4(studentService.getStudentIdByStudentCode(certificateDto.getStudent4()).getStudentId());
+            }else{
+                result.setMessage("学生4未注册");
+                result.setSuccess(false);
+                return result;
+            }
         }
         if(certificateDto.getStudent5()!=null && certificateDto.getStudent5().length()!=0){
-            userCertificate.setStudentId5(studentService.getStudentIdByStudentCode(certificateDto.getStudent5()).getStudentId());
+            Student student =  studentService.getStudentIdByStudentCode(certificateDto.getStudent5());
+            if(student!=null) {
+                userCertificate.setStudentId5(studentService.getStudentIdByStudentCode(certificateDto.getStudent5()).getStudentId());
+            }else{
+                result.setMessage("学生5未注册");
+                result.setSuccess(false);
+                return result;
+            }
         }
         if(certificateDto.getStudent6()!=null && certificateDto.getStudent6().length()!=0){
-            userCertificate.setStudentId6(studentService.getStudentIdByStudentCode(certificateDto.getStudent6()).getStudentId());
+            Student student =  studentService.getStudentIdByStudentCode(certificateDto.getStudent6());
+            if(student!=null) {
+                userCertificate.setStudentId6(studentService.getStudentIdByStudentCode(certificateDto.getStudent6()).getStudentId());
+            }else{
+                result.setMessage("学生6未注册");
+                result.setSuccess(false);
+                return result;
+            }
         }
         if(certificateDto.getStudent7()!=null && certificateDto.getStudent7().length()!=0){
-            userCertificate.setStudentId7(studentService.getStudentIdByStudentCode(certificateDto.getStudent7()).getStudentId());
+            Student student =  studentService.getStudentIdByStudentCode(certificateDto.getStudent7());
+            if(student!=null) {
+                userCertificate.setStudentId7(studentService.getStudentIdByStudentCode(certificateDto.getStudent7()).getStudentId());
+            }
         }
         if(certificateDto.getStudent8()!=null && certificateDto.getStudent8().length()!=0){
-            userCertificate.setStudentId8(studentService.getStudentIdByStudentCode(certificateDto.getStudent8()).getStudentId());
+            Student student =  studentService.getStudentIdByStudentCode(certificateDto.getStudent8());
+            if(student!=null) {
+                userCertificate.setStudentId8(studentService.getStudentIdByStudentCode(certificateDto.getStudent8()).getStudentId());
+            }else{
+                result.setMessage("学生7未注册");
+                result.setSuccess(false);
+                return result;
+            }
         }
         if(certificateDto.getStudent9()!=null && certificateDto.getStudent9().length()!=0){
-            userCertificate.setStudentId9(studentService.getStudentIdByStudentCode(certificateDto.getStudent9()).getStudentId());
+            Student student =  studentService.getStudentIdByStudentCode(certificateDto.getStudent9());
+            if(student!=null) {
+                userCertificate.setStudentId9(studentService.getStudentIdByStudentCode(certificateDto.getStudent9()).getStudentId());
+            }else{
+                result.setMessage("学生未注册");
+            }
         }
         if(certificateDto.getStudent10()!=null && certificateDto.getStudent10().length()!=0){
-            userCertificate.setStudentId10(studentService.getStudentIdByStudentCode(certificateDto.getStudent10()).getStudentId());
+            Student student =  studentService.getStudentIdByStudentCode(certificateDto.getStudent10());
+            if(student!=null) {
+                userCertificate.setStudentId10(studentService.getStudentIdByStudentCode(certificateDto.getStudent10()).getStudentId());
+            }else{
+                result.setMessage("学生5未注册");
+                result.setSuccess(false);
+                return result;
+            }
         }
         if(certificateDto.getTeacher1()!=null && certificateDto.getTeacher1().length()!=0){
-            userCertificate.setTeacherId1(teacherService.getTeacherByTeacherCode(certificateDto.getTeacher1()).getTeacherId());
+            Teacher teacher =  teacherService.getTeacherByTeacherCode(certificateDto.getTeacher1());
+            if(teacher!=null) {
+                userCertificate.setTeacherId1(teacherService.getTeacherByTeacherCode(certificateDto.getTeacher1()).getTeacherId());
+            }else{
+                result.setMessage("教师1未在教师列表中注册");
+                result.setSuccess(false);
+                return result;
+            }
         }
         if(certificateDto.getTeacher2()!=null && certificateDto.getTeacher2().length()!=0){
-            userCertificate.setTeacherId2(teacherService.getTeacherByTeacherCode(certificateDto.getTeacher2()).getTeacherId());
+            Teacher teacher =  teacherService.getTeacherByTeacherCode(certificateDto.getTeacher2());
+            if(teacher!=null) {
+                userCertificate.setTeacherId2(teacherService.getTeacherByTeacherCode(certificateDto.getTeacher2()).getTeacherId());
+            }else{
+                result.setMessage("教师2未在教师列表中注册");
+                result.setSuccess(false);
+                return result;
+            }
         }
         if(certificateDto.getTeacher3()!=null && certificateDto.getTeacher3().length()!=0){
-            userCertificate.setTeacherId3(teacherService.getTeacherByTeacherCode(certificateDto.getTeacher3()).getTeacherId());
+            Teacher teacher =  teacherService.getTeacherByTeacherCode(certificateDto.getTeacher3());
+            if(teacher!=null) {
+                userCertificate.setTeacherId3(teacherService.getTeacherByTeacherCode(certificateDto.getTeacher3()).getTeacherId());
+            }else{
+                result.setMessage("教师3未在教师列表中注册");
+                result.setSuccess(false);
+                return result;
+            }
         }
         if(certificateDto.getUrl()!=null && certificateDto.getUrl().length()!=0){
             userCertificate.setUrl(certificateDto.getUrl());
@@ -606,16 +780,14 @@ public class CertificateController {
         }
         return result;
     }
-    @PutMapping("/deleteUserCertificate/student/")
-    public Result deleteUserCertificate(@RequestBody CertificateDto certificateDto){
+    @DeleteMapping("/deleteUserCertificate/student/{id}")
+    public Result deleteUserCertificate(@PathVariable Long id){
         Result result = new Result();
         result.setSuccess(true);
         result.setMessage("添加成功");
         UserCertificate userCertificate = new UserCertificate();
         int i = 1;
-        if(certificateDto.getId()!=null){
-            i = userCertificateService.delete(certificateDto.getId());
-        }
+        i = userCertificateService.delete(id);
         if(i == 0){
             result.setMessage("跟新失败");
             result.setSuccess(false);
