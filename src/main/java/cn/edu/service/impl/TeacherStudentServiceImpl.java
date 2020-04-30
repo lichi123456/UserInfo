@@ -4,6 +4,7 @@ import cn.edu.dao.TeacherStudentMapper;
 import cn.edu.service.StudentService;
 import cn.edu.service.TeacherService;
 import cn.edu.service.TeacherStudentService;
+import cn.edu.utils.Constant;
 import cn.edu.vo.Student;
 import cn.edu.vo.Teacher;
 import cn.edu.vo.TeacherStudent;
@@ -46,7 +47,10 @@ public class TeacherStudentServiceImpl implements TeacherStudentService {
         List<TeacherStudent> teacherStudent = teacherStudentMapper.selectByExample(example);
         List<Teacher>teacherList=new ArrayList<>();
         for (TeacherStudent ts:teacherStudent) {
-            teacherList.add(teacherService.getOneTeacherById(ts.getTeacherId()));
+            Teacher teacher = teacherService.getOneTeacherById(ts.getTeacherId());
+            if(teacher.getDeleteStatus().compareTo(Constant.IS_NOT_DELETE)==0){
+                teacherList.add(teacher);
+            }
         }
         return teacherList;
     }
@@ -65,9 +69,11 @@ public class TeacherStudentServiceImpl implements TeacherStudentService {
         example.and().andEqualTo("teacherId",id);
         List<TeacherStudent> teacherStudent = teacherStudentMapper.selectByExample(example);
         List<Student>studentList=new ArrayList<>();
-        for (TeacherStudent ts:teacherStudent
-        ) {
-            studentList.add(studentService.getOneStudentById(ts.getStudentId()));
+        for (TeacherStudent ts:teacherStudent) {
+            Student student = studentService.getOneStudentById(ts.getStudentId());
+            if(student.getDeleteStatus().compareTo(Constant.IS_NOT_DELETE)==0){
+                studentList.add(student);
+            }
         }
         return studentList;
     }

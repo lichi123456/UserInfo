@@ -32,4 +32,18 @@ public class Constant {
     //教师
     public static final String[] TEACHER_EXCEL_HEADER = {"工号","姓名","性别","电话号码","QQ号","电子邮箱"};
 
+    /**
+     * Excel错误类型
+     */
+    //当前列为空
+    public static final String ROW_IS_EMPTY  = "内容为空";
+    //当前列格式不正确
+    public static final String ROW_VALIDATE_ERROR = "格式错误";
+    //当前列长度错误
+    public static final String ROW_LENGTH_ERROR = "长度不正确";
+    //当前列内容不存在
+    public static final String IS_NOT_EXIST = "不存在";
+    //当前内容已存在
+    public static final String IS_EXIST = "已存在";
+
 }

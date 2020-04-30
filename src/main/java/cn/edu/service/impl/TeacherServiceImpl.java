@@ -5,13 +5,12 @@ import cn.edu.service.TeacherGroupService;
 import cn.edu.service.TeacherService;
 import cn.edu.service.TeacherStudentService;
 import cn.edu.service.UserLoginService;
-import cn.edu.utils.ApplicationUtils;
-import cn.edu.utils.Constant;
-import cn.edu.utils.Result;
+import cn.edu.utils.*;
 import cn.edu.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+import org.springframework.web.multipart.MultipartFile;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.ArrayList;
@@ -267,6 +266,85 @@ public class TeacherServiceImpl implements TeacherService {
         Teacher teacher = getOneTeacherById(id);
         teacher.setDeleteStatus(Constant.IS_NOT_DELETE);
         return teacherMapper.updateByPrimaryKeySelective(teacher);
+    }
+
+    /**
+     * @Author wys
+     * @ClassName importExcel
+     * @Description //TODO  导入教师数据
+     * @Date 18:08 2020/4/30
+     * @Param [file]
+     * @return cn.edu.utils.Result
+     **/
+    @Override
+    public Result importExcel(MultipartFile file) throws Exception {
+        Result result = new Result();
+        ExcelUtils excelUtils = new ExcelUtils();
+        //excel 导入数据demo
+        List<List<Object>> dataList;
+        List<Teacher> list = new ArrayList<>();
+        dataList = excelUtils.importExcel(file);
+        //数据封装格式一，将表格中的数据遍历取出后封装进对象放进List
+        for (int i = 0; i < dataList.size(); i++) {
+            Teacher teacher = new Teacher();
+            //工号
+            if(dataList.get(i).get(0)!=null&&(String) dataList.get(i).get(0)!=""){
+                String teacherCode = (String) dataList.get(i).get(0);
+                if(getTeacherByTeacherCode(teacherCode) != null){
+                    return ExcelUtils.setErrorMessage(i+1,"工号",Constant.IS_EXIST);
+                }
+                if(!ValidateUtil.isNumeric(teacherCode)){
+                    return ExcelUtils.setErrorMessage(i+1,"工号",Constant.ROW_VALIDATE_ERROR);
+                }
+                teacher.setTeacherCode(teacherCode);
+            }else{
+                return ExcelUtils.setErrorMessage(i+2,"工号",Constant.ROW_IS_EMPTY);
+            }
+            //姓名
+            if(dataList.get(i).get(1)!=null&&(String) dataList.get(i).get(1)!=""){
+                teacher.setTeacherName((String) dataList.get(i).get(1));
+            }else{
+                return ExcelUtils.setErrorMessage(i+2,"姓名",Constant.ROW_IS_EMPTY);
+            }
+            //性别
+            if(dataList.get(i).get(2)!=null&&(String) dataList.get(i).get(2)!=""){
+                teacher.setTeacherSex((String) dataList.get(i).get(2));
+            }else{
+                return ExcelUtils.setErrorMessage(i+2,"姓名",Constant.ROW_IS_EMPTY);
+            }
+            //电话号码
+            if(dataList.get(i).get(3)!=null&&(String) dataList.get(i).get(3)!=""){
+                String tel=(String) dataList.get(i).get(3);
+                if(!ValidateUtil.isMobileNo(tel)){
+                    return ExcelUtils.setErrorMessage(i+2,"电话号码",Constant.ROW_VALIDATE_ERROR);
+                }
+                teacher.setTeacherTel(tel);
+            }
+            //QQ
+            if(dataList.get(i).get(4)!=null&&(String) dataList.get(i).get(4)!=""){
+                String qq = (String) dataList.get(i).get(4);
+                if(!ValidateUtil.isNumeric(qq)){
+                    return ExcelUtils.setErrorMessage(i+2,"QQ号",Constant.ROW_VALIDATE_ERROR);
+                }
+                teacher.setTeacherQq(qq);
+            }
+            //邮箱
+            if(dataList.get(i).get(5)!=null&&(String) dataList.get(i).get(5)!=""){
+                String email = (String) dataList.get(i).get(5);
+                if(!ValidateUtil.isEmail(email)){
+                    return ExcelUtils.setErrorMessage(i+2,"电子邮箱",Constant.ROW_VALIDATE_ERROR);
+                }
+                teacher.setTeacherEmail(email);
+            }
+            list.add(teacher);
+        }
+        result.setSuccess(true);
+        result.setMessage("导入成功");
+        for(int i = 0 ; i < list.size(); i++){
+            Teacher t = list.get(i);
+            insert(t);
+        }
+        return result;
     }
 
     /**
