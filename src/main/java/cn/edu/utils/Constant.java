@@ -18,6 +18,10 @@ public class Constant {
     public static final String IS_TEACHER = "2";
     //学生标识
     public static final String IS_STUDENT = "1";
+    // 图片名称长度
+    public static final Integer IMAGE_URL_LENGTH = 32;
+    public static final String IMAGE_WEB_PATH = "account/img";
+
     // 证书数据导出表头
     public static final String[] CERTIFICATE_EXCEL_HEADER =
             {"学号1","姓名1","学号2","姓名2","学号3","姓名3","证书名称","类别","级别","证书等级","获取证书时间","指导老师1","指导老师2","指导老师3"};

@@ -36,6 +36,7 @@ public interface UserCertificateService {
      * @return
      */
     boolean getUserCertificate(String userId,String certificateId);
+    UserCertificate getUserCertificate(Long id);
 
     /**
      * 得到所有的用户证书列表
@@ -74,6 +75,17 @@ public interface UserCertificateService {
     int update(UserCertificate userCertificate);
 
     int delete(Long id);
+
+    /**
+     * 得到所有学生证书信息
+     * @return
+     */
+    List<UserCertificate> getPersonCertificate();
+    /**
+     * 得到所有教师证书信息
+     * @return
+     */
+    List<UserCertificate>getPersonCertificateListOfTeacher();
 
 
 }

@@ -22,6 +22,125 @@
   <select id="getListofCertificate" resultType="cn.edu.vo.UserCertificate">
     SELECT * FROM user_certificate AS a WHERE a.certificate_id = #{certificateId}
   </select>
+  <select id ="getPersonCertificateList" resultType="cn.edu.vo.UserCertificate" >
+        select student_id1 As studentId1,
+                        user_cer_id AS userCerId,
+                     certificate_id AS certificateId,
+
+                     match_id As matchId,
+                     match_level_level AS matchLevelLevel
+        FROM user_certificate
+        WHERE student_id1 IS NOT NULL
+        union all
+        select student_id2 As studentId1,
+                        user_cer_id AS userCerId,
+                     certificate_id AS certificateId,
+
+                     match_id As matchId,
+                     match_level_level AS matchLevelLevel
+        FROM user_certificate
+        WHERE student_id2 IS NOT NULL
+        union all
+        select student_id3 As studentId1,
+                        user_cer_id AS userCerId,
+                     certificate_id AS certificateId,
+
+                     match_id As matchId,
+                     match_level_level AS matchLevelLevel
+        FROM user_certificate
+        WHERE student_id3 IS NOT NULL
+        union all
+        select student_id4 As studentId1,
+                        user_cer_id AS userCerId,
+                     certificate_id AS certificateId,
+
+                     match_id As matchId,
+                     match_level_level AS matchLevelLevel
+        FROM user_certificate
+        WHERE student_id4 IS NOT NULL
+        union all
+        select student_id5 As studentId1,
+                        user_cer_id AS userCerId,
+                     certificate_id AS certificateId,
+
+                     match_id As matchId,
+                     match_level_level AS matchLevelLevel
+        FROM user_certificate
+        WHERE student_id5 IS NOT NULL
+        union all
+        select student_id6 As studentId1,
+                        user_cer_id AS userCerId,
+                     certificate_id AS certificateId,
+
+                     match_id As matchId,
+                     match_level_level AS matchLevelLevel
+        FROM user_certificate
+        WHERE student_id6 IS NOT NULL
+        union all
+        select student_id7 As studentId1,
+                        user_cer_id AS userCerId,
+                     certificate_id AS certificateId,
+
+                     match_id As matchId,
+                     match_level_level AS matchLevelLevel
+        FROM user_certificate
+        WHERE student_id7 IS NOT NULL
+        union all
+        select student_id8 As studentId1,
+                        user_cer_id AS userCerId,
+                     certificate_id AS certificateId,
+
+                     match_id As matchId,
+                     match_level_level AS matchLevelLevel
+        FROM user_certificate
+        WHERE student_id8 IS NOT NULL
+        union all
+        select student_id9 As studentId1,
+                        user_cer_id AS userCerId,
+                     certificate_id AS certificateId,
+
+                     match_id As matchId,
+                     match_level_level AS matchLevelLevel
+        FROM user_certificate
+        WHERE student_id9 IS NOT NULL
+        union all
+        select student_id10 As studentId1,
+                        user_cer_id AS userCerId,
+                     certificate_id AS certificateId,
+
+                     match_id As matchId,
+                     match_level_level AS matchLevelLevel
+        FROM user_certificate
+        WHERE student_id10 IS NOT NULL
+    </select>
+    <select id ="getPersonCertificateListOfTeacher" resultType="cn.edu.vo.UserCertificate" >
+        select teacher_id1 As teacherId1,
+                user_cer_id AS userCerId,
+            certificate_id AS certificateId,
+            match_id As matchId,
+            match_level_level AS matchLevelLevel
+        FROM user_certificate
+        WHERE teacher_id1 IS NOT NULL
+        union all
+        select teacher_id2 As teacherId1,
+                        user_cer_id AS userCerId,
+                     certificate_id AS certificateId,
+
+                     match_id As matchId,
+                     match_level_level AS matchLevelLevel
+        FROM user_certificate
+        WHERE teacher_id2 IS NOT NULL
+        union all
+        select teacher_id3 As teacherId1,
+                        user_cer_id AS userCerId,
+                     certificate_id AS certificateId,
+
+                     match_id As matchId,
+                     match_level_level AS matchLevelLevel
+        FROM user_certificate
+        WHERE teacher_id3 IS NOT NULL
+
+    </select>
 
 
 

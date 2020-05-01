@@ -106,4 +106,5 @@
         </if>
         AND certificate.delete_status = 'Y'
     </select>
+
 </mapper>

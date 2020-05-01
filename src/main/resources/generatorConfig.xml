@@ -49,7 +49,7 @@
 
         <!-- 指定数据库表 -->
         <!--certificate, classes, faculty, groups, major, match_level, match_type, matchs, menu, organization, organization_certificate, role, role_menu, student, student_match, teacher, teacher_group, teacher_student, user_certificate, user_login, user_role-->
-        <table tableName="organization" domainObjectName="Organization" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false">
+        <table tableName="user_certificate_url" domainObjectName="UserCertificateUrl" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false">
         </table>
 
     </context>

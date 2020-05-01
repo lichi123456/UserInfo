@@ -4,11 +4,9 @@ import cn.edu.dto.CertificateDto;
 import cn.edu.service.*;
 import cn.edu.service.impl.FileServiceImpl;
 import cn.edu.utils.*;
-import cn.edu.vo.Certificate;
-import cn.edu.vo.Student;
-import cn.edu.vo.Teacher;
-import cn.edu.vo.UserCertificate;
+import cn.edu.vo.*;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.poi.ss.formula.functions.Match;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +48,8 @@ public class CertificateController {
     private UserCertificateService userCertificateService;
     @Autowired
     private TeacherStudentService teacherStudentService;
+    @Autowired
+    private UserCertificateUrlService userCertificateUrlService;
     @Autowired
     private OrganizationCertificateService organizationCertificateService;
     @Autowired
@@ -202,7 +202,7 @@ public class CertificateController {
     public Result addImage(@RequestParam(name = "file", required = false) MultipartFile file,HttpServletRequest request, HttpServletResponse response) {
         //项目存放路径
         String str=uploadPath;
-        String webPath = "account/img";
+        String webPath = Constant.IMAGE_WEB_PATH;
         logger.info("webPath = "+webPath);
         //得到上传时的文件名字
         String originalname=file.getOriginalFilename();
@@ -631,6 +631,8 @@ public class CertificateController {
         result.setMessage("添加成功");
         logger.info("Url"+certificateDto.getUrl());
         UserCertificate userCertificate = new UserCertificate();
+        userCertificate.setCertificateId(certificateDto.getCertificateId());
+        userCertificate.setUserCerId(certificateDto.getId());
         if(certificateDto.getStudent1()!=null && certificateDto.getStudent1().length()!=0){
             Student student =  studentService.getStudentIdByStudentCode(certificateDto.getStudent1());
             if(student!=null) {
@@ -756,6 +758,11 @@ public class CertificateController {
             }
         }
         if(certificateDto.getUrl()!=null && certificateDto.getUrl().length()!=0){
+            if(userCertificateService.getUserCertificate(certificateDto.getId())!=null){
+                if(userCertificateService.getUserCertificate(certificateDto.getId()).getUrl()!=null){
+                    Picture.deletePicture(userCertificateService.getUserCertificate(certificateDto.getId()).getUrl(),uploadPath);
+                }
+            }
             userCertificate.setUrl(certificateDto.getUrl());
         }
         if(certificateDto.getCertificateLevel()!=null && certificateDto.getCertificateLevel().length()!=0){
@@ -793,6 +800,240 @@ public class CertificateController {
             result.setSuccess(false);
         }
         return result;
+    }
+
+    @GetMapping("/getPersonCertificate/student/")
+    public Result getOnceCertificateOfStudent(){
+        Result result = new Result();
+        try{
+            List<UserCertificate> userCertificates = new ArrayList<>();
+            userCertificates = userCertificateService.getPersonCertificate();
+            result.setSuccess(true);
+            result.setMessage("获得个人证书成功");
+            List<CertificateDto> certificateDtos = userCertificateToCertificateDto(userCertificates,"1");
+            result.setObject(certificateDtos);
+        }catch (Exception e){
+            result.setMessage(e.getMessage());
+            result.setSuccess(false);
+        }
+        return result;
+    }
+    @PostMapping("/updatePersonCertificate/student/")
+    public Result updatePersonCertificateOfStudent(@RequestBody CertificateDto certificateDto){
+        Result result = new Result();
+        try{
+            String certificateId = certificateDto.getCertificateId();
+
+            String studentId = studentService.getStudentIdByStudentCode(certificateDto.getStudent1()).getStudentId();
+            UserCertificateUrl userCertificateUrl = userCertificateUrlService.getUrlById(studentId,certificateId);
+            UserCertificateUrl url = new UserCertificateUrl();
+            url.setUserId(studentId);
+            url.setCertificateId(certificateId);
+            if(!isNull(certificateDto.getUrl())){
+                url.setUserCertificateUrl(certificateDto.getUrl());
+            }
+
+            if(userCertificateUrl == null){
+                userCertificateUrlService.insertUrlById(url);
+            }else{
+                if(!isNull(userCertificateUrl.getUserCertificateUrl())){
+                  int i =  Picture.deletePicture(userCertificateUrl.getUserCertificateUrl(),uploadPath);
+                  if(i == 0){
+                      logger.info("删除图片失败");
+                  }
+                }
+                url.setUserCertificateUrlId(userCertificateUrl.getUserCertificateUrlId());
+                userCertificateUrlService.updateUserCertificateUrl(url);
+            }
+            result.setMessage("修改学生图片成功");
+            result.setSuccess(true);
+        }catch (Exception e){
+            result.setMessage(e.getMessage());
+            result.setSuccess(false);
+        }
+        return result;
+    }
+    @GetMapping("/getPersonCertificate/teacher/")
+    public Result getOnceCertificateOfTeacher(){
+        Result result = new Result();
+        try{
+            List<UserCertificate> userCertificates = new ArrayList<>();
+            userCertificates = userCertificateService.getPersonCertificateListOfTeacher();
+            result.setSuccess(true);
+            result.setMessage("获得个人证书成功");
+            List<CertificateDto> certificateDtos = userCertificateToCertificateDto(userCertificates,"2");
+            result.setObject(certificateDtos);
+        }catch (Exception e){
+            result.setMessage(e.getMessage());
+            result.setSuccess(false);
+        }
+        return result;
+    }
+
+    @PostMapping("/updatePersonCertificate/teacher/")
+    public Result updatePersonCertificateOfTeacher(@RequestBody CertificateDto certificateDto){
+        Result result = new Result();
+        try{
+            String certificateId = certificateDto.getCertificateId();
+
+            String teacherId = teacherService.getTeacherByTeacherCode(certificateDto.getTeacher1()).getTeacherId();
+            UserCertificateUrl userCertificateUrl = userCertificateUrlService.getUrlById(teacherId,certificateId);
+            UserCertificateUrl url = new UserCertificateUrl();
+            url.setUserId(teacherId);
+            url.setCertificateId(certificateId);
+            if(!isNull(certificateDto.getUrl())){
+                url.setUserCertificateUrl(certificateDto.getUrl());
+            }
+
+            if(userCertificateUrl == null){
+                userCertificateUrlService.insertUrlById(url);
+            }else{
+                if(!isNull(userCertificateUrl.getUserCertificateUrl())){
+                    int i =  Picture.deletePicture(userCertificateUrl.getUserCertificateUrl(),uploadPath);
+                    if(i == 0){
+                        logger.info("删除图片失败");
+                    }
+                }
+                url.setUserCertificateUrlId(userCertificateUrl.getUserCertificateUrlId());
+                userCertificateUrlService.updateUserCertificateUrl(url);
+            }
+            result.setMessage("修改学生图片成功");
+            result.setSuccess(true);
+        }catch (Exception e){
+            result.setMessage(e.getMessage());
+            result.setSuccess(false);
+        }
+        return result;
+    }
+
+
+    List<CertificateDto> userCertificateToCertificateDto(List<UserCertificate> userCertificates,String params){
+        List<CertificateDto> certificateDtos = new ArrayList<>();
+        try {
+            for (UserCertificate u: userCertificates) {
+                CertificateDto certificateDto = new CertificateDto();
+                certificateDto.setId(u.getUserCerId());
+                if(!isNull(u.getCertificateId())){
+
+                    certificateDto.setCertificateId(u.getCertificateId());
+                    Certificate certificate =  certificateService.getOneCertificateById(u.getCertificateId());
+                    if(!isNull(certificate.getCertificateLevel())){
+                        certificateDto.setCertificateLevel(certificate.getCertificateLevel());
+                    }
+                    if(!isNull(certificate.getCertificateName())){
+                        certificateDto.setCertificateName(certificate.getCertificateName());
+                    }
+
+                }
+                if(!isNull(u.getUrl())){
+                    certificateDto.setUrl(u.getUrl());
+                }
+                if(params.equals("1")){
+                    if(!isNull(u.getCertificateId()) && !isNull(u.getStudentId1())){
+
+                        if(userCertificateUrlService.getUrlById(u.getStudentId1(),u.getCertificateId())!=null){
+                            certificateDto.setUrl(userCertificateUrlService.getUrlById(u.getStudentId1(),u.getCertificateId()).getUserCertificateUrl());
+
+                        }
+                    }
+                }
+                if(params.equals("2")){
+                    if(!isNull(u.getCertificateId()) && !isNull(u.getTeacherId1())){
+
+                        if(userCertificateUrlService.getUrlById(u.getTeacherId1(),u.getCertificateId())!=null){
+                            certificateDto.setUrl(userCertificateUrlService.getUrlById(u.getTeacherId1(),u.getCertificateId()).getUserCertificateUrl());
+
+                        }
+                    }
+                }
+
+                if(!isNull(u.getStudentId1())){
+                    certificateDto.setStudent1(studentService.getOneStudentById(u.getStudentId1()).getStudentCode());
+                    certificateDto.setStudentName1(studentService.getOneStudentById(u.getStudentId1()).getStudentName());
+                }
+                if(!isNull(u.getStudentId2())){
+                    certificateDto.setStudent2(studentService.getOneStudentById(u.getStudentId2()).getStudentCode());
+                    certificateDto.setStudentName1(studentService.getOneStudentById(u.getStudentId2()).getStudentName());
+                }
+                if(!isNull(u.getStudentId3())){
+                    certificateDto.setStudent3(studentService.getOneStudentById(u.getStudentId3()).getStudentCode());
+                    certificateDto.setStudentName1(studentService.getOneStudentById(u.getStudentId3()).getStudentName());
+                }
+                if(!isNull(u.getStudentId4())){
+                    certificateDto.setStudent4(studentService.getOneStudentById(u.getStudentId4()).getStudentCode());
+                    certificateDto.setStudentName1(studentService.getOneStudentById(u.getStudentId4()).getStudentName());
+                }
+
+                if(!isNull(u.getStudentId5())){
+                    certificateDto.setStudent5(studentService.getOneStudentById(u.getStudentId5()).getStudentCode());
+                    certificateDto.setStudentName1(studentService.getOneStudentById(u.getStudentId5()).getStudentName());
+                }
+                if(!isNull(u.getStudentId6())){
+                    certificateDto.setStudent6(studentService.getOneStudentById(u.getStudentId6()).getStudentCode());
+                    certificateDto.setStudentName1(studentService.getOneStudentById(u.getStudentId6()).getStudentName());
+
+                }
+                if(!isNull(u.getStudentId7())){
+                    certificateDto.setStudent7(studentService.getOneStudentById(u.getStudentId7()).getStudentCode());
+                    certificateDto.setStudentName1(studentService.getOneStudentById(u.getStudentId7()).getStudentName());
+                }
+                if(!isNull(u.getStudentId8())){
+                    certificateDto.setStudent8(studentService.getOneStudentById(u.getStudentId8()).getStudentCode());
+                    certificateDto.setStudentName1(studentService.getOneStudentById(u.getStudentId8()).getStudentName());
+                }
+                if(!isNull(u.getStudentId9())){
+                    certificateDto.setStudent9(studentService.getOneStudentById(u.getStudentId9()).getStudentCode());
+                    certificateDto.setStudentName1(studentService.getOneStudentById(u.getStudentId9()).getStudentName());
+                }
+                if(!isNull(u.getStudentId10())){
+                    certificateDto.setStudent10(studentService.getOneStudentById(u.getStudentId10()).getStudentCode());
+                    certificateDto.setStudentName1(studentService.getOneStudentById(u.getStudentId10()).getStudentName());
+                }
+                if(!isNull(u.getTeacherId1())){
+                    certificateDto.setTeacher1(teacherService.getOneTeacherById(u.getTeacherId1()).getTeacherCode());
+                    certificateDto.setTeacherName1(teacherService.getOneTeacherById(u.getTeacherId1()).getTeacherName());
+                }
+
+                if(!isNull(u.getTeacherId2())){
+                    certificateDto.setTeacher2(teacherService.getOneTeacherById(u.getTeacherId2()).getTeacherCode());
+                    certificateDto.setTeacherName1(teacherService.getOneTeacherById(u.getTeacherId2()).getTeacherName());
+                }
+                if(!isNull(u.getTeacherId3())){
+                    certificateDto.setTeacher3(teacherService.getOneTeacherById(u.getTeacherId3()).getTeacherCode());
+                    certificateDto.setTeacherName1(teacherService.getOneTeacherById(u.getTeacherId3()).getTeacherName());
+                }
+
+                if(!isNull(u.getMatchId())){
+                    certificateDto.setMatchId(u.getMatchId());
+                    Matchs matchs = matchService.getMatchs(u.getMatchId());
+                    if(!isNull(matchs.getMatchName())){
+                        certificateDto.setMatchName(matchs.getMatchName());
+                    }
+                    if(!isNull(matchs.getMatchName())){
+                        certificateDto.setMatchName(matchs.getMatchName());
+                    }
+
+                }
+                if(!isNull(u.getMatchLevelLevel())){
+                    certificateDto.setMatchLevelLevel(u.getMatchLevelLevel());
+                }
+
+                certificateDtos.add(certificateDto);
+
+            }
+        }catch (Exception e){
+                logger.info("ddddddd"+e.getMessage());
+        }
+
+        return certificateDtos;
+
+    }
+    Boolean isNull(String s){
+        if(s==null|| s.length()==0){
+            return true;
+        }else{
+            return false;
+        }
     }
 
 

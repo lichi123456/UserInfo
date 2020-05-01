@@ -4,6 +4,9 @@ import cn.edu.service.MenuService;
 import cn.edu.service.RoleMenuService;
 import cn.edu.service.RoleService;
 import cn.edu.utils.Result;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @Date 2020/2/18 10:09
  * @Version 1.0
  **/
+@Slf4j
 @RestController
 @RequestMapping("/role")
 public class RoleController {
@@ -28,6 +32,8 @@ public class RoleController {
 
     @Autowired
     private MenuService menuService;
+    @Autowired
+    private static final Logger logger = LoggerFactory.getLogger(RoleController.class);
 
     /**
      * @Author wys
@@ -52,7 +58,7 @@ public class RoleController {
             result.setSuccess(false);
             result.setMessage(e.getMessage());
         }
-
+        logger.info("result"+roleId +"\n"+"roleService.getMenuByRoleId(roleId)"+roleService.getMenuByRoleId(roleId));
         return result;
     }
 }

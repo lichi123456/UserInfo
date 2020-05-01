@@ -1,13 +1,10 @@
 package cn.edu.service.impl;
 
 import cn.edu.dao.UserCertificateMapper;
+import cn.edu.dao.UserCertificateUrlMapper;
 import cn.edu.service.CertificateService;
 import cn.edu.service.UserCertificateService;
-import cn.edu.utils.Constant;
-import cn.edu.vo.Certificate;
-import cn.edu.vo.Student;
-import cn.edu.vo.Teacher;
-import cn.edu.vo.UserCertificate;
+import cn.edu.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -30,6 +27,8 @@ public class UserCertificateServiceImpl implements UserCertificateService {
     private UserCertificateMapper userCertificateMapper;
     @Autowired
     private CertificateService certificateService;
+    @Autowired
+    private UserCertificateUrlMapper userCertificateUrlMapper;
     @Override
     public List<Certificate> getCertificateListOfId(String id) {
         Assert.hasText(id,"证书id不能为空");
@@ -65,6 +64,15 @@ public class UserCertificateServiceImpl implements UserCertificateService {
             isEntry =false;
         }
         return isEntry;
+    }
+
+    @Override
+    public UserCertificate getUserCertificate(Long id) {
+        Assert.hasText(id.toString(),"证书id不能为空");
+        Example example = new Example(UserCertificate.class);
+        example.and().andEqualTo("userCerId",id);
+
+        return userCertificateMapper.selectOneByExample(example);
     }
 
     /**
@@ -119,6 +127,20 @@ public class UserCertificateServiceImpl implements UserCertificateService {
     @Override
     public int delete(Long id) {
         return userCertificateMapper.deleteByPrimaryKey(id);
+    }
+
+    @Override
+    public List<UserCertificate> getPersonCertificate() {
+        List<UserCertificate> userCertificates = new ArrayList<>();
+        userCertificates = userCertificateMapper.getPersonCertificateList();
+        return userCertificates;
+    }
+
+    @Override
+    public List<UserCertificate> getPersonCertificateListOfTeacher() {
+        List<UserCertificate> userCertificates = new ArrayList<>();
+        userCertificates = userCertificateMapper.getPersonCertificateListOfTeacher();
+        return userCertificates;
     }
 
 
