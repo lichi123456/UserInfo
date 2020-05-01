@@ -151,9 +151,11 @@ public class StudentContorller {
     public Result update(@RequestBody Student student){
         Result result = new Result();
         try{
-            result.setSuccess(true);
-            result.setMessage("更新学生信息成功");
-            result.setObject(studentService.update(student));
+            result = studentService.setErrorMessage(student);
+            if(result.isSuccess()){
+                result.setMessage("更新学生信息成功");
+                result.setObject(studentService.update(student));
+            }
         }catch (Exception e){
             result.setMessage(e.getMessage());
             result.setSuccess(false);

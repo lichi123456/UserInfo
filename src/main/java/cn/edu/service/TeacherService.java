@@ -26,7 +26,7 @@ public interface TeacherService {
     int changeTeacherGroupList(Teacher teacher);
     int Recover(String id) throws Exception;
     Result importExcel(MultipartFile file) throws Exception;
-
+    Result setErrorMessage(Teacher teacher);
     /**
      * @Author lichi
      * @param teacher
