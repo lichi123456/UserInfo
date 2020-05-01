@@ -7,6 +7,7 @@ import cn.edu.service.TeacherStudentService;
 import cn.edu.service.UserLoginService;
 import cn.edu.utils.*;
 import cn.edu.vo.*;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -116,6 +117,13 @@ public class TeacherServiceImpl implements TeacherService {
      **/
     @Override
     public Result insert(Teacher teacher) throws Exception {
+        Assert.hasText(teacher.getCondition(),"教师工号不能为空");
+        Assert.hasText(teacher.getTeacherName(),"教师姓名不能为空");
+        Assert.hasText(teacher.getTeacherSex(),"性别不能为空");
+        Result checkTeacher = setErrorMessage(teacher);
+        if(!checkTeacher.isSuccess()){
+            return checkTeacher;
+        }
         Result result = new Result();
         teacher.setTeacherId(ApplicationUtils.GUID32());
         teacher.setDeleteStatus(Constant.IS_NOT_DELETE);
@@ -159,6 +167,7 @@ public class TeacherServiceImpl implements TeacherService {
         Assert.hasText(teacher.getTeacherCode(),"教师工号不能为空");
         Assert.hasText(teacher.getTeacherName(),"教师姓名不能为空");
         Assert.hasText(teacher.getTeacherSex(),"教师性别不能为空");
+        Assert.hasText(teacher.getPassword(),"密码不能为空");
         teacher.setUpdateTime(new Date());
         //更新教师指导小组情况-会出现置空情况，因此不做判断
         changeTeacherGroupList(teacher);
@@ -291,10 +300,13 @@ public class TeacherServiceImpl implements TeacherService {
             if(dataList.get(i).get(0)!=null&&(String) dataList.get(i).get(0)!=""){
                 String teacherCode = (String) dataList.get(i).get(0);
                 if(getTeacherByTeacherCode(teacherCode) != null){
-                    return ExcelUtils.setErrorMessage(i+1,"工号",Constant.IS_EXIST);
+                    return ExcelUtils.setErrorMessage(i+2,"工号",Constant.IS_EXIST);
                 }
                 if(!ValidateUtil.isNumeric(teacherCode)){
-                    return ExcelUtils.setErrorMessage(i+1,"工号",Constant.ROW_VALIDATE_ERROR);
+                    return ExcelUtils.setErrorMessage(i+2,"工号",Constant.ROW_VALIDATE_ERROR);
+                }
+                if(!ValidateUtil.isTeacherCode(teacherCode)){
+                    return ExcelUtils.setErrorMessage(i+2,"工号",Constant.ROW_LENGTH_ERROR);
                 }
                 teacher.setTeacherCode(teacherCode);
             }else{
@@ -344,6 +356,38 @@ public class TeacherServiceImpl implements TeacherService {
             Teacher t = list.get(i);
             insert(t);
         }
+        return result;
+    }
+
+    /**
+     * @Author wys
+     * @ClassName setErrorMessage
+     * @Description //TODO  校验
+     * @Date 15:57 2020/5/1
+     * @Param [teacher]
+     * @return cn.edu.utils.Result
+     **/
+    @Override
+    public Result setErrorMessage(Teacher teacher) {
+        Result result = new Result();
+        result.setSuccess(false);
+        if(!ValidateUtil.isTeacherCode(teacher.getTeacherCode()) || !ValidateUtil.isNumeric(teacher.getTeacherCode())){
+            result.setMessage("工号应为6位数字");
+            return result;
+        }
+        if(StringUtils.isNotBlank(teacher.getTeacherEmail()) && !ValidateUtil.isEmail(teacher.getTeacherEmail())){
+            result.setMessage("邮箱格式不正确");
+            return result;
+        }
+        if(StringUtils.isNotBlank(teacher.getTeacherQq()) && !ValidateUtil.isNumeric(teacher.getTeacherQq())){
+            result.setMessage("qq格式不正确");
+            return result;
+        }
+        if(StringUtils.isNotBlank(teacher.getTeacherTel()) && !ValidateUtil.isMobileNo(teacher.getTeacherTel())){
+            result.setMessage("电话号码格式不正确");
+            return result;
+        }
+        result.setSuccess(true);
         return result;
     }
 

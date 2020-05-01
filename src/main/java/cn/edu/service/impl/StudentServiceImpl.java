@@ -98,6 +98,10 @@ public class StudentServiceImpl implements StudentService {
         Assert.hasText(student.getStudentCode(),"学生学号不能为空");
         Assert.hasText(student.getClassId(),"学生班级id不能为空");
         Assert.hasText(student.getGroupId(),"学生小组id不能为空");
+        Result checkStudent = setErrorMessage(student);
+        if(!checkStudent.isSuccess()){
+            return checkStudent;
+        }
         student.setStudentId(ApplicationUtils.GUID32());
         student.setDeleteStatus(Constant.IS_NOT_DELETE);
         UserLogin userLogin = new UserLogin();
@@ -141,7 +145,6 @@ public class StudentServiceImpl implements StudentService {
         Student student = studentMapper.selectByPrimaryKey(id);
         student.setDeleteStatus(Constant.IS_DELETE);
         student.setUpdateTime(new Date());
-//        student.setUpdateUser();
         return studentMapper.updateByPrimaryKeySelective(student);
     }
 
@@ -177,10 +180,11 @@ public class StudentServiceImpl implements StudentService {
         Assert.hasText(student.getStudentCode(),"学生学号不能为空");
         Assert.hasText(student.getStudentName(),"学生姓名不能为空");
         Assert.hasText(student.getStudentSex(),"学生性别不能为空");
+        Assert.hasText(student.getPassword(),"密码不能为空");
         student.setUpdateTime(new Date());
         //更新密码
         userLoginService.updatePasswordByUserCode(student.getStudentId(),student.getPassword());
-        //更新学生指导老师-会出现置空情况，因此不做判断
+        //更新学生指导老师会出现置空情况，因此不做判断
         changeTutorList(student);
         //更新
         return studentMapper.updateByPrimaryKeySelective(student);
@@ -336,7 +340,7 @@ public class StudentServiceImpl implements StudentService {
                 if(!ValidateUtil.isNumeric(studentCode)){
                     return ExcelUtils.setErrorMessage(i+2,"学号",Constant.ROW_VALIDATE_ERROR);
                 }
-                if(!ValidateUtil.isCode(studentCode)){
+                if(!ValidateUtil.isStudentCode(studentCode)){
                     return ExcelUtils.setErrorMessage(i+2,"学号",Constant.ROW_LENGTH_ERROR);
                 }
                 if(getStudentIdByStudentCode(studentCode) != null ){
@@ -410,6 +414,38 @@ public class StudentServiceImpl implements StudentService {
             Student s = list.get(i);
             insert(s);
         }
+        return result;
+    }
+
+    /**
+     * @Author wys
+     * @ClassName setErrorMessage
+     * @Description //TODO  信息校验
+     * @Date 15:40 2020/5/1
+     * @Param [student]
+     * @return cn.edu.utils.Result
+     **/
+    @Override
+    public Result setErrorMessage(Student student) {
+        Result result = new Result();
+        result.setSuccess(false);
+        if(!ValidateUtil.isStudentCode(student.getStudentCode()) || !ValidateUtil.isNumeric(student.getStudentCode())){
+            result.setMessage("学号应为11位数字");
+            return result;
+        }
+        if(StringUtils.isNotBlank(student.getStudentEmail()) && !ValidateUtil.isEmail(student.getStudentEmail())){
+            result.setMessage("邮箱格式不正确");
+            return result;
+        }
+        if(StringUtils.isNotBlank(student.getStudentQq()) && !ValidateUtil.isNumeric(student.getStudentQq())){
+            result.setMessage("qq格式不正确");
+            return result;
+        }
+        if(StringUtils.isNotBlank(student.getStudentTel()) && !ValidateUtil.isMobileNo(student.getStudentTel())){
+            result.setMessage("电话号码格式不正确");
+            return result;
+        }
+        result.setSuccess(true);
         return result;
     }
 

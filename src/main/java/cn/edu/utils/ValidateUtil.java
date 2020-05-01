@@ -78,13 +78,13 @@ public class ValidateUtil {
     }
     /**
      * @Author wys
-     * @ClassName isCode
+     * @ClassName isStudentCode
      * @Description //TODO 学号为11位
      * @Date 16:47 2020/4/29
      * @Param [str]
      * @return boolean
      **/
-    public static boolean isCode(String str){
+    public static boolean isStudentCode(String str){
         boolean flag = false;
         if (str.length() == 11) {
             flag = true;
@@ -92,4 +92,19 @@ public class ValidateUtil {
         return flag;
     }
 
+    /**
+     * @Author wys
+     * @ClassName isTeacherCode
+     * @Description //TODO  工号为6位
+     * @Date 14:49 2020/5/1
+     * @Param [str]
+     * @return boolean
+     **/
+    public static boolean isTeacherCode(String str){
+        boolean flag = false;
+        if (str.length() == 6) {
+            flag = true;
+        }
+        return flag;
+    }
 }
