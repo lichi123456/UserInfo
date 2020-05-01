@@ -10,4 +10,5 @@ public interface StudentMapper extends Mapper<Student> {
     List<String> getStudentListByName(Student student);
     List<String>getDelStudentListByName(Student student);
     List<StudentDto>getAllStudentDto();
+    Student getOneStudentDetails(String id);
 }

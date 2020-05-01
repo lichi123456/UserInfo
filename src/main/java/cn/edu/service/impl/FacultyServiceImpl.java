@@ -116,28 +116,18 @@ public class FacultyServiceImpl implements FacultyService {
      **/
     @Override
     public List<Faculty> getAllList() {
-        //院系，专业，班级，学生信息获取
+        //院系，专业，班级信息获取
         List<Faculty>facultyList = getFacultyList();
         List<Major>majorList = majorService.getMajorList();
         List<Classes>classesList = classesService.getClassesList();
-        Student student = new Student();
-        List<Student>studentList = studentService.getStudentListWithConditionAndDeleteStatus(student, Constant.IS_NOT_DELETE);
         //信息组装
+
         List<Faculty>list=new ArrayList<>();//院系
         for (Faculty f:facultyList ) {
             List<Major>m1 = new ArrayList<>();//专业
             for (Major m:majorList) {
                 List<Classes>c1 = new ArrayList<>();//班级
                 for (Classes c:classesList) {
-                    List<Student>s1 = new ArrayList<>();//学生
-                    for(Student s:studentList){
-                        if(StringUtils.isNotEmpty(s.getClassId())&&StringUtils.isNoneBlank(s.getClassId())){
-                            if(s.getClassId().compareTo(c.getClassId())==0){
-                                s1.add(s);
-                            }
-                        }
-                    }
-                    c.setStudentList(s1);
                     if(c.getMajorId().compareTo(m.getMajorId())==0){
                         c1.add(c);
                     }

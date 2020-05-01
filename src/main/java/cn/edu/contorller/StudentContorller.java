@@ -151,9 +151,11 @@ public class StudentContorller {
     public Result update(@RequestBody Student student){
         Result result = new Result();
         try{
-            result.setSuccess(true);
-            result.setMessage("更新学生信息成功");
-            result.setObject(studentService.update(student));
+            result = studentService.setErrorMessage(student);
+            if(result.isSuccess()){
+                result.setMessage("更新学生信息成功");
+                result.setObject(studentService.update(student));
+            }
         }catch (Exception e){
             result.setMessage(e.getMessage());
             result.setSuccess(false);
@@ -205,55 +207,19 @@ public class StudentContorller {
         return result;
     }
 
+    /**
+     * @Author wys
+     * @ClassName importExcel
+     * @Description //TODO  导入学生数据
+     * @Date 16:14 2020/4/29
+     * @Param [file]
+     * @return cn.edu.utils.Result
+     **/
     @PostMapping("/importExcel")
     public Result importExcel(MultipartFile file){
         Result result = new Result();
-        ExcelUtils excelUtils = new ExcelUtils();
-        //excel 导入数据demo
-        List<List<Object>> dataList;
-        List<Student>list = new ArrayList<>();
         try {
-            dataList = excelUtils.importExcel(file);
-            //数据封装格式一，将表格中的数据遍历取出后封装进对象放进List
-            for (int i = 0; i < dataList.size(); i++) {
-                if(dataList.get(i).size()<10){
-                    break;
-                }
-                Student student = new Student();
-                if(dataList.get(i).get(0)!=null&&dataList.get(i).get(0)!=""){
-                    student.setStudentCode((String) dataList.get(i).get(0));
-                }
-                if(dataList.get(i).get(1)!=null&&dataList.get(i).get(1)!=""){
-                    student.setStudentName((String) dataList.get(i).get(1));
-                }
-                if(dataList.get(i).get(2)!=null&&dataList.get(i).get(2)!=""){
-                    student.setStudentSex((String) dataList.get(i).get(2));
-                }
-                if(dataList.get(i).get(5)!=null&&dataList.get(i).get(5)!=""){
-                    student.setClassId(classesService.getIdByName((String) dataList.get(i).get(5)));
-                }
-                if(dataList.get(i).get(6)!=null&&dataList.get(i).get(6)!=""){
-                    student.setGroupId(groupsService.getIdByname((String) dataList.get(i).get(6)));
-                }
-                if(dataList.get(i).get(7)!=null&&dataList.get(i).get(7)!=""){
-                    student.setStudentTel((String) dataList.get(i).get(7));
-                }
-                if(dataList.get(i).get(8)!=null&&dataList.get(i).get(8)!=""){
-                    student.setStudentQq((String) dataList.get(i).get(8));
-                }
-                if(dataList.get(i).get(9)!=null&&dataList.get(i).get(9)!=""){
-                    student.setStudentEmail((String) dataList.get(i).get(9));
-                }
-                list.add(student);
-            }
-            result.setSuccess(true);
-            result.setMessage("导入成功");
-            for(Student s:list){
-                if (s.getStudentName() != null && s.getStudentName() != "") {
-                    studentService.insert(s);
-                }
-
-            }
+           result = studentService.importExcel(file);
         } catch (Exception e) {
             result.setMessage(e.getMessage());
             result.setSuccess(false);

@@ -123,6 +123,7 @@ public class ClassesServiceImpl implements ClassesService {
         Example example = new Example(Classes.class);
         example.and().andEqualTo("className",className);
         Classes classes = classesMapper.selectOneByExample(example);
+        if(classes == null)return null;
         return classes.getClassId();
     }
 }

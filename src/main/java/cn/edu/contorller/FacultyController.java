@@ -43,7 +43,7 @@ public class FacultyController {
     /**
      * @Author wys
      * @ClassName getAllList
-     * @Description //TODO  获取获取院系-专业-班级-学生列表成功
+     * @Description //TODO  获取获取院系-专业-班级列表成功
      * @Date 23:17 2020/3/3
      * @Param []
      * @return cn.edu.utils.Result
@@ -53,7 +53,7 @@ public class FacultyController {
         Result result = new Result();
         try{
             result.setSuccess(true);
-            result.setMessage("获取院系-专业-班级-学生列表成功");
+            result.setMessage("获取院系-专业-班级列表成功");
             result.setObject(facultyService.getAllList());
         }catch (Exception e){
             result.setMessage(e.getMessage());

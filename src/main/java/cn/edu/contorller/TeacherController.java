@@ -172,9 +172,11 @@ public class TeacherController {
     public Result update(@RequestBody Teacher teacher){
         Result result = new Result();
         try{
-            result.setSuccess(true);
-            result.setMessage("更新教师信息成功");
-            result.setObject(teacherService.update(teacher));
+            result = teacherService.setErrorMessage(teacher);
+            if(result.isSuccess()){
+                result.setMessage("更新教师信息成功");
+                result.setObject(teacherService.update(teacher));
+            }
         }catch (Exception e){
             result.setMessage(e.getMessage());
             result.setSuccess(false);
@@ -238,54 +240,20 @@ public class TeacherController {
         }
         return result;
     }
+    /**
+     * @Author lichi
+     * @ClassName importExcel
+     * @Description //TODO  导入表格数据
+     * @Date 11:30 2020/1/19
+     * @Param [file]
+     * @return cn.edu.utils.Result
+     * wys 于 2020.4.30 改
+     **/
     @PostMapping("/importExcel")
     public Result importExcel(MultipartFile file){
-        /**
-         * @Author lichi
-         * @ClassName importExcel
-         * @Description //TODO  导入表格数据
-         * @Date 11:30 2020/1/19
-         * @Param [file]
-         * @return cn.edu.utils.Result
-         **/
         Result result = new Result();
-        ExcelUtils excelUtils = new ExcelUtils();
-        //excel 导入数据demo
-        List<List<Object>> dataList;
-        List<Teacher> list = new ArrayList<>();
         try {
-            dataList = excelUtils.importExcel(file);
-            //数据封装格式一，将表格中的数据遍历取出后封装进对象放进List
-            for (int i = 0; i < dataList.size(); i++) {
-                Teacher teacher = new Teacher();
-                if(dataList.get(i).get(0)!=null&&(String) dataList.get(i).get(0)!=""){
-                    teacher.setTeacherCode((String) dataList.get(i).get(0));
-                }
-                if(dataList.get(i).get(1)!=null&&(String) dataList.get(i).get(1)!=""){
-                    teacher.setTeacherName((String) dataList.get(i).get(1));
-                }
-                if(dataList.get(i).get(2)!=null&&(String) dataList.get(i).get(2)!=""){
-                    teacher.setTeacherSex((String) dataList.get(i).get(2));
-                }
-                if(dataList.get(i).get(3)!=null&&(String) dataList.get(i).get(3)!=""){
-                    teacher.setTeacherTel((String) dataList.get(i).get(3));
-                }
-                if(dataList.get(i).get(4)!=null&&(String) dataList.get(i).get(4)!=""){
-                    teacher.setTeacherQq((String) dataList.get(i).get(4));
-                }
-
-                if(dataList.get(i).get(5)!=null&&(String) dataList.get(i).get(5)!=""){
-                    teacher.setTeacherEmail((String) dataList.get(i).get(5));
-                }
-                list.add(teacher);
-            }
-            result.setSuccess(true);
-            result.setMessage("导入成功");
-            for(Teacher s:list){
-                if(s.getTeacherCode()!=""){
-                    teacherService.insert(s);
-                }
-            }
+            result = teacherService.importExcel(file);
         } catch (Exception e) {
             result.setMessage(e.getMessage());
             result.setSuccess(false);

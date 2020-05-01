@@ -4,6 +4,7 @@ import cn.edu.utils.Result;
 import cn.edu.vo.Teacher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -24,7 +25,8 @@ public interface TeacherService {
     int realDel(String id);
     int changeTeacherGroupList(Teacher teacher);
     int Recover(String id) throws Exception;
-
+    Result importExcel(MultipartFile file) throws Exception;
+    Result setErrorMessage(Teacher teacher);
     /**
      * @Author lichi
      * @param teacher

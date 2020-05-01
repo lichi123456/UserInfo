@@ -3,13 +3,10 @@ package cn.edu.service.impl;
 import cn.edu.dao.StudentMapper;
 import cn.edu.dto.StudentDto;
 import cn.edu.service.*;
-import cn.edu.utils.ExcelUtils;
-import cn.edu.utils.Result;
+import cn.edu.utils.*;
 import cn.edu.vo.*;
 import cn.edu.vo.Student;
 import cn.edu.service.StudentService;
-import cn.edu.utils.Constant;
-import cn.edu.utils.ApplicationUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +15,8 @@ import org.springframework.util.Assert;
 import org.springframework.web.multipart.MultipartFile;
 import tk.mybatis.mapper.entity.Example;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -63,19 +62,23 @@ public class StudentServiceImpl implements StudentService {
     public List<Student> getStudentListWithConditionAndDeleteStatus(Student student,String deleteStatus) {
         List<String>studentList = null;
         if(deleteStatus.trim().compareTo(Constant.IS_NOT_DELETE)==0){
+
             studentList = studentMapper.getStudentListByName(student);
+
         }else if(deleteStatus.trim().compareTo(Constant.IS_DELETE)==0){
             studentList = studentMapper.getDelStudentListByName(student);
         }
 
-        List<Student>list=new ArrayList<>();
+        List<Student>list=new ArrayList<>();double start = System.currentTimeMillis();
         studentList.stream().forEach(s->{
             try {
                 list.add(getOneStudentById(s));//信息装配
             } catch (Exception e) {
                 e.printStackTrace();
+
             }
-        });
+        });double end = System.currentTimeMillis();
+        System.out.println(end -start);
         return list;
     }
 
@@ -95,6 +98,10 @@ public class StudentServiceImpl implements StudentService {
         Assert.hasText(student.getStudentCode(),"学生学号不能为空");
         Assert.hasText(student.getClassId(),"学生班级id不能为空");
         Assert.hasText(student.getGroupId(),"学生小组id不能为空");
+        Result checkStudent = setErrorMessage(student);
+        if(!checkStudent.isSuccess()){
+            return checkStudent;
+        }
         student.setStudentId(ApplicationUtils.GUID32());
         student.setDeleteStatus(Constant.IS_NOT_DELETE);
         UserLogin userLogin = new UserLogin();
@@ -138,7 +145,6 @@ public class StudentServiceImpl implements StudentService {
         Student student = studentMapper.selectByPrimaryKey(id);
         student.setDeleteStatus(Constant.IS_DELETE);
         student.setUpdateTime(new Date());
-//        student.setUpdateUser();
         return studentMapper.updateByPrimaryKeySelective(student);
     }
 
@@ -174,10 +180,11 @@ public class StudentServiceImpl implements StudentService {
         Assert.hasText(student.getStudentCode(),"学生学号不能为空");
         Assert.hasText(student.getStudentName(),"学生姓名不能为空");
         Assert.hasText(student.getStudentSex(),"学生性别不能为空");
+        Assert.hasText(student.getPassword(),"密码不能为空");
         student.setUpdateTime(new Date());
         //更新密码
         userLoginService.updatePasswordByUserCode(student.getStudentId(),student.getPassword());
-        //更新学生指导老师-会出现置空情况，因此不做判断
+        //更新学生指导老师会出现置空情况，因此不做判断
         changeTutorList(student);
         //更新
         return studentMapper.updateByPrimaryKeySelective(student);
@@ -195,33 +202,8 @@ public class StudentServiceImpl implements StudentService {
     public Student getOneStudentById(String id) throws Exception {
         Assert.hasText(id, "id不能为空");
         //获取基本信息
-        Student student = studentMapper.selectByPrimaryKey(id);
-        Faculty faculty = new Faculty();
-        Major major = new Major();
-        Classes classes = new Classes();
-        Groups groups = new Groups();
-        //组装院系信息
-        if (StringUtils.isNotEmpty(student.getClassId()) && StringUtils.isNoneBlank(student.getClassId())) {
-            classes = classesService.getOneClassesById(student.getClassId());
-            student.setClassName(classes.getClassName());
-            if (StringUtils.isNotEmpty(classes.getMajorId()) && StringUtils.isNoneBlank(classes.getMajorId())) {
-                major = majorService.getOneMajorById(classes.getMajorId());
-                student.setMajorId(major.getMajorId());
-                student.setMajorName(major.getMajorName());
-                if (StringUtils.isNotEmpty(major.getFacultyId()) && StringUtils.isNoneBlank(major.getFacultyId())) {
-                    faculty = facultyService.getFacultyById(major.getFacultyId());
-                    student.setFacultyId(faculty.getFacultyId());
-                    student.setFacultyName(faculty.getFacultyName());
-                }
-            }
-        }
-        //组装小组信息
-        if (StringUtils.isNotEmpty(student.getGroupId()) && StringUtils.isNoneBlank(student.getGroupId())) {
-            groups = groupsService.getOneGroupById(student.getGroupId());
-            student.setGroupName(groups.getGroupName());
-        }
-        //获取密码
-        student.setPassword(userLoginService.getPasswordById(id));
+        Student student = studentMapper.getOneStudentDetails(id);
+        student.setPassword(DESPlus.Decrypt(student.getPassword()));
         //获取其指导老师列表
         List<Teacher>teacherList = teacherStudentService.getTeacherListByStudentId(id);
         student.setTutor(teacherList);
@@ -333,6 +315,139 @@ public class StudentServiceImpl implements StudentService {
         return excelUtils.exportExcelStudentModel(faculty,fatherNameArr,schoolMap,group);
     }
 
+    /**
+     * @Author wys
+     * @ClassName importExcel
+     * @Description //TODO  学生信息导入
+     * @Date 18:05 2020/4/30
+     * @Param [file]
+     * @return cn.edu.utils.Result
+     **/
+    @Override
+    public Result importExcel(MultipartFile file) throws Exception {
+        Result result = new Result();
+        ExcelUtils excelUtils = new ExcelUtils();
+        //excel 导入数据demo
+        List<List<Object>> dataList;
+        List<Student>list = new ArrayList<>();
+        dataList = excelUtils.importExcel(file);
+        //数据封装格式一，将表格中的数据遍历取出后封装进对象放进List
+        for (int i = 0; i < dataList.size(); i++) {
+            Student student = new Student();
+            //学号校验
+            if(dataList.get(i).get(0)!=null&&dataList.get(i).get(0)!=""){
+                String studentCode = (String) dataList.get(i).get(0);
+                if(!ValidateUtil.isNumeric(studentCode)){
+                    return ExcelUtils.setErrorMessage(i+2,"学号",Constant.ROW_VALIDATE_ERROR);
+                }
+                if(!ValidateUtil.isStudentCode(studentCode)){
+                    return ExcelUtils.setErrorMessage(i+2,"学号",Constant.ROW_LENGTH_ERROR);
+                }
+                if(getStudentIdByStudentCode(studentCode) != null ){
+                    return ExcelUtils.setErrorMessage(i+2,"学号",Constant.IS_EXIST);
+                }
+                student.setStudentCode(studentCode);
+            }else{
+                return ExcelUtils.setErrorMessage(i+2,"学号",Constant.ROW_IS_EMPTY);
+            }
+            //姓名校验
+            if(dataList.get(i).get(1)!=null&&dataList.get(i).get(1)!=""){
+                student.setStudentName((String) dataList.get(i).get(1));
+            }else{
+                return ExcelUtils.setErrorMessage(i+2,"姓名",Constant.ROW_IS_EMPTY);
+            }
+            //性别校验
+            if(dataList.get(i).get(2)!=null&&dataList.get(i).get(2)!=""){
+                student.setStudentSex((String) dataList.get(i).get(2));
+            }else{
+                return ExcelUtils.setErrorMessage(i+2,"性别",Constant.ROW_IS_EMPTY);
+            }
+            //班级
+            if(dataList.get(i).get(5)!=null&&dataList.get(i).get(5)!=""){
+                String classesId = classesService.getIdByName((String) dataList.get(i).get(5));
+                if(StringUtils.isBlank(classesId)){
+                    return ExcelUtils.setErrorMessage(i+2,"班级",Constant.IS_NOT_EXIST);
+                }
+                student.setClassId(classesId);
+            }else{
+                return ExcelUtils.setErrorMessage(i+2,"班级",Constant.ROW_IS_EMPTY);
+            }
+            //小组
+            if(dataList.get(i).get(6)!=null&&dataList.get(i).get(6)!=""){
+                String groupId = groupsService.getIdByname((String) dataList.get(i).get(6));
+                if(StringUtils.isBlank(groupId)){
+                    return ExcelUtils.setErrorMessage(i+2,"小组",Constant.IS_NOT_EXIST);
+                }
+                student.setGroupId(groupId);
+            }else{
+                return ExcelUtils.setErrorMessage(i+2,"小组",Constant.ROW_IS_EMPTY);
+            }
+            //电话号码
+            if(dataList.get(i).get(7)!=null && dataList.get(i).get(7)!=""){
+                String tel = (String) dataList.get(i).get(7);
+                if(!ValidateUtil.isMobileNo(tel)){
+                    return ExcelUtils.setErrorMessage(i+2,"电话号码",Constant.ROW_VALIDATE_ERROR);
+                }
+                student.setStudentTel(tel);
+            }
+            //QQ号
+            if(dataList.get(i).get(8)!=null&&dataList.get(i).get(8)!=""){
+                String qq = (String) dataList.get(i).get(8);
+                if(!ValidateUtil.isNumeric(qq)){
+                    return ExcelUtils.setErrorMessage(i+2,"QQ号",Constant.ROW_VALIDATE_ERROR);
+                }
+                student.setStudentQq(qq);
+            }
+            //邮箱
+            if(dataList.get(i).get(9)!=null&&dataList.get(i).get(9)!=""){
+                String email = (String) dataList.get(i).get(9);
+                if(!ValidateUtil.isEmail(email)){
+                    return ExcelUtils.setErrorMessage(i+2,"电子邮箱",Constant.ROW_VALIDATE_ERROR);
+                }
+                student.setStudentEmail(email);
+            }
+            list.add(student);
+        }
+        result.setSuccess(true);
+        result.setMessage("导入成功");
+        for(int i = 0 ; i < list.size(); i++){
+            Student s = list.get(i);
+            insert(s);
+        }
+        return result;
+    }
+
+    /**
+     * @Author wys
+     * @ClassName setErrorMessage
+     * @Description //TODO  信息校验
+     * @Date 15:40 2020/5/1
+     * @Param [student]
+     * @return cn.edu.utils.Result
+     **/
+    @Override
+    public Result setErrorMessage(Student student) {
+        Result result = new Result();
+        result.setSuccess(false);
+        if(!ValidateUtil.isStudentCode(student.getStudentCode()) || !ValidateUtil.isNumeric(student.getStudentCode())){
+            result.setMessage("学号应为11位数字");
+            return result;
+        }
+        if(StringUtils.isNotBlank(student.getStudentEmail()) && !ValidateUtil.isEmail(student.getStudentEmail())){
+            result.setMessage("邮箱格式不正确");
+            return result;
+        }
+        if(StringUtils.isNotBlank(student.getStudentQq()) && !ValidateUtil.isNumeric(student.getStudentQq())){
+            result.setMessage("qq格式不正确");
+            return result;
+        }
+        if(StringUtils.isNotBlank(student.getStudentTel()) && !ValidateUtil.isMobileNo(student.getStudentTel())){
+            result.setMessage("电话号码格式不正确");
+            return result;
+        }
+        result.setSuccess(true);
+        return result;
+    }
 
 
     /**

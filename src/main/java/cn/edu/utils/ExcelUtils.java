@@ -54,29 +54,23 @@ public class ExcelUtils {
         Row row = null;
         Cell cell = null;
         list = new ArrayList<List<Object>>();
-        //遍历Excel中所有的sheet
-        for (int i = 0; i < work.getNumberOfSheets(); i++) {
-            sheet = work.getSheetAt(i);
-            if (sheet == null) {
+        sheet = work.getSheetAt(0);
+        //遍历当前sheet中的所有行
+        for (int j = sheet.getFirstRowNum() + 1; j <= sheet.getLastRowNum(); j++) {
+            row = sheet.getRow(j);
+            if (row == null || row.getFirstCellNum() == j) {
                 continue;
             }
 
-            //遍历当前sheet中的所有行
-            for (int j = sheet.getFirstRowNum() + 1; j <= sheet.getLastRowNum(); j++) {
-                row = sheet.getRow(j);
-                if (row == null || row.getFirstCellNum() == j) {
-                    continue;
-                }
-
-                //遍历所有的列
-                List<Object> li = new ArrayList<>();
-                for (int y = row.getFirstCellNum(); y < row.getLastCellNum(); y++) {
-                    cell = row.getCell(y);
-                    li.add(this.getCellValue(cell));
-                }
-                list.add(li);
+            //遍历所有的列
+            List<Object> li = new ArrayList<>();
+            for (int y = row.getFirstCellNum(); y < row.getLastCellNum(); y++) {
+                cell = row.getCell(y);
+                li.add(this.getCellValue(cell));
             }
+            list.add(li);
         }
+
         return list;
     }
 
@@ -326,6 +320,8 @@ public class ExcelUtils {
                     new String(("学生信息表模板" + excel2007U).getBytes("UTF-8"), "iso-8859-1"));
             headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
             baos = new ByteArrayOutputStream();
+            //隐藏下拉栏sheet
+            wb.setSheetHidden(1,true);
             wb.write(baos);
         }catch (Exception e){
             e.printStackTrace();
@@ -333,9 +329,6 @@ public class ExcelUtils {
 
         return new ResponseEntity<byte[]>(baos.toByteArray(), headers, HttpStatus.CREATED);
     }
-
-
-
 
     /**
      *  计算formula
@@ -566,9 +559,6 @@ public class ExcelUtils {
         return new ResponseEntity<byte[]>(baos.toByteArray(), headers, HttpStatus.CREATED);
     }
 
-
-
-
     public ResponseEntity<byte[]> exportExcelTeacher(List<Teacher> teachers) throws IOException {
 
         HttpHeaders headers = null;
@@ -634,7 +624,20 @@ public class ExcelUtils {
         return new ResponseEntity<byte[]>(baos.toByteArray(), headers, HttpStatus.CREATED);
     }
 
-
+    /**
+     * @Author wys
+     * @ClassName setErrorMessage
+     * @Description //TODO  错误信息提示
+     * @Date 13:09 2020/4/30
+     * @Param [index, name, problemText]
+     * @return cn.edu.utils.Result
+     **/
+    public static Result setErrorMessage(int index, String name,String problemText){
+        Result result = new Result();
+        result.setMessage("第["+index+"]行, ["+name+problemText+"] ,请校正后再重新导入！");
+        result.setSuccess(false);
+        return result;
+    }
 
 
 }
