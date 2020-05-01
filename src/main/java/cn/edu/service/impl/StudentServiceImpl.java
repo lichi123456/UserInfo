@@ -180,6 +180,7 @@ public class StudentServiceImpl implements StudentService {
         Assert.hasText(student.getStudentCode(),"学生学号不能为空");
         Assert.hasText(student.getStudentName(),"学生姓名不能为空");
         Assert.hasText(student.getStudentSex(),"学生性别不能为空");
+        Assert.hasText(student.getPassword(),"密码不能为空");
         student.setUpdateTime(new Date());
         //更新密码
         userLoginService.updatePasswordByUserCode(student.getStudentId(),student.getPassword());

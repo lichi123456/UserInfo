@@ -117,7 +117,7 @@ public class TeacherServiceImpl implements TeacherService {
      **/
     @Override
     public Result insert(Teacher teacher) throws Exception {
-        Assert.hasText(teacher.getCondition(),"教师工号不能为空");
+        Assert.hasText(teacher.getTeacherCode(),"教师工号不能为空");
         Assert.hasText(teacher.getTeacherName(),"教师姓名不能为空");
         Assert.hasText(teacher.getTeacherSex(),"性别不能为空");
         Result checkTeacher = setErrorMessage(teacher);
@@ -167,6 +167,7 @@ public class TeacherServiceImpl implements TeacherService {
         Assert.hasText(teacher.getTeacherCode(),"教师工号不能为空");
         Assert.hasText(teacher.getTeacherName(),"教师姓名不能为空");
         Assert.hasText(teacher.getTeacherSex(),"教师性别不能为空");
+        Assert.hasText(teacher.getPassword(),"密码不能为空");
         teacher.setUpdateTime(new Date());
         //更新教师指导小组情况-会出现置空情况，因此不做判断
         changeTeacherGroupList(teacher);
