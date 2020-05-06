@@ -56,35 +56,7 @@
     AND m.major_id = c.major_id
     AND s.class_id = c.class_id
     AND s.group_id = g.group_id
-  </select>
-  <select id="getOneStudentDetails" resultType="cn.edu.vo.Student" parameterType="java.lang.String">
-      SELECT
-    s.student_id as studentId,
-    s.student_code as studentCode,
-    s.student_name as studentName,
-    s.student_sex as studentSex,
-    s.student_tel as studentTel,
-    s.student_qq as studentQQ,
-    s.student_email as studentEmail,
-    s.student_picture_url as studentPictureUrl,
-    s.class_id as classId,
-    s.group_id as groupId,
-    g.group_name as groupName,
-    s.delete_status as deleteStatus,
-    c.class_name as className,
-    c.major_id as majorId,
-    m.major_name as majorName,
-    m.faculty_id as facultyId,
-    f.faculty_name as facultyName,
-    u.user_password as password
-    FROM student s,groups g,classes c,major m,faculty f,user_login u
-    WHERE
-     s.student_id = #{id}
-    AND s.class_id = c.class_id
-    AND m.major_id = c.major_id
-    AND f.faculty_id = m.faculty_id
-    AND g.group_id = s.group_id
-    AND s.student_id = u.user_id
-
+    AND s.delete_status = 'N'
+    GROUP BY student_code ASC
   </select>
 </mapper>

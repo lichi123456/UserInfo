@@ -168,6 +168,10 @@ public class TeacherServiceImpl implements TeacherService {
         Assert.hasText(teacher.getTeacherName(),"教师姓名不能为空");
         Assert.hasText(teacher.getTeacherSex(),"教师性别不能为空");
         Assert.hasText(teacher.getPassword(),"密码不能为空");
+
+        Result checkTeacher = setErrorMessage(teacher);
+        Assert.isTrue(checkTeacher.isSuccess(),checkTeacher.getMessage());
+
         teacher.setUpdateTime(new Date());
         //更新教师指导小组情况-会出现置空情况，因此不做判断
         changeTeacherGroupList(teacher);
@@ -203,14 +207,14 @@ public class TeacherServiceImpl implements TeacherService {
     @Override
     public int realDel(String id) {
         Assert.hasText(id,"id不能为空");
-        List<TeacherGroup>teacherGroupList = teacherGroupService.getTeacherGroupByTeacherId(id);
-        for (TeacherGroup tg:teacherGroupList) {
-            teacherGroupService.delete(tg.getTeaGroId());
-        }
-        List<TeacherStudent>teacherStudentList = teacherStudentService.getTeacherStudentByTeacherId(id);
-        for (TeacherStudent ts:teacherStudentList) {
-            teacherStudentService.deleteByStudentIdAndTeacherId(ts);
-        }
+//        List<TeacherGroup>teacherGroupList = teacherGroupService.getTeacherGroupByTeacherId(id);
+//        for (TeacherGroup tg:teacherGroupList) {
+//            teacherGroupService.delete(tg.getTeaGroId());
+//        }
+//        List<TeacherStudent>teacherStudentList = teacherStudentService.getTeacherStudentByTeacherId(id);
+//        for (TeacherStudent ts:teacherStudentList) {
+//            teacherStudentService.deleteByStudentIdAndTeacherId(ts);
+//        }
         return teacherMapper.deleteByPrimaryKey(id);
     }
 

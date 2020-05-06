@@ -62,23 +62,19 @@ public class StudentServiceImpl implements StudentService {
     public List<Student> getStudentListWithConditionAndDeleteStatus(Student student,String deleteStatus) {
         List<String>studentList = null;
         if(deleteStatus.trim().compareTo(Constant.IS_NOT_DELETE)==0){
-
             studentList = studentMapper.getStudentListByName(student);
-
         }else if(deleteStatus.trim().compareTo(Constant.IS_DELETE)==0){
             studentList = studentMapper.getDelStudentListByName(student);
         }
 
-        List<Student>list=new ArrayList<>();double start = System.currentTimeMillis();
+        List<Student>list=new ArrayList<>();
         studentList.stream().forEach(s->{
             try {
                 list.add(getOneStudentById(s));//信息装配
             } catch (Exception e) {
                 e.printStackTrace();
-
             }
-        });double end = System.currentTimeMillis();
-        System.out.println(end -start);
+        });
         return list;
     }
 
@@ -159,10 +155,6 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public int realDel(String id) {
         Assert.hasText(id,"id不能为空");
-        List<TeacherStudent>teacherStudentList = teacherStudentService.getTeacherStudentByStudentId(id);
-        for (TeacherStudent ts:teacherStudentList) {
-            teacherStudentService.deleteByStudentIdAndTeacherId(ts);
-        }
         return studentMapper.deleteByPrimaryKey(id);
     }
 
@@ -181,6 +173,10 @@ public class StudentServiceImpl implements StudentService {
         Assert.hasText(student.getStudentName(),"学生姓名不能为空");
         Assert.hasText(student.getStudentSex(),"学生性别不能为空");
         Assert.hasText(student.getPassword(),"密码不能为空");
+
+        Result checkStudent = setErrorMessage(student);
+        Assert.isTrue(checkStudent.isSuccess(),checkStudent.getMessage());
+
         student.setUpdateTime(new Date());
         //更新密码
         userLoginService.updatePasswordByUserCode(student.getStudentId(),student.getPassword());
@@ -202,8 +198,27 @@ public class StudentServiceImpl implements StudentService {
     public Student getOneStudentById(String id) throws Exception {
         Assert.hasText(id, "id不能为空");
         //获取基本信息
-        Student student = studentMapper.getOneStudentDetails(id);
-        student.setPassword(DESPlus.Decrypt(student.getPassword()));
+        Student student = studentMapper.selectByPrimaryKey(id);
+        student.setPassword(userLoginService.getPasswordById(student.getStudentId()));
+        //院系，专业，班级信息装配
+        if(StringUtils.isNotBlank(student.getClassId())){
+            Classes classes = classesService.getOneClassesById(student.getClassId());
+            student.setClassName(classes.getClassName());
+            if(StringUtils.isNotBlank(classes.getMajorId())){
+                Major major = majorService.getOneMajorById(classes.getMajorId());
+                student.setMajorName(major.getMajorName());
+                student.setMajorId(major.getMajorId());
+                if(StringUtils.isNotBlank(major.getFacultyId())){
+                    Faculty faculty = facultyService.getFacultyById(major.getFacultyId());
+                    student.setFacultyId(faculty.getFacultyId());
+                    student.setFacultyName(faculty.getFacultyName());
+                }
+            }
+        }
+        if(StringUtils.isNotBlank(student.getGroupId())){
+            Groups groups = groupsService.getOneGroupById(student.getGroupId());
+            student.setGroupName(groups.getGroupName());
+        }
         //获取其指导老师列表
         List<Teacher>teacherList = teacherStudentService.getTeacherListByStudentId(id);
         student.setTutor(teacherList);

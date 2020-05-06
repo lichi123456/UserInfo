@@ -172,11 +172,9 @@ public class TeacherController {
     public Result update(@RequestBody Teacher teacher){
         Result result = new Result();
         try{
-            result = teacherService.setErrorMessage(teacher);
-            if(result.isSuccess()){
-                result.setMessage("更新教师信息成功");
-                result.setObject(teacherService.update(teacher));
-            }
+            result.setSuccess(true);
+            result.setMessage("更新教师信息成功");
+            result.setObject(teacherService.update(teacher));
         }catch (Exception e){
             result.setMessage(e.getMessage());
             result.setSuccess(false);
