@@ -451,7 +451,7 @@ public class ExcelUtils {
             String [] sex = Constant.SEX_TYPE;
             XSSFDataValidationHelper helper = new XSSFDataValidationHelper(sheetPro);
             DataValidationConstraint sexConstraint = helper.createExplicitListConstraint(sex);
-            CellRangeAddressList sexRangeAddressList = new CellRangeAddressList(1, 102, 2, 2);
+            CellRangeAddressList sexRangeAddressList = new CellRangeAddressList(1, 500, 2, 2);
             DataValidation sexDataValidation = helper.createValidation(sexConstraint, sexRangeAddressList);
             //验证
             sexDataValidation.createErrorBox("error","请选择正确的性别");

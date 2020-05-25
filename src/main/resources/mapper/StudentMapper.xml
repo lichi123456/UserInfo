@@ -51,7 +51,7 @@
     s.student_tel AS studentTel,
     s.student_qq AS studentQq,
     s.student_email AS studentEmail
-    FROM major m, faculty f,classes c,Student s ,groups g
+    FROM major m, faculty f,classes c,student s ,groups g
     WHERE m.faculty_id = f.faculty_id
     AND m.major_id = c.major_id
     AND s.class_id = c.class_id

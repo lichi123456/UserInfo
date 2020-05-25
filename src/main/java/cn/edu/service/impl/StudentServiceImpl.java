@@ -66,7 +66,6 @@ public class StudentServiceImpl implements StudentService {
         }else if(deleteStatus.trim().compareTo(Constant.IS_DELETE)==0){
             studentList = studentMapper.getDelStudentListByName(student);
         }
-
         List<Student>list=new ArrayList<>();
         studentList.stream().forEach(s->{
             try {

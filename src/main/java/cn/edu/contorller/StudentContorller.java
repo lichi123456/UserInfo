@@ -231,7 +231,7 @@ public class StudentContorller {
      * @return
      * @throws IOException
      */
-    @GetMapping("/exportExcel")
+    @GetMapping("/exportExcel/")
     public ResponseEntity<byte[]> exportExcel() throws IOException {
         ExcelUtils excelUtils = new ExcelUtils();
         return excelUtils.exportExcelStudent(studentService.getAllStudentDto());

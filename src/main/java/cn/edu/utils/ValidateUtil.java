@@ -79,14 +79,14 @@ public class ValidateUtil {
     /**
      * @Author wys
      * @ClassName isStudentCode
-     * @Description //TODO 学号为11位
+     * @Description //TODO 学号为10或11位
      * @Date 16:47 2020/4/29
      * @Param [str]
      * @return boolean
      **/
     public static boolean isStudentCode(String str){
         boolean flag = false;
-        if (str.length() == 11) {
+        if (str.length() == 11 || str.length() == 10) {
             flag = true;
         }
         return flag;
