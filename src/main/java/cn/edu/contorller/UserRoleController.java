@@ -3,10 +3,7 @@ package cn.edu.contorller;
 import cn.edu.service.UserRoleService;
 import cn.edu.utils.Result;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @ClassName UserRoleController
@@ -16,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @Version 1.0
  **/
 @RestController
+@CrossOrigin
 @RequestMapping("/userRole")
 public class UserRoleController {
     @Autowired

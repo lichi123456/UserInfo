@@ -13,6 +13,7 @@ import cn.edu.utils.Result;
 import cn.edu.vo.MatchLevel;
 import cn.edu.vo.Matchs;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,6 +29,7 @@ import java.util.List;
  *
  */
 @RestController
+@CrossOrigin
 @RequestMapping("/match")
 public class MatchsController {
     //竞赛service

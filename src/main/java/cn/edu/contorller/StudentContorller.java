@@ -22,6 +22,7 @@ import java.util.List;
  * @Date 2020/2/15 13:34
  * @Version 1.0
  **/
+@CrossOrigin
 @RestController
 @RequestMapping("/student")
 public class StudentContorller {

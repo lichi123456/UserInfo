@@ -30,6 +30,7 @@ import static cn.edu.utils.Constant.CERTIFICATE_TYPE;
  * @Version 1.0
  **/
 @Slf4j
+@CrossOrigin
 @RestController
 @RequestMapping("/certificate")
 public class CertificateController {
